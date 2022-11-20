@@ -1,14 +1,14 @@
-package com.surajmanshal.mannsignadmin.viewmodel
+package com.surajmanshal.mannsign.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsignadmin.data.model.Category
-import com.surajmanshal.mannsignadmin.data.model.Language
-import com.surajmanshal.mannsignadmin.data.model.Material
-import com.surajmanshal.mannsignadmin.data.model.SubCategory
-import com.surajmanshal.mannsignadmin.data.model.product.Product
-import com.surajmanshal.mannsignadmin.repository.Repository
+import com.surajmanshal.mannsign.data.model.Category
+import com.surajmanshal.mannsign.data.model.Language
+import com.surajmanshal.mannsign.data.model.Material
+import com.surajmanshal.mannsign.data.model.SubCategory
+import com.surajmanshal.mannsign.data.model.product.Product
+import com.surajmanshal.mannsign.repository.Repository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

@@ -1,23 +1,22 @@
-package com.surajmanshal.mannsignadmin.viewmodel
+package com.surajmanshal.mannsign.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsignadmin.data.model.*
-import com.surajmanshal.mannsignadmin.data.model.auth.User
-import com.surajmanshal.mannsignadmin.data.model.ordering.Order
-import com.surajmanshal.mannsignadmin.data.model.ordering.Transaction
-import com.surajmanshal.mannsignadmin.data.model.ordering.TransactionItem
-import com.surajmanshal.mannsignadmin.data.model.product.Product
-import com.surajmanshal.mannsignadmin.network.NetworkService
-import com.surajmanshal.response.SimpleResponse
+import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.auth.User
+import com.surajmanshal.mannsign.data.model.ordering.Order
+import com.surajmanshal.mannsign.data.model.ordering.Transaction
+import com.surajmanshal.mannsign.data.model.ordering.TransactionItem
+import com.surajmanshal.mannsign.data.model.product.Product
+import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.util.*
 
 class StatsViewModel : ViewModel() {
 

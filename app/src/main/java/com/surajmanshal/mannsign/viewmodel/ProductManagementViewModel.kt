@@ -1,12 +1,12 @@
-package com.surajmanshal.mannsignadmin.viewmodel
+package com.surajmanshal.mannsign.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsignadmin.data.model.*
-import com.surajmanshal.mannsignadmin.data.model.product.Product
-import com.surajmanshal.mannsignadmin.repository.Repository
-import com.surajmanshal.response.SimpleResponse
+import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.product.Product
+import com.surajmanshal.mannsign.repository.Repository
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
