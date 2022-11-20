@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.utils
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
+import com.surajmanshal.mannsign.URL
 
 object Functions {
     fun urlMaker(imageurl :String): String {
