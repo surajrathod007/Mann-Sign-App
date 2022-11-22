@@ -2,6 +2,8 @@ package com.surajmanshal.mannsign.network
 
 import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.auth.User
+import com.surajmanshal.mannsign.data.model.ordering.CartItem
+import com.surajmanshal.mannsign.data.model.ordering.Carts
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.ordering.Transaction
 import com.surajmanshal.mannsign.data.model.product.Product
@@ -119,5 +121,15 @@ interface NetworkCallsInterface {
     @GET("subCategory")
     fun fetchSubCategoryById(@Query("id")id: Int): Call<SubCategory>
 
+    @POST("cart/get")
+    fun fetchCartByEmail(@Query("email") email : String) : Call<List<CartItem>>
 
+    @POST("cart/remove")
+    fun removeCartItem(@Query("cartid") cartid : Int) : Call<SimpleResponse>
+
+    @POST("order/add")
+    fun placeOrder(@Body carts : Carts, @Query("discount") discount : Float, @Query("delivery") delivery : Float) : Call<SimpleResponse>
+
+    @GET("discount/use")
+    fun userCoupon(@Query("code") code : String) : Call<Int>
 }
