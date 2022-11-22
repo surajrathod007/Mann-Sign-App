@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "635881709223",
+    "project_id": "mann-sign-admin",
+    "storage_bucket": "mann-sign-admin.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635881709223:android:791d07d666629c67fdc582",
+        "android_client_info": {
+          "package_name": "com.surajmanshal.mannsign"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635881709223-qderp96o9jll75j2j2ek2r1h0iivkemi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqBK9NcG-rDId8MXl6DjcaZ5i2kSXymXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635881709223-qderp96o9jll75j2j2ek2r1h0iivkemi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:635881709223:android:e31e71bb2dff3149fdc582",
+        "android_client_info": {
+          "package_name": "com.surajmanshal.mannsignadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "635881709223-qderp96o9jll75j2j2ek2r1h0iivkemi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqBK9NcG-rDId8MXl6DjcaZ5i2kSXymXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "635881709223-qderp96o9jll75j2j2ek2r1h0iivkemi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
