@@ -239,12 +239,11 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-
-
-
-
-
-
+                <ProgressBar
+                    android:visibility="visible"
+                    android:id="@+id/progressCart"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCartItems"
                     android:layout_width="match_parent"

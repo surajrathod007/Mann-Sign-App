@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.surajmanshal.mannsign.data.model.Area
 import com.surajmanshal.mannsign.data.model.ordering.CartItem
 import com.surajmanshal.mannsign.data.model.ordering.Carts
 import com.surajmanshal.mannsign.data.response.SimpleResponse
@@ -29,8 +30,12 @@ class CartViewModel : ViewModel() {
     var _total = MutableLiveData<Float>(0f)
     var _amountToPay = MutableLiveData<Float>(0f)
 
+    var _areas = MutableLiveData<List<Area>>()
     val msg: LiveData<String> get() = _msg
 
+    init {
+        getArea()
+    }
     companion object {
         val db = NetworkService.networkInstance
     }
@@ -114,6 +119,7 @@ class CartViewModel : ViewModel() {
     }
 
     fun useCoupon(code : String){
+        isLoading.postValue(true)
         val r = db.userCoupon(code)
         r.enqueue(object : Callback<Int?> {
             override fun onResponse(call: Call<Int?>, response: Response<Int?>) {
@@ -124,17 +130,32 @@ class CartViewModel : ViewModel() {
                         var d = response.body()!!
                         val dis = (d*_total.value!!)/100
                         _discount.postValue(dis)
-                        _amountToPay.postValue(_total.value!!-dis)
+                        _amountToPay.postValue((_total.value!!-dis)+_delivery.value!!)
                     }
                     400 ->{
                         _msg.postValue("Invalid coupon code !" + response.message())
                     }
                 }
-
+                isLoading.postValue(false)
             }
 
             override fun onFailure(call: Call<Int?>, t: Throwable) {
                 _msg.postValue(t.message.toString())
+                isLoading.postValue(false)
+            }
+        })
+    }
+
+    fun getArea(){
+        val r = db.fetchAreas()
+        r.enqueue(object : Callback<List<Area>?> {
+            override fun onResponse(call: Call<List<Area>?>, response: Response<List<Area>?>) {
+                _areas.postValue(response.body()!!)
+                _delivery.postValue(response.body()!!.random().minCharge)       //TODO : Get for the user address
+            }
+
+            override fun onFailure(call: Call<List<Area>?>, t: Throwable) {
+                _msg.postValue("Error in fetching areas")
             }
         })
     }

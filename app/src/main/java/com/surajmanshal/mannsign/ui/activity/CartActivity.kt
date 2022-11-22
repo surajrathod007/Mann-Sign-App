@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.surajmanshal.mannsign.R
@@ -19,6 +20,7 @@ class CartActivity : AppCompatActivity() {
 
         binding = ActivityCartBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(CartViewModel::class.java)
+
         loadCarts("surajsinhrathod75@gmail.com")
         setContentView(binding.root)
 
@@ -32,9 +34,14 @@ class CartActivity : AppCompatActivity() {
                 t+=it.totalPrice
             }
             vm._total.postValue(t)
-            vm._amountToPay.postValue(t- vm._discount.value!!)
+            val to = t- vm._discount.value!!
+            vm._amountToPay.postValue(to + vm._delivery.value!!)
         }
 
+        vm._areas.observe(this){
+            val c = it.random().minCharge
+            vm._delivery.postValue(c)
+        }
         vm._total.observe(this){
             binding.txtSubTotal.text = "$" + it.toString()
         }
@@ -44,9 +51,19 @@ class CartActivity : AppCompatActivity() {
         vm._amountToPay.observe(this){
             binding.txtAmountToPay.text = "$" + it.toString()
         }
+        vm._delivery.observe(this){
+            binding.txtDeliveryCharge.text = "+$" + it.toString()
+        }
+        vm.isLoading.observe(this){
+            if(it){
+                binding.progressCart.visibility = View.VISIBLE
+            }else{
+                binding.progressCart.visibility = View.GONE
+            }
+        }
         //buttons
         binding.btnPlaceOrder.setOnClickListener {
-            vm.doCalculation()
+
         }
         binding.btnApplyCoupon.setOnClickListener {
             vm.useCoupon(binding.edCouponCode.text.toString())
