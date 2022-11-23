@@ -1,17 +1,45 @@
 package com.surajmanshal.mannsign.network
 
+import com.surajmanshal.mannsign.URL.BASE_URL
 import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.ordering.Transaction
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.model.product.ProductType
 import com.surajmanshal.mannsign.data.response.SimpleResponse
+import com.surajrathod.authme.model.LoginReq
+import com.surajrathod.authme.model.RegisterReq
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
 
 interface NetworkCallsInterface {
+
+    //User Auth
+
+    @Headers("Content-Type: application/json")
+    @POST("$BASE_URL/auth/register")
+    suspend fun registerUser(@Body registerReq : RegisterReq) : SimpleResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("$BASE_URL/auth/login")
+    suspend fun loginUser(@Body loginReq: LoginReq) : LoginResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("$BASE_URL/auth/otp")
+    suspend fun sendOtp(@Query("email") email : String) : SimpleResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("$BASE_URL/auth/resetpassword")
+    suspend fun resetPassword(@Query("email") email: String, @Query("otp") otp : String, @Query("newpas") newpas : String) : SimpleResponse
+
+    //user Update
+
+    @Headers("Content-Type: application/json")
+    @POST("$BASE_URL/user/update_profile")
+    suspend fun updateUser(@Body user : User) : SimpleResponse
 
     @GET("materials")
     fun fetchMaterials() : Call<List<Material>>

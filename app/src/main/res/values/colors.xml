@@ -14,4 +14,14 @@
     <color name="bg_color">#f6f7fc</color>
     <color name="title_text_color">#213357</color>
     <color name="text_normal_color">#374457</color>
+
+<!--    Auth Module Colors-->
+    <color name="background">#ffffff</color>
+    <color name="editTextColor">#f5f6f8</color>
+    <color name="buttonColor">#3253e0</color>
+    <color name="head_text">#1a1b39</color>
+    <color name="title_text">#32353e</color>
+    <color name="error">#dddd4444</color>
+
+
 </resources>
