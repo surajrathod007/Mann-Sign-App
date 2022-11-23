@@ -12,9 +12,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.http2.Http2Stream
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import retrofit2.*
 
 class CartViewModel : ViewModel() {
 
@@ -23,6 +21,7 @@ class CartViewModel : ViewModel() {
 
     val isLoading = MutableLiveData<Boolean>(true)
     private var _msg = MutableLiveData<String>()
+    val msg: LiveData<String> get() = _msg
 
     var _discount = MutableLiveData<Float>(0f)
     var _delivery = MutableLiveData<Float>(0f)
@@ -31,7 +30,9 @@ class CartViewModel : ViewModel() {
     var _amountToPay = MutableLiveData<Float>(0f)
 
     var _areas = MutableLiveData<List<Area>>()
-    val msg: LiveData<String> get() = _msg
+
+    var _orderPlaced = MutableLiveData<Boolean>(false)
+    val orderPlaced : LiveData<Boolean> get() = _orderPlaced
 
     init {
         getArea()
@@ -52,7 +53,6 @@ class CartViewModel : ViewModel() {
             ) {
                 val list = response.body()!!
                 _cartItems.postValue(list)
-                _msg.postValue("Done ! ${list.size}")
                 isLoading.postValue(false)
             }
 
@@ -61,6 +61,8 @@ class CartViewModel : ViewModel() {
                 _msg.postValue(t.message.toString())
             }
         })
+
+
     }
 
     fun removeCart(id : Int){
@@ -85,18 +87,31 @@ class CartViewModel : ViewModel() {
     }
 
     //TODO : Get delivery and discount from mutable live data
-    fun placeOrder(carts : Carts,discount : Float,delivery : Float ){
-        val r = db.placeOrder(carts,discount,delivery)
+    fun placeOrder(){
+        isLoading.postValue(true)
+        val cart = mutableListOf<CartItem>()
+        _cartItems.value!!.forEach {
+            cart.add(it)
+        }
+        val carts = Carts(cart)
+
+        val r = db.placeOrder(carts,_discount.value!!,_delivery.value!!)
         r.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
                 call: Call<SimpleResponse?>,
                 response: Response<SimpleResponse?>
             ) {
                 _msg.postValue(response.body()!!.message)
+
+                if(response.body()!!.success)
+                    _orderPlaced.postValue(true)
+
+                isLoading.postValue(false)
             }
 
             override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
                 _msg.postValue(t.message.toString())
+                isLoading.postValue(false)
             }
         })
     }
@@ -104,7 +119,6 @@ class CartViewModel : ViewModel() {
 
     //TODO : Delivery calculation need to be done later
     fun doCalculation(){
-
             val lst = _cartItems.value
             var total = 0f
             if(!lst.isNullOrEmpty()){
@@ -114,8 +128,6 @@ class CartViewModel : ViewModel() {
                 _total.postValue(total)
                 _amountToPay.postValue(_total.value!!-_discount.value!!)
             }
-
-
     }
 
     fun useCoupon(code : String){
@@ -158,5 +170,13 @@ class CartViewModel : ViewModel() {
                 _msg.postValue("Error in fetching areas")
             }
         })
+    }
+
+    fun clearValues(){
+        _total.postValue(0f)
+        _amountToPay.postValue(0f)
+        //_delivery.postValue(0f)
+        _discount.postValue(0f)
+        _orderPlaced.postValue(false)
     }
 }
