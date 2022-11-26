@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.fragments
 
+import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,6 +10,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.databinding.FragmentCustomOrderBinding
+import com.surajmanshal.mannsign.ui.activity.CustomAcpBoardActivity
 
 class CustomOrderFragment : Fragment() {
 
@@ -27,6 +29,10 @@ class CustomOrderFragment : Fragment() {
         binding = DataBindingUtil.bind(view)!!
 
 
+        binding.btnClickMe.setOnClickListener {
+            val i = Intent(requireActivity(),CustomAcpBoardActivity::class.java)
+            startActivity(i)
+        }
         return binding.root
     }
 

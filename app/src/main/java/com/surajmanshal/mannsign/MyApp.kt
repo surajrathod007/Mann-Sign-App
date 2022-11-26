@@ -8,6 +8,7 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
         OneSignal.initWithContext(this)
         OneSignal.setAppId(ONESIGNAL_USER_APP_ID)
     }

@@ -103,4 +103,6 @@ dependencies {
 
     //ios like overscroll ;)
     implementation 'com.github.valkriaine:Bouncy:2.3'
+
+
 }
