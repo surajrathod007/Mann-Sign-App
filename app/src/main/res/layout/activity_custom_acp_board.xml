@@ -24,6 +24,8 @@
         <EditText
             android:id="@+id/edName"
             android:hint="Enter your name..."
+            android:editable="true"
+            android:inputType="textMultiLine"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -34,11 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <TextView
-            android:id="@+id/txtName"
-            android:text="Sample text"
-            android:textSize="24sp"
-            android:gravity="center"
+        <androidx.recyclerview.widget.RecyclerView
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_margin="10dp"
+            tools:listitem="@layout/font_item_layout"
+            android:id="@+id/rvFonts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

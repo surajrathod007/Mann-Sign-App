@@ -7,19 +7,25 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.adapter.recyclerview.FontAdapter
 import com.surajmanshal.mannsign.databinding.ActivityCustomAcpBoardBinding
 import java.io.File
 
 class CustomAcpBoardActivity : AppCompatActivity() {
     lateinit var binding : ActivityCustomAcpBoardBinding
     lateinit var downLoadManager : DownloadManager
+    val fileNames = listOf("font1.ttf","font2.ttf")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomAcpBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
         downLoadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+        setupRecyclerView()
 
         val fontUrls = arrayListOf<String>("https://fontsfree.net//wp-content/fonts/basic/sans-serif/dDihapus404.ttf","https://fontsfree.net//wp-content/fonts/basic/sans-serif/FontsFree-Net-ALSDirect2.ttf")
 
@@ -47,6 +53,23 @@ class CustomAcpBoardActivity : AppCompatActivity() {
                 Toast.makeText(this,e.message.toString(),Toast.LENGTH_LONG).show()
             }
         }
+
+        binding.edName.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                binding.rvFonts.adapter = FontAdapter(this@CustomAcpBoardActivity,fileNames,text.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+
+        })
+
+
 
 
 
@@ -78,6 +101,11 @@ class CustomAcpBoardActivity : AppCompatActivity() {
     private fun applyFont(fontName : String){
         var f = File(this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),"/")
         var myFont = f.listFiles().filter { it.name == fontName }
-        binding.txtName.typeface = Typeface.createFromFile(myFont[0])
     }
+
+    private fun setupRecyclerView(){
+        binding.rvFonts.adapter = FontAdapter(this,fileNames,"Sample Text")
+    }
+
+
 }
