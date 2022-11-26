@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="26dp"
+    android:elevation="0dp"
+    app:cardElevation="0dp"
+    app:cardBackgroundColor="@color/bg_color">
+
+    <LinearLayout
+        android:padding="10dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/btnOrders"
+            android:text="View Your Orders"
+            android:textSize="16sp"
+            android:textColor="@color/title_text_color"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/btnProfile"
+            android:text="View Your Profile"
+            android:textSize="16sp"
+            android:textColor="@color/title_text_color"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:layout_margin="10dp"
+            android:id="@+id/btnTransaction"
+            android:text="View Your Transactions"
+            android:textSize="16sp"
+            android:textColor="@color/title_text_color"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
