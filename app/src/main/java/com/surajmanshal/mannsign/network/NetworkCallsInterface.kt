@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.network
 
 import com.surajmanshal.mannsign.URL.BASE_URL
 import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.Order
@@ -9,7 +10,6 @@ import com.surajmanshal.mannsign.data.model.ordering.Transaction
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.model.product.ProductType
 import com.surajmanshal.mannsign.data.response.SimpleResponse
-import com.surajrathod.authme.model.LoginReq
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -22,7 +22,7 @@ interface NetworkCallsInterface {
     suspend fun registerUser(@Body user : User) : SimpleResponse
 
     @Headers("Content-Type: application/json")
-    @POST("$BASE_URL/auth/login")
+    @POST("user/login")
     suspend fun loginUser(@Body loginReq: LoginReq) : LoginResponse
 
     @Headers("Content-Type: application/json")

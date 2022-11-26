@@ -16,6 +16,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.surajmanshal.mannsign.ProfileActivity
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.FragLoginBinding
@@ -24,8 +25,6 @@ import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
-import com.surajrathod.authme.model.LoginReq
-import com.surajrathod.authme.util.DataStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -80,20 +79,20 @@ class LoginFrag : Fragment() {
            if(response!=null){
                if(response.simpleResponse.success){
                    onSimpleResponse("Login",response.user)
-                   Toast.makeText(activity, response.simpleResponse.message, Toast.LENGTH_SHORT).show()
+                   Toast.makeText(requireContext(), response.simpleResponse.message, Toast.LENGTH_SHORT).show()
                }else{
-                   activity?.let { ExceptionHandler.catchOnContext(it, response.simpleResponse.message) }
+                   ExceptionHandler.catchOnContext(requireContext(), response.simpleResponse.message)
                    d.toggleDialog(dd)
                }
-           }
+           }else Toast.makeText(activity, "Null Received", Toast.LENGTH_SHORT).show()
        }
     }
     fun onSimpleResponse(task : String, user: User){
         if(user.token!=null){
             d.toggleDialog(dd)  // hide
-            lifecycleScope.launch{
+            /*lifecycleScope.launch{
                 storeStringPreferences(DataStore.JWT_TOKEN,user.token)
-            }
+            }*/
 
             val sharedPreference =  requireActivity().getSharedPreferences("user_e",Context.MODE_PRIVATE)
             var editor = sharedPreference.edit()
