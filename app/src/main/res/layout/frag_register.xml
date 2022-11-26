@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -112,156 +113,192 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:context=".AuthenticationActivity">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="56dp"
+            android:paddingHorizontal="@dimen/margin_medium">
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/satoshi_medium"
+                android:gravity="center"
+                android:text="Welcome to Mann Sign"
+                android:textColor="@color/head_text"
+                android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="30dp"
+                android:fontFamily="@font/satoshi_regular"
+                android:gravity="center"
+                android:text="Create an account"
+                android:textStyle="bold" />
+
+            <!-- <TextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:fontFamily="@font/satoshi_regular"
+                 android:text="First Name"
+                 android:textColor="@color/title_text"
+                 android:textSize="16sp"
+                 android:textStyle="bold" />
+
+             <androidx.appcompat.widget.AppCompatEditText
+                 android:id="@+id/ETFirstName"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:fontFamily="@font/satoshi_regular"
+                 android:textColor="@color/title_text"
+                 android:textSize="14sp"
+                 android:textStyle="bold" />
+
+             <TextView
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="10dp"
+                 android:fontFamily="@font/satoshi_regular"
+                 android:text="Last Name"
+                 android:textColor="@color/title_text"
+                 android:textSize="16sp"
+                 android:textStyle="bold" />
+
+             <androidx.appcompat.widget.AppCompatEditText
+                 android:id="@+id/ETLastName"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:fontFamily="@font/satoshi_regular"
+                 android:textColor="@color/title_text"
+                 android:textSize="14sp"
+                 android:textStyle="bold" />-->
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:layout_marginHorizontal="56dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="64dp"
+                android:fontFamily="@font/satoshi_regular"
+                android:text="Email Address"
+                android:textColor="@color/title_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/ETEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/satoshi_regular"
+                android:textColor="@color/title_text"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/satoshi_regular"
+                android:text="Password"
+                android:textColor="@color/title_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/ETPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/satoshi_regular"
+                android:inputType="textPassword"
+                android:textColor="@color/title_text"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/satoshi_regular"
+                android:text="Mobile no."
+                android:textColor="@color/title_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/etMobileNumber"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/satoshi_regular"
+                android:inputType="number"
+                android:maxLength="10"
+                android:textColor="@color/title_text"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnRegister"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="56dp"
+                android:layout_marginHorizontal="56dp"
+                android:background="@drawable/button_bg"
+                android:fontFamily="@font/satoshi_regular"
+                android:text="Register"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-
-
-            <TextView
-                android:fontFamily="@font/satoshi_medium"
-                android:textColor="@color/head_text"
-                android:gravity="center"
-                android:textSize="40sp"
-                android:text="Welcome To \nAuth Me"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/satoshi_regular"
-                android:text="Register Your Self"
-                android:gravity="center"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"/>
-
-            <TextView
-                android:text="First Name"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/satoshi_regular"
-                android:textColor="@color/title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/ETFirstName"
-                android:textSize="14sp"
-                android:fontFamily="@font/satoshi_regular"
-                android:textStyle="bold"
-                android:textColor="@color/title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <TextView
-                android:textSize="16sp"
-                android:layout_marginTop="10dp"
-                android:text="Last Name"
-                android:textStyle="bold"
-                android:fontFamily="@font/satoshi_regular"
-                android:textColor="@color/title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/ETLastName"
-                android:textSize="14sp"
-                android:fontFamily="@font/satoshi_regular"
-                android:textStyle="bold"
-                android:textColor="@color/title_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_marginTop="@dimen/margin_high"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/padding_medium"
+                android:weightSum="1">
 
                 <TextView
-                    android:textSize="16sp"
-                    android:layout_marginTop="10dp"
-                    android:text="Email Address"
-                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:fontFamily="@font/satoshi_regular"
+                    android:gravity="right"
+                    android:text="Already have an account ? "
                     android:textColor="@color/title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/ETEmail"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/satoshi_regular"
-                    android:textStyle="bold"
-                    android:textColor="@color/title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textSize="12sp" />
 
                 <TextView
-                    android:textSize="16sp"
-                    android:layout_marginTop="10dp"
-                    android:text="Password"
-                    android:textStyle="bold"
+                    android:id="@+id/tvLoginHere"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
                     android:fontFamily="@font/satoshi_regular"
-                    android:textColor="@color/title_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatEditText
-                    android:id="@+id/ETPassword"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/satoshi_regular"
-                    android:textStyle="bold"
-                    android:textColor="@color/title_text"
-                    android:inputType="textPassword"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnRegister"
-                    android:layout_marginTop="20dp"
-                    android:textColor="@color/white"
-                    android:text="Register Me"
-                    android:textAllCaps="false"
-                    android:fontFamily="@font/satoshi_regular"
-                    android:textStyle="bold"
-                    android:textSize="18sp"
-                    android:background="@drawable/button_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.appcompat.widget.LinearLayoutCompat
-                    android:layout_marginTop="8dp"
-                    android:weightSum="1"
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:gravity="right"
-                        android:layout_weight="0.5"
-                        android:textSize="10sp"
-                        android:textColor="@color/title_text"
-                        android:fontFamily="@font/satoshi_regular"
-                        android:text="Already have an account ? "
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                    <TextView
-                        android:id="@+id/tvLoginHere"
-                        android:layout_weight="0.5"
-                        android:textSize="10sp"
-                        android:fontFamily="@font/satoshi_regular"
-                        android:textColor="@color/buttonColor"
-                        android:textStyle="bold|italic"
-                        android:text="Log In Here"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"/>
-
-                </androidx.appcompat.widget.LinearLayoutCompat>
+                    android:text="Log In Here"
+                    android:textColor="@color/buttonColor"
+                    android:textSize="12sp"
+                    android:textStyle="bold|italic" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
     </ScrollView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

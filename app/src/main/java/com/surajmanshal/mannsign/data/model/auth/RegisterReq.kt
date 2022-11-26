@@ -1,4 +1,4 @@
-package com.surajrathod.authme.model
+package com.surajmanshal.mannsign.data.model.auth
 
 data class RegisterReq(
     val firstName : String,

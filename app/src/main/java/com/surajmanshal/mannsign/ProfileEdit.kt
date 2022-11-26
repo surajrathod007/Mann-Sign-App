@@ -10,7 +10,7 @@ import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileEditBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajrathod.authme.database.UserEntity
+import com.surajmanshal.mannsign.room.UserEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFrag"
-        android:name="com.surajrathod.authme.fragment.LoginFrag"
+        android:name="com.surajmanshal.mannsign.fragment.LoginFrag"
         android:label="LoginFrag" >
         <action
             android:id="@+id/action_loginFrag_to_registerFrag"

@@ -10,7 +10,6 @@ import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.model.product.ProductType
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajrathod.authme.model.LoginReq
-import com.surajrathod.authme.model.RegisterReq
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.http.*
@@ -18,10 +17,9 @@ import retrofit2.http.*
 interface NetworkCallsInterface {
 
     //User Auth
-
     @Headers("Content-Type: application/json")
-    @POST("$BASE_URL/auth/register")
-    suspend fun registerUser(@Body registerReq : RegisterReq) : SimpleResponse
+    @POST("user/register")
+    suspend fun registerUser(@Body user : User) : SimpleResponse
 
     @Headers("Content-Type: application/json")
     @POST("$BASE_URL/auth/login")

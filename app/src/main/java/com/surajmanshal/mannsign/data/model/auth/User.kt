@@ -1,19 +1,14 @@
 package com.surajmanshal.mannsign.data.model.auth
 
-
-import java.security.Principal
-
-//import java.security.Principal
-
 data class User(
-    val emailId : String ="",
-    val password : String ="",
-    val firstName : String = "",
-    val lastName : String = "",
-    val phoneNumber : String = "",
-    val profileImage : String = "",
-    val address : String = "",
-    val pinCode : Int = 0,
+    var emailId : String ="",
+    var password : String ="",
+    val firstName : String? = null,
+    val lastName : String? = null,
+    var phoneNumber : String = "",
+    val profileImage : String? = null,
+    val address : String? = null,
+    val pinCode : Int? = null,
     var token : String = "",
-    var deviceId : String = ""
+    var deviceId : String? = null
 )

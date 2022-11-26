@@ -1,4 +1,4 @@
-package com.surajrathod.authme.fragment
+package com.surajmanshal.mannsign.fragment
 
 import android.app.Dialog
 import android.content.Context
@@ -10,8 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,12 +21,11 @@ import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.FragLoginBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.UserDatabase
+import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
-import com.surajrathod.authme.database.UserEntity
 import com.surajrathod.authme.model.LoginReq
 import com.surajrathod.authme.util.DataStore
-import com.surajrathod.authme.util.DataStore.preferenceDataStoreAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -107,11 +104,7 @@ class LoginFrag : Fragment() {
 
             val u = UserEntity(
                 emailId = user.emailId,
-                firstName = user.firstName,
-                lastName = user.lastName,
-                address = user.address,
-                token = user.token,
-                otp = "hi"
+                token = user.token
             )
             val db = UserDatabase.getDatabase(this.requireContext())
             GlobalScope.launch(Dispatchers.IO) {
@@ -127,10 +120,11 @@ class LoginFrag : Fragment() {
         }
     }
     suspend fun storeStringPreferences(key: String ,value : String){
-        activity?.let{ dsContext ->
+        // Todo : Implement it later to store JWT token
+        /*activity?.let{ dsContext ->
             dsContext.preferenceDataStoreAuth.edit {
                 it[stringPreferencesKey(key)] = value
             }
-        }
+        }*/
     }
 }
