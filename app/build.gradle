@@ -104,5 +104,6 @@ dependencies {
     //ios like overscroll ;)
     implementation 'com.github.valkriaine:Bouncy:2.3'
 
-
+    //color picker
+    implementation "com.github.skydoves:colorpickerview:2.2.4"
 }

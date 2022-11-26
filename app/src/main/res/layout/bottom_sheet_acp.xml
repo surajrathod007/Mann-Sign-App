@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardElevation="0dp"
+    app:cardCornerRadius="24dp">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:text="Choose Font"
+            android:fontFamily="@font/satoshi_bold"
+            android:gravity="center"
+            android:textSize="22sp"
+            android:textColor="@color/title_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_margin="6dp"
+            android:id="@+id/rvFontBottomSheet"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/font_item_layout"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"/>
+
+        <Button
+            android:layout_margin="10dp"
+            android:id="@+id/btnApplyFontBottomSheet"
+            android:text="Apply Font"
+            android:textAllCaps="false"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
