@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,10 +25,12 @@ import com.surajmanshal.mannsign.databinding.FragLoginBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.utils.auth.DataStore
+import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class LoginFrag : Fragment() {
@@ -88,42 +92,35 @@ class LoginFrag : Fragment() {
        }
     }
     fun onSimpleResponse(task : String, user: User){
-        if(user.token!=null){
-            d.toggleDialog(dd)  // hide
-            /*lifecycleScope.launch{
-                storeStringPreferences(DataStore.JWT_TOKEN,user.token)
-            }*/
-
-            val sharedPreference =  requireActivity().getSharedPreferences("user_e",Context.MODE_PRIVATE)
-            var editor = sharedPreference.edit()
-            editor.putString("email",user.emailId)
-            editor.commit()
-
-            val intent = Intent(requireActivity(), ProfileActivity::class.java)
-
-            val u = UserEntity(
-                emailId = user.emailId,
-                token = user.token
-            )
-            val db = UserDatabase.getDatabase(this.requireContext())
-            GlobalScope.launch(Dispatchers.IO) {
-                db.userDao().insertUser(u)
-            }
-
-            startActivity(intent)
-            activity?.finish()
-
-        }else{
-            d.toggleDialog(dd)  // hide
-            Toast.makeText(activity, "$task Failed", Toast.LENGTH_SHORT).show()
+        d.toggleDialog(dd)  // hide
+        CoroutineScope(Dispatchers.IO).launch{
+            storeStringPreferences(DataStore.JWT_TOKEN,user.token)
         }
+
+        val sharedPreference =  requireActivity().getSharedPreferences("user_e",Context.MODE_PRIVATE)
+        var editor = sharedPreference.edit()
+        editor.putString("email",user.emailId)
+        editor.commit()
+
+        val intent = Intent(requireActivity(), ProfileActivity::class.java)
+
+        val u = UserEntity(
+            emailId = user.emailId,
+            token = user.token
+        )
+        val db = UserDatabase.getDatabase(this.requireContext())
+        lifecycleScope.launch(Dispatchers.IO) {
+            db.userDao().insertUser(u)
+        }
+
+        startActivity(intent)
+        activity?.finish()
+
     }
     suspend fun storeStringPreferences(key: String ,value : String){
         // Todo : Implement it later to store JWT token
-        /*activity?.let{ dsContext ->
-            dsContext.preferenceDataStoreAuth.edit {
+        requireActivity().preferenceDataStoreAuth.edit {
                 it[stringPreferencesKey(key)] = value
-            }
-        }*/
+        }
     }
 }

@@ -4,8 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.surajrathod.authme.util.DataStore
-import com.surajrathod.authme.util.DataStore.preferenceDataStoreAuth
+import com.surajmanshal.mannsign.utils.auth.DataStore
+import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first

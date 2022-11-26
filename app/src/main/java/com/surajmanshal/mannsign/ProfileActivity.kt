@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
 import com.surajmanshal.mannsign.databinding.ActivityProfileBinding
 import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajrathod.authme.util.DataStore.preferenceDataStoreAuth
+import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
