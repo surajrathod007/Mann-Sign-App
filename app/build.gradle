@@ -106,4 +106,7 @@ dependencies {
 
     //color picker
     implementation "com.github.skydoves:colorpickerview:2.2.4"
+
+    //superellipse
+    //implementation 'com.github.MicroRJ:android_superellipse:v3.0.0-alpha'
 }

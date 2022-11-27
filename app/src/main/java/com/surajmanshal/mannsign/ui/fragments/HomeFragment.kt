@@ -7,19 +7,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
+import com.surajmanshal.mannsign.data.model.SubCategory
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
+import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.activity.CartActivity
+import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 
 class HomeFragment : Fragment() {
 
 
     lateinit var binding: FragmentHomeBinding
     lateinit var bottomMenu: BottomSheetDialog
+    lateinit var vm: HomeViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -36,9 +45,22 @@ class HomeFragment : Fragment() {
         }
 
         binding.btnCart.setOnClickListener {
-            val i = Intent(requireActivity(),CartActivity::class.java)
+            val i = Intent(requireActivity(), CartActivity::class.java)
             startActivity(i)
         }
+
+        setupObservers()
+
+        if (NetworkService.checkForInternet(requireContext())) {
+            vm.getSubCategories()
+            vm.subCategories.observe(viewLifecycleOwner) {
+                binding.rvCategories.adapter = CategoryAdapter(requireContext(), it)
+            }
+        } else {
+            Functions.makeToast(requireContext(), "No internet", true)
+        }
+
+
 
         return binding.root
     }
@@ -52,4 +74,9 @@ class HomeFragment : Fragment() {
     }
 
 
+    private fun setupObservers() {
+        vm.msg.observe(viewLifecycleOwner) {
+            Functions.makeToast(requireContext(), it)
+        }
+    }
 }

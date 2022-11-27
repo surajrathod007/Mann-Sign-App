@@ -1,8 +1,10 @@
 package com.surajmanshal.mannsign.utils
 
+import android.content.Context
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
+import android.widget.Toast
 import com.surajmanshal.mannsign.URL
 
 object Functions {
@@ -19,5 +21,12 @@ object Functions {
     }
     fun makeViewGone(view : View){
         view.visibility = View.GONE
+    }
+    fun makeToast(context : Context, msg : String,long : Boolean=false){
+        if(long){
+            Toast.makeText(context,msg,Toast.LENGTH_LONG).show()
+        }else{
+            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
+        }
     }
 }

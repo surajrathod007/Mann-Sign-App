@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.viewPager.isUserInputEnabled = false
 
         permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
             isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
