@@ -84,6 +84,10 @@ class ResetPasswordFragment : Fragment() {
             }
             if(isEnteredOtp()){
                 email = arguments?.get("email") as String?
+                if(otp != arguments?.get("otp")as String?){
+                    Toast.makeText(requireContext(), "Wrong OTP", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 d.toggleDialog(dd)
                 verifyAndResetPassword()
             }else{
@@ -108,15 +112,13 @@ class ResetPasswordFragment : Fragment() {
        edit.forEach {
            otp+= GetInput.takeFrom(it)
        }
-//        Toast.makeText(activity, "$otp", Toast.LENGTH_SHORT).show()
         return true
     }
     fun verifyAndResetPassword(){
         lifecycleScope.launch{
             try {
                 val newpass = confirmPassword.text.toString()
-//                Log.d(TAG, "$email $otp $newpass")
-                val response = NetworkService.networkInstance.resetPassword(email!!,otp!!,newpass)
+                val response = NetworkService.networkInstance.resetPassword(email!!,newpass)
                 onSimpleResponse("Reset",response)
             }catch (e : Exception){
                 d.toggleDialog(dd)

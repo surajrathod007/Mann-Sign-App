@@ -26,12 +26,12 @@ interface NetworkCallsInterface {
     suspend fun loginUser(@Body loginReq: LoginReq) : LoginResponse
 
     @Headers("Content-Type: application/json")
-    @POST("$BASE_URL/auth/otp")
+    @POST("user/otp")
     suspend fun sendOtp(@Query("email") email : String) : SimpleResponse
 
     @Headers("Content-Type: application/json")
-    @POST("$BASE_URL/auth/resetpassword")
-    suspend fun resetPassword(@Query("email") email: String, @Query("otp") otp : String, @Query("newpas") newpas : String) : SimpleResponse
+    @POST("user/resetpassword")
+    suspend fun resetPassword(@Query("email") email: String, @Query("newpas") newpas : String) : SimpleResponse
 
     //user Update
 
