@@ -53,6 +53,9 @@ class CartViewModel : ViewModel() {
             ) {
                 val list = response.body()!!
                 _cartItems.postValue(list)
+                if(list.isEmpty()){
+                    _msg.postValue("No Cart Items !")
+                }
                 isLoading.postValue(false)
             }
 

@@ -8,9 +8,12 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
+import com.onesignal.OSNotificationReceivedEvent
+import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CartItemAdapter
 import com.surajmanshal.mannsign.databinding.ActivityCartBinding
+import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 
 class CartActivity : AppCompatActivity() {
@@ -27,6 +30,8 @@ class CartActivity : AppCompatActivity() {
         loadCarts("surajsinhrathod75@gmail.com")
         setContentView(binding.root)
 
+
+
         binding.sRefresh.setOnRefreshListener {
             loadCarts("surajsinhrathod75@gmail.com")
         }
@@ -35,7 +40,6 @@ class CartActivity : AppCompatActivity() {
         }
         vm.cartItems.observe(this) {
             if (it.isNullOrEmpty()) {
-                Toast.makeText(this, "No Cart Items ;(", Toast.LENGTH_SHORT).show()
                 binding.btnPlaceOrder.isEnabled = false
             }else{
                 binding.btnPlaceOrder.isEnabled = true

@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         tools:context=".ui.fragments.HomeFragment">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:background="#048F55"
             android:layout_width="match_parent"
@@ -67,90 +68,123 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
-            <LinearLayout
-                android:weightSum="1"
+
+            <com.factor.bouncy.BouncyNestedScrollView
+                android:id="@+id/boucneScroll"
                 app:layout_constraintTop_toBottomOf="@id/appBar"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                android:id="@+id/linearSearchView"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <EditText
-                    android:paddingLeft="12dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginLeft="18dp"
-                    android:layout_weight="0.9"
-                    android:textColor="@color/title_text_color"
-                    android:textColorHint="@color/text_normal_color"
-                    android:id="@+id/edSearch"
-                    android:hint="Search Product Here.."
-                    android:background="@drawable/search_bar_bg"
-                    android:textSize="12sp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"/>
-
-                <ImageView
-                    android:clickable="true"
-                    android:foreground="?attr/selectableItemBackground"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="0.1"
-                    android:id="@+id/btnSearch"
-                    android:src="@drawable/ic_baseline_search_24"
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_height="24dp"/>
+                android:layout_height="0dp">
 
 
-            </LinearLayout>
 
             <LinearLayout
-                android:padding="22dp"
-                android:layout_marginTop="24dp"
-                app:layout_constraintTop_toBottomOf="@id/linearSearchView"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/linearContent"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:background="@drawable/content_background"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 >
 
-                <TextView
-                    android:textSize="18sp"
-                    android:text="Categories"
-                    android:fontFamily="@font/satoshi_medium"
-                    android:textColor="@color/title_text_color"
+                <LinearLayout
+                    android:id="@+id/linearSearchView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginTop="6dp"
-                    android:scrollbars="none"
-                    android:id="@+id/rvCategories"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/category_item_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:weightSum="1">
 
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:textSize="18sp"
-                    android:text="Products"
-                    android:fontFamily="@font/satoshi_medium"
-                    android:textColor="@color/title_text_color"
+                    <EditText
+                        android:id="@+id/edSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginLeft="18dp"
+                        android:layout_marginTop="6dp"
+                        android:layout_weight="0.9"
+                        android:background="@drawable/search_bar_bg"
+                        android:hint="Search Product Here.."
+                        android:paddingLeft="12dp"
+                        android:textColor="@color/title_text_color"
+                        android:textColorHint="@color/text_normal_color"
+                        android:textSize="12sp" />
+
+                    <ImageView
+                        android:id="@+id/btnSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="4dp"
+                        android:layout_weight="0.1"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:src="@drawable/ic_baseline_search_24" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearContent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:background="@drawable/content_background"
+                    android:orientation="vertical"
+                    android:padding="22dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Categories"
+                        android:textColor="@color/title_text_color"
+                        android:textSize="18sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvCategories"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:orientation="horizontal"
+                        android:scrollbars="none"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/category_item_layout" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Products"
+                        android:textColor="@color/title_text_color"
+                        android:textSize="18sp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvProducts"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical"
+                        app:spanCount="2"
+                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                         />
+
+                    <TextView
+                        android:layout_marginTop="56dp"
+                        android:id="@+id/extraView"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"/>
+
+                </LinearLayout>
+
 
             </LinearLayout>
+
+
+            </com.factor.bouncy.BouncyNestedScrollView>
+
+
+
 
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </FrameLayout>
 </layout>

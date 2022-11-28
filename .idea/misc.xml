@@ -4,22 +4,25 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/content_background.xml" value="0.156" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/ic_baseline_home_24.xml" value="0.156" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/ic_baseline_menu_24.xml" value="0.156" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.156" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/ic_baseline_shopping_cart_24.xml" value="0.156" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/ic_superellipse_60x60.xml" value="0.156" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/product_bg.xml" value="0.148" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/drawable/search_bar_bg.xml" value="0.156" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/activity_cart.xml" value="0.22" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/activity_custom_acp_board.xml" value="0.22" />
-        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/activity_main.xml" value="0.2552083333333333" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/activity_main.xml" value="0.22" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/bottom_sheet_acp.xml" value="0.22" />
-        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/bottom_sheet_menu.xml" value="0.33" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/bottom_sheet_menu.xml" value="0.22" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/cart_item_layout.xml" value="0.25" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/category_item_layout.xml" value="1.1" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/font_item_layout.xml" value="0.25" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_custom_order.xml" value="0.2552083333333333" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_home.xml" value="0.25" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_user_profile.xml" value="0.2552083333333333" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/product_item_layout.xml" value="0.5" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/menu/bottom_menu.xml" value="0.25416666666666665" />
       </map>
     </option>

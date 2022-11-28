@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/product_bg">
+
+
+        <ImageView
+            android:layout_gravity="center"
+            android:src="@drawable/poster1"
+            android:id="@+id/imgProductImage"
+            android:layout_width="130dp"
+            android:layout_height="130dp" />
+
+        <TextView
+            android:textSize="14sp"
+            android:layout_marginLeft="10dp"
+            android:textStyle="bold"
+            android:id="@+id/txtProductName"
+            android:text="Fire safety poster cool na"
+            android:fontFamily="@font/satoshi_medium"
+            android:textColor="@color/title_text_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:textSize="10sp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/txtProductCategory"
+            android:text="Poster"
+            android:fontFamily="@font/satoshi_medium"
+            android:textColor="@color/text_normal_color"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_weight="0.7"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                android:id="@+id/txtProductPrice"
+                android:text="$20.00"
+                android:fontFamily="@font/satoshi_bold"
+                android:textColor="@color/order_selected_text_color"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <ImageView
+                android:layout_weight="0.3"
+                android:layout_gravity="end"
+                android:id="@+id/btnAddToWishlist"
+                android:src="@drawable/ic_baseline_favorite_border_24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>

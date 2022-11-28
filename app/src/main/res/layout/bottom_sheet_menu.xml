@@ -9,40 +9,133 @@
     app:cardBackgroundColor="@color/bg_color">
 
     <LinearLayout
-        android:padding="10dp"
+        android:padding="22dp"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_margin="10dp"
-            android:id="@+id/btnOrders"
-            android:text="View Your Orders"
-            android:textSize="16sp"
-            android:textColor="@color/title_text_color"
-            android:fontFamily="@font/satoshi_medium"
+        <LinearLayout
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_margin="10dp"
-            android:id="@+id/btnProfile"
-            android:text="View Your Profile"
-            android:textSize="16sp"
-            android:textColor="@color/title_text_color"
-            android:fontFamily="@font/satoshi_medium"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/user_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
 
-        <TextView
-            android:layout_margin="10dp"
-            android:id="@+id/btnTransaction"
-            android:text="View Your Transactions"
-            android:textSize="16sp"
-            android:textColor="@color/title_text_color"
-            android:fontFamily="@font/satoshi_medium"
+            <TextView
+                android:layout_margin="10dp"
+                android:text="Profile"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/order_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+            <TextView
+                android:layout_margin="10dp"
+                android:id="@+id/btnOrders"
+                android:text="Orders"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/wishlist_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="Wishlist"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/transaction_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="Transactions"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/rating_icon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="My Reviews"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+
+
+
+
 
 
     </LinearLayout>
