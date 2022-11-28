@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:elevation="0dp"
+        app:cardElevation="0dp"
+        android:backgroundTint="@color/bg_color"
+        android:foreground="?attr/selectableItemBackground"
+        android:clickable="true">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <ImageView
+                android:id="@+id/imgProductOrderItem"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="6dp"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:textColor="@color/title_text_color"
+                    android:id="@+id/txtOrderItemTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:text="Safty poster with nothing" />
+
+                <TextView
+                    android:textColor="@color/text_normal_color"
+                    android:id="@+id/txtOrderItemBasePrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:text="$500" />
+
+                <TextView
+                    android:textColor="@color/text_normal_color"
+                    android:id="@+id/txtOrderItemQty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:text="Quantity : 5" />
+
+                <TextView
+                    android:id="@+id/txtProductType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/order_status_bg"
+                    android:fontFamily="@font/satoshi_bold"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="2dp"
+                    android:text="Banner"
+                    android:textColor="@color/title_text_color" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtOrderItemTotalPrice"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginRight="6dp"
+                android:fontFamily="@font/satoshi_bold"
+                android:gravity="center|end"
+                android:text="$600"
+                android:textColor="#58B814"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>

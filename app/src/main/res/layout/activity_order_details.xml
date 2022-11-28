@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="#048F55"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.OrderDetailsActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/orderDetailsAppBar"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            android:background="#048F55"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <LinearLayout
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:id="@+id/btnOrderDetailBack"
+                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"/>
+                <TextView
+                    android:layout_weight="0.6"
+                    android:textSize="22sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/satoshi_bold"
+                    android:text="Order Details"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.factor.bouncy.BouncyNestedScrollView
+            app:layout_constraintTop_toBottomOf="@id/orderDetailsAppBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            >
+
+            <LinearLayout
+                android:padding="20dp"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/content_background">
+
+                <TextView
+                    android:fontFamily="@font/satoshi_bold"
+                    android:textColor="@color/title_text_color"
+                    android:textSize="16sp"
+                    android:text="Ordered Products"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/rvOrderItems"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    />
+
+
+                <GridLayout
+                    android:padding="12dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/gridview_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="7"
+                    android:useDefaultMargins="true">
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Order Id : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderIdDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="99898sb" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Order Date : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderDateDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="18 july 2003" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Total Items : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderQuantityDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="5" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Order Total : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderTotalDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="$56" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Payment Status : " />
+
+                    <TextView
+                        android:background="@drawable/order_status_bg"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="2dp"
+                        android:id="@+id/txtOrderPaymentStatus"
+                        android:text="Payment status"/>
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Estimated Days : " />
+
+                    <TextView
+                        android:id="@+id/txtEstimatedDays"
+                        android:layout_width="50dp"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:gravity="center"
+                        android:text="0"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Tracking Url : " />
+
+                    <EditText
+                        android:id="@+id/edTrackingUrl"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:gravity="center"
+                        android:hint="Getting soon..."
+                        android:textSize="16sp" />
+
+
+                </GridLayout>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:text="Make Payment"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginBottom="4dp"
+                    android:id="@+id/btnMakePayment"
+                    android:background="@drawable/normal_button_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+
+        </com.factor.bouncy.BouncyNestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

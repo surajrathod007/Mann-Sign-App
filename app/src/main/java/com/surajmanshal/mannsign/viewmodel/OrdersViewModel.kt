@@ -49,6 +49,8 @@ class OrdersViewModel : ViewModel() {
     private var _msg = MutableLiveData<String>()
     val msg : LiveData<String> get() = _msg
 
+    private var _order = MutableLiveData<Order>()
+    val order : LiveData<Order> get() = _order
 
     companion object {
         val repository = Repository()
@@ -72,6 +74,22 @@ class OrdersViewModel : ViewModel() {
 
             override fun onFailure(call: Call<List<Order>?>, t: Throwable) {
                 _msg.postValue(t.message.toString())
+            }
+        })
+    }
+
+    fun getOrderById(id : String){
+        isLoading.postValue(true)
+        val r = db.getOrderById(id)
+
+        r.enqueue(object : Callback<Order?> {
+            override fun onResponse(call: Call<Order?>, response: Response<Order?>) {
+                _order.postValue(response.body()!!)
+                isLoading.postValue(false)
+            }
+
+            override fun onFailure(call: Call<Order?>, t: Throwable) {
+                isLoading.postValue(false)
             }
         })
     }

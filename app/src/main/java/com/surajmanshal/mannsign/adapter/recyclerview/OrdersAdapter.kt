@@ -1,11 +1,13 @@
 package com.surajmanshal.mannsign.adapter.recyclerview
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.databinding.OrderItemLayoutBinding
+import com.surajmanshal.mannsign.ui.activity.OrderDetailsActivity
 import com.surajmanshal.mannsign.utils.Constants
 
 class OrdersAdapter(val context: Context, val list: List<Order>) :
@@ -54,6 +56,11 @@ class OrdersAdapter(val context: Context, val list: List<Order>) :
                 Constants.ORDER_CANCELED -> {
                     holder.txtOrderStatus.text = "Canceled"
                 }
+            }
+            itemView.setOnClickListener {
+                val i = Intent(context, OrderDetailsActivity::class.java)
+                i.putExtra("id", d.orderId)
+                context.startActivity(i)
             }
         }
     }
