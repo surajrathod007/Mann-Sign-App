@@ -38,6 +38,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btnOrdersBottomSheet"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal"

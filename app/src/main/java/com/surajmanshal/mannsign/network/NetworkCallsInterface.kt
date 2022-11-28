@@ -132,4 +132,7 @@ interface NetworkCallsInterface {
 
     @GET("discount/use")
     fun userCoupon(@Query("code") code : String) : Call<Int>
+
+    @POST("order/get")
+    fun getOrderByEmail(@Query("email") email : String) : Call<List<Order>>
 }

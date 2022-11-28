@@ -24,7 +24,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    defaultConfig {
+        // Required when setting minSdkVersion to 20 or lower
+        multiDexEnabled true
+    }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
@@ -109,4 +114,7 @@ dependencies {
 
     //superellipse
     //implementation 'com.github.MicroRJ:android_superellipse:v3.0.0-alpha'
+
+    //for localdate
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 }

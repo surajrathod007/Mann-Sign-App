@@ -17,8 +17,8 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class OrdersViewModel : ViewModel() {
-    //lateinit var  repository : Repository
 
+    //lateinit var  repository : Repository
 
     private val _allOrders = MutableLiveData<List<Order>>(emptyList())
     val allOrders: LiveData<List<Order>> get() = _allOrders
@@ -43,16 +43,40 @@ class OrdersViewModel : ViewModel() {
     val _reviews = MutableLiveData<List<Review>>()
     val reviews : LiveData<List<Review>> get() = _reviews
 
+    val _customerOrders = MutableLiveData<List<Order>>(mutableListOf())
+    val customerOrders : LiveData<List<Order>> get() = _customerOrders
+
+    private var _msg = MutableLiveData<String>()
+    val msg : LiveData<String> get() = _msg
+
+
     companion object {
         val repository = Repository()
+        val db = NetworkService.networkInstance
     }
 
     suspend fun setupViewModelDataMembers() {
-        CoroutineScope(Dispatchers.IO).launch { getAllOrders() }
+        //CoroutineScope(Dispatchers.IO).launch { getAllOrders() }
+    }
+
+    fun getCustomerOrders(email : String){
+        isLoading.postValue(true)
+        val r = db.getOrderByEmail(email)
+        r.enqueue(object : Callback<List<Order>?> {
+            override fun onResponse(call: Call<List<Order>?>, response: Response<List<Order>?>) {
+                if(response.body()!!.isEmpty()){
+                    _msg.postValue("No Orders , Please Order Something!")
+                }
+                _customerOrders.postValue(response.body()!!)
+            }
+
+            override fun onFailure(call: Call<List<Order>?>, t: Throwable) {
+                _msg.postValue(t.message.toString())
+            }
+        })
     }
 
     fun filterOrder(status: Int) {
-
         val list = _allOrders.value?.filter { it.orderStatus == status }
         _allOrders.value = list!!
     }
@@ -135,11 +159,8 @@ class OrdersViewModel : ViewModel() {
         }
     }
 
-
     fun fetchOrderItemDetails(sid : Int,lid :  Int,mid : Int){
-
         try{
-
             val size = NetworkService.networkInstance.fetchSizeById(sid)
 
             size.enqueue(object : Callback<Size?> {
@@ -177,11 +198,9 @@ class OrdersViewModel : ViewModel() {
         }catch ( e : Exception){
             _serverResponse.postValue(SimpleResponse(true,"${e.message}"))
         }
-
     }
 
     fun fetchProductReview(productId : String){
-
         val l = NetworkService.networkInstance.getReview(productId)
         l.enqueue(object : Callback<List<Review>?> {
             override fun onResponse(call: Call<List<Review>?>, response: Response<List<Review>?>) {
