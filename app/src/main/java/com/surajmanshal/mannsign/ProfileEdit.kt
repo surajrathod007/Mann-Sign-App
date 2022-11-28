@@ -6,6 +6,7 @@ import android.text.Editable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileEditBinding
 import com.surajmanshal.mannsign.network.NetworkService
@@ -31,11 +32,13 @@ class ProfileEdit : AppCompatActivity() {
 
         val user = db.getUser(e!!)
         user.observe(this) {
+            Glide.with(this).load(it.profilePic).into(binding.ivProfilePic)
             binding.editFirstName.setText(it.firstName)
             binding.editLastName.setText(it.lastName)
             binding.editAddress.setText(it.address)
-            binding.editPhone.setText(it.mobileNo)
+            binding.editPhone.setText(it.phoneNumber)
             binding.editEmailName.setText(it.emailId)
+            binding.etPinCode.setText(it.pinCode.toString())
         }
 
         with(binding) {
@@ -44,11 +47,12 @@ class ProfileEdit : AppCompatActivity() {
                     emailId = editEmailName.text.toString(),
                     firstName = editFirstName.text.toString(),
                     lastName = editLastName.text.toString(),
-                    mobileNo = editPhone.text.toString(),
+                    phoneNumber = editPhone.text.toString(),
                     address = editAddress.text.toString(),
-                    token = "",
-                    otp = ""
-                )
+
+                ).apply {
+                    if(etPinCode.text.isNotEmpty()) pinCode = etPinCode.text.toString().toInt()
+                }
 
                 try {
 

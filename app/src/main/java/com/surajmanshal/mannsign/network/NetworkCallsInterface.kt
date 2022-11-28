@@ -1,6 +1,5 @@
 package com.surajmanshal.mannsign.network
 
-import com.surajmanshal.mannsign.URL.BASE_URL
 import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
@@ -36,7 +35,7 @@ interface NetworkCallsInterface {
     //user Update
 
     @Headers("Content-Type: application/json")
-    @POST("$BASE_URL/user/update_profile")
+    @POST("user/update")
     suspend fun updateUser(@Body user : User) : SimpleResponse
 
     @GET("materials")

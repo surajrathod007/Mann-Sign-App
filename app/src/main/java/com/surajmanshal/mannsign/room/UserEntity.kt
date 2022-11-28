@@ -9,11 +9,13 @@ data class UserEntity(
 
 
     @PrimaryKey
-    val emailId : String,
-    val firstName : String="",
-    val lastName : String="",
-    val mobileNo : String ="",
+    var emailId : String ="",
+    var password : String ="",
+    val firstName : String? = null,
+    val lastName : String? = null,
+    var phoneNumber : String = "",
+    val profileImage : String? = null,
     val address : String? = null,
-    val token : String? = null,
-    val otp : String? = null
+    var pinCode : Int? = null,
+    var profilePic : String? = null
 )

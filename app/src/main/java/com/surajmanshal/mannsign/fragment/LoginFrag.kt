@@ -98,7 +98,7 @@ class LoginFrag : Fragment() {
         }
 
         val sharedPreference =  requireActivity().getSharedPreferences("user_e",Context.MODE_PRIVATE)
-        var editor = sharedPreference.edit()
+        val editor = sharedPreference.edit()
         editor.putString("email",user.emailId)
         editor.commit()
 
@@ -106,7 +106,7 @@ class LoginFrag : Fragment() {
 
         val u = UserEntity(
             emailId = user.emailId,
-            token = user.token
+//            token = user.token
         )
         val db = UserDatabase.getDatabase(this.requireContext())
         lifecycleScope.launch(Dispatchers.IO) {
@@ -118,7 +118,6 @@ class LoginFrag : Fragment() {
 
     }
     suspend fun storeStringPreferences(key: String ,value : String){
-        // Todo : Implement it later to store JWT token
         requireActivity().preferenceDataStoreAuth.edit {
                 it[stringPreferencesKey(key)] = value
         }
