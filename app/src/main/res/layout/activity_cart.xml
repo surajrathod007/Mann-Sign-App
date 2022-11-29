@@ -213,34 +213,76 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
     -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="@color/bg_color"
+        android:background="#048F55"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.CartActivity">
 
+
+
+
+
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/cartsAppBar"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            android:background="#048F55"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <LinearLayout
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:id="@+id/btnCartBack"
+                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"/>
+                <TextView
+                    android:layout_weight="0.6"
+                    android:textSize="22sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/satoshi_bold"
+                    android:text="Cart"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/sRefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/cartsAppBar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
 
         <com.factor.bouncy.BouncyNestedScrollView
-            android:layout_margin="10dp"
-            app:fling_animation_size=".5"
-            app:overscroll_animation_size=".6"
-            app:bouncy_scrollview_damping_ratio="DAMPING_RATIO_MEDIUM_BOUNCY"
-            app:bouncy_scrollview_stiffness="STIFFNESS_LOW"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="0dp">
+            android:id="@+id/sCartNested"
+            android:background="@drawable/content_background"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
-                android:background="@color/bg_color"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -254,20 +296,31 @@
                     android:id="@+id/rvCartItems"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginBottom="14dp"
+                    tools:listitem="@layout/cart_item_layout"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     />
 
 
 
                 <LinearLayout
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginBottom="14dp"
                     android:weightSum="1"
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <EditText
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:paddingLeft="12dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/search_bar_bg"
                         android:layout_weight="0.6"
                         android:id="@+id/edCouponCode"
                         android:hint="Enter coupon code , if any !"
@@ -275,19 +328,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>
 
-                    <Button
-                        android:layout_marginLeft="4dp"
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:backgroundTint="#048F55"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/normal_button_bg"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginRight="4dp"
                         android:layout_weight="0.4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/btnApplyCoupon"
                         android:textAllCaps="false"
+                        android:textColor="@color/white"
                         android:text="Apply"/>
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:layout_margin="4dp"
+                    android:background="@drawable/search_bar_bg"
+                    android:layout_marginLeft="18dp"
+                    android:layout_marginRight="18dp"
+                    android:padding="18dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -429,6 +492,7 @@
                         android:layout_marginTop="4dp"
                         android:orientation="horizontal"
                         android:weightSum="1"
+                        android:layout_marginBottom="18dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
                         <TextView
@@ -450,11 +514,14 @@
 
                     </LinearLayout>
 
-                    <Button
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_margin="8dp"
+                        android:background="@drawable/normal_button_bg"
                         android:id="@+id/btnPlaceOrder"
                         android:layout_marginTop="10dp"
                         android:textAllCaps="false"
                         android:text="Place Order"
+                        android:textColor="@color/white"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
 
@@ -462,6 +529,7 @@
             </LinearLayout>
 
         </com.factor.bouncy.BouncyNestedScrollView>
+
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

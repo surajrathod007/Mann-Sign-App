@@ -8,6 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:animateLayoutChanges="true"
         android:background="#048F55"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -96,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:columnCount="2"
-                    android:rowCount="7"
+                    android:rowCount="11"
                     android:useDefaultMargins="true">
 
                     <TextView
@@ -132,16 +133,6 @@
                         android:fontFamily="@font/satoshi_medium"
                         android:text="5" />
 
-                    <TextView
-                        android:textColor="@color/title_text_color"
-                        android:fontFamily="@font/satoshi_medium"
-                        android:text="Order Total : " />
-
-                    <TextView
-                        android:id="@+id/txtOrderTotalDetails"
-                        android:textColor="@color/text_normal_color"
-                        android:fontFamily="@font/satoshi_medium"
-                        android:text="$56" />
 
                     <TextView
                         android:textColor="@color/title_text_color"
@@ -183,10 +174,68 @@
                         android:hint="Getting soon..."
                         android:textSize="16sp" />
 
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Order Status : " />
+
+                    <TextView
+                        android:background="@drawable/order_status_bg"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="2dp"
+                        android:id="@+id/txtOrderDetailsStatus"
+                        android:text=""/>
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Order SubTotal : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderTotalDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="$56" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Order Discount : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderDiscountDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="$56" />
+
+                    <TextView
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Delivery Charge : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderDeliveryDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="$56" />
+
+                    <TextView
+                        android:id="@+id/txtYouHaveToPay"
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="You have to pay : " />
+
+                    <TextView
+                        android:id="@+id/txtOrderGrandTotalDetails"
+                        android:textColor="@color/text_normal_color"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="$56" />
 
                 </GridLayout>
 
                 <androidx.appcompat.widget.AppCompatButton
+                    android:visibility="gone"
                     android:text="Make Payment"
                     android:textColor="@color/white"
                     android:textAllCaps="false"
