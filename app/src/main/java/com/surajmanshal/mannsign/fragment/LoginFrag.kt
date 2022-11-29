@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
-import com.surajmanshal.mannsign.ProfileActivity
+import com.surajmanshal.mannsign.MainActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
@@ -102,7 +102,7 @@ class LoginFrag : Fragment() {
         editor.putString("email",user.emailId)
         editor.commit()
 
-        val intent = Intent(requireActivity(), ProfileActivity::class.java)
+        val intent = Intent(requireActivity(), MainActivity::class.java)
 
         val u = UserEntity(
             emailId = user.emailId,

@@ -49,6 +49,9 @@
         <activity android:name=".ProfileEdit"
             android:exported="false"/>
 
+        <activity android:name=".MainActivity"
+            android:exported="false"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

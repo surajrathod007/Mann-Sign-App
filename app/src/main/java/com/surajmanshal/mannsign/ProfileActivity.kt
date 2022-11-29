@@ -82,6 +82,7 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
+
     fun setupCards() {
         with(binding) {
             // Title

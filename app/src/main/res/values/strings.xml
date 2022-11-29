@@ -1,4 +1,5 @@
 <resources>
+    <string name="hello_blank_fragment">Its a Blank frag</string>
     <string name="app_name">Mann Sign App</string>
     <string name="email">email</string>
     <string name="password">password</string>

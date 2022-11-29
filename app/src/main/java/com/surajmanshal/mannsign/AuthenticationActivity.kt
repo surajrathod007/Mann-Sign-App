@@ -18,7 +18,7 @@ class AuthenticationActivity : AppCompatActivity() {
         CoroutineScope(Dispatchers.IO).launch{
             val token = isLoggedIn(DataStore.JWT_TOKEN)
             if(token!=null){
-                val intent = Intent(this@AuthenticationActivity, ProfileActivity::class.java)
+                val intent = Intent(this@AuthenticationActivity, MainActivity::class.java)
                 intent.putExtra(DataStore.JWT_TOKEN,token)
                 startActivity(intent)
                 finish()
