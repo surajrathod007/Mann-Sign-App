@@ -29,6 +29,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
+            <Button
+                android:id="@+id/btnCustomBanner"
+                android:text="Custom Banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
         </LinearLayout>
 
     </FrameLayout>
