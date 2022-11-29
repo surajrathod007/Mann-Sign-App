@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 class AuthenticationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_auth)
         CoroutineScope(Dispatchers.IO).launch{
             val token = isLoggedIn(DataStore.JWT_TOKEN)
             if(token!=null){
