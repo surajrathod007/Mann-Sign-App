@@ -9,13 +9,13 @@ data class UserEntity(
 
 
     @PrimaryKey
-    var emailId : String ="",
-    var password : String ="",
-    val firstName : String? = null,
-    val lastName : String? = null,
-    var phoneNumber : String = "",
-    val profileImage : String? = null,
-    val address : String? = null,
-    var pinCode : Int? = null,
-    var profilePic : String? = null
+    var emailId: String ="",
+    var password: String ="",
+    val firstName: String? = null,
+    val lastName: String? = null,
+    var phoneNumber: String = "",
+    var profileImage: String? = null,
+    val address: String? = null,
+    var pinCode: Int? = null,
+    var profilePic: String? = null
 )

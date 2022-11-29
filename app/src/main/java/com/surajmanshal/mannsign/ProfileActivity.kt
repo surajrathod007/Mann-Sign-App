@@ -8,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
+import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.databinding.ActivityProfileBinding
 import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
@@ -42,9 +43,12 @@ class ProfileActivity : AppCompatActivity() {
 
         val user = db.getUser(e!!)
 
-        user.observe(this) {
+        user.observe(this) { it ->
             txtUserName.text = it.firstName
             txtEmail.text = it.emailId
+            it.profileImage?.let {
+                Glide.with(this).load(it).circleCrop().into(binding.layoutProfile.ivProfilePic)
+            }
         }
         btnEdit = findViewById(R.id.btnEditProfile)
         btnEdit.setOnClickListener {

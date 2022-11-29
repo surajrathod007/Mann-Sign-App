@@ -144,5 +144,7 @@ interface NetworkCallsInterface {
     @GET("subCategory")
     fun fetchSubCategoryById(@Query("id")id: Int): Call<SubCategory>
 
+    @POST("user/updateProfilePic")
+    suspend fun updateUserProfile(@Query("emailId")emailId: String,@Query("imgUrl") imgUrl: String): SimpleResponse
 
 }
