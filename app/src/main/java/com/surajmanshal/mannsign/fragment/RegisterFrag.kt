@@ -14,11 +14,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragRegisterBinding
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import kotlinx.coroutines.launch
@@ -44,17 +46,27 @@ class RegisterFrag : Fragment() {
         var etPassword = binding.ETPassword
         val etMobileNo = binding.etMobileNumber
 
+        //Functions.makeToast(requireContext(),OneSignal.getDeviceState()?.userId.toString())
 
         // Event Listeners
         binding.tvLoginHere.setOnClickListener {
             findNavController().navigate(R.id.action_registerFrag_to_loginFrag)
         }
         binding.btnRegister.setOnClickListener {
+            try{
+                OneSignal.setExternalUserId(etEmail.text.toString())
+            }catch (e : Exception){
+                Functions.makeToast(requireContext(),e.message.toString())
+            }
+
+            Functions.makeToast(requireContext(),OneSignal.getDeviceState()?.userId.toString())
+            val did = OneSignal.getDeviceState()?.userId
             if(!isDataFillled(etEmail))else if(!isDataFillled(etPassword))else if(!isDataFillled(etMobileNo))else{
                 registerUser(User().apply {
                     emailId = etEmail.text.toString()
                     password = etPassword.text.toString()
                     phoneNumber = etMobileNo.text.toString()
+                    deviceId = did
                 })
             }
         }

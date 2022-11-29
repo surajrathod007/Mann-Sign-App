@@ -12,12 +12,14 @@ import androidx.appcompat.app.ActionBar
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.tabs.TabLayout
+import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.adapter.MainViewPagerAdapter
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
 import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.ui.fragments.CustomOrderFragment
 import com.surajmanshal.mannsign.ui.fragments.HomeFragment
 import com.surajmanshal.mannsign.ui.fragments.UserProfileFragment
+import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,6 +46,8 @@ class MainActivity : AppCompatActivity() {
             isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
             isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
         }
+
+
 
         requestPermission()
         setupViewPager()
