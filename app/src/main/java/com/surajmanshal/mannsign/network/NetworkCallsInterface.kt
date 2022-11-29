@@ -1,6 +1,8 @@
 package com.surajmanshal.mannsign.network
 
 import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.auth.LoginReq
+import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.CartItem
 import com.surajmanshal.mannsign.data.model.ordering.Carts
@@ -14,6 +16,29 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface NetworkCallsInterface {
+
+    //User Auth
+    @Headers("Content-Type: application/json")
+    @POST("user/register")
+    suspend fun registerUser(@Body user : User) : SimpleResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("user/login")
+    suspend fun loginUser(@Body loginReq: LoginReq) : LoginResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("user/otp")
+    suspend fun sendOtp(@Query("email") email : String) : SimpleResponse
+
+    @Headers("Content-Type: application/json")
+    @POST("user/resetpassword")
+    suspend fun resetPassword(@Query("email") email: String, @Query("newpas") newpas : String) : SimpleResponse
+
+    //user Update
+
+    @Headers("Content-Type: application/json")
+    @POST("user/update")
+    suspend fun updateUser(@Body user : User) : SimpleResponse
 
     @GET("materials")
     fun fetchMaterials() : Call<List<Material>>
@@ -132,6 +157,8 @@ interface NetworkCallsInterface {
 
     @GET("discount/use")
     fun userCoupon(@Query("code") code : String) : Call<Int>
+    @POST("user/updateProfilePic")
+    suspend fun updateUserProfile(@Query("emailId")emailId: String,@Query("imgUrl") imgUrl: String): SimpleResponse
 
     @POST("order/get")
     fun getOrderByEmail(@Query("email") email : String) : Call<List<Order>>

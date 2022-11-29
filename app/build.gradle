@@ -117,4 +117,17 @@ dependencies {
 
     //for localdate
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+
+    // Lottie
+    def lottieVersion = "5.2.0"
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+    // DataStore
+    implementation('androidx.datastore:datastore-preferences:1.0.0')
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
+
+    //Navigation
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+
 }

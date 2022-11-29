@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">Mann Sign App</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="login">Login</string>
+    <string name="title_activity_authentication">Authentication</string>
+    <string name="register">Register</string>
+    <string name="resetPWtxt">Enter your registered email we will send \nyou a link for reset password</string>
+    <string name="generalErrorMsg">Something went wrong</string>
 </resources>
