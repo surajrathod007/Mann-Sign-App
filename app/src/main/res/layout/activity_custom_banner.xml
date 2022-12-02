@@ -13,9 +13,9 @@
         android:layout_height="match_parent"
         tools:context=".ui.activity.CustomBannerActivity">
 
-        <FrameLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_gravity="center"
             android:id="@+id/framLayout"
-            android:padding="20dp"
             android:background="@color/black"
             android:layout_width="match_parent"
             android:layout_height="300dp"/>
@@ -25,13 +25,19 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:paddingBottom="4dp"
-            android:layout_margin="50dp"
             android:background="@color/black"
             android:textColor="@color/white"
             android:fontFamily="@font/satoshi_bold"
             android:textSize="26sp"
             android:text="Drag me anywhere"
             android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+        <TextView
+            android:id="@+id/txtPosition"
+            android:text="Position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
