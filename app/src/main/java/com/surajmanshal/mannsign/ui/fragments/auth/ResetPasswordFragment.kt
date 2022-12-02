@@ -1,4 +1,4 @@
-package com.surajrathod.authme.fragment
+package com.surajmanshal.mannsign.ui.fragments.auth
 
 import android.app.Dialog
 import android.content.ContentValues.TAG
@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentResetPasswordBinding
+
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.GenericTextWatcher

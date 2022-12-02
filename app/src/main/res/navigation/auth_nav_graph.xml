@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFrag"
-        android:name="com.surajmanshal.mannsign.fragment.LoginFrag"
+        android:name="com.surajmanshal.mannsign.ui.fragments.auth.LoginFrag"
         android:label="LoginFrag" >
         <action
             android:id="@+id/action_loginFrag_to_registerFrag"
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFrag"
-        android:name="com.surajrathod.authme.fragment.RegisterFrag"
+        android:name="com.surajmanshal.mannsign.ui.fragments.auth.RegisterFrag"
         android:label="RegisterFrag" >
         <action
             android:id="@+id/action_registerFrag_to_loginFrag"
@@ -27,7 +27,7 @@
     </fragment>
     <fragment
         android:id="@+id/resetPasswordFragment"
-        android:name="com.surajrathod.authme.fragment.ResetPasswordFragment"
+        android:name="com.surajmanshal.mannsign.ui.fragments.auth.ResetPasswordFragment"
         android:label="ResetPasswordFragment" >
         <action
             android:id="@+id/action_resetPasswordFragment_to_loginFrag"
@@ -36,7 +36,7 @@
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
-        android:name="com.surajrathod.authme.fragment.ForgotPasswordFragment"
+        android:name="com.surajmanshal.mannsign.ui.fragments.auth.ForgotPasswordFragment"
         android:label="fragment_forgot_password"
         tools:layout="@layout/fragment_forgot_password" >
         <action
