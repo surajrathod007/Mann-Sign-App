@@ -6,6 +6,7 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/productCard"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         android:layout_margin="10dp"

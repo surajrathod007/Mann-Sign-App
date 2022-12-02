@@ -1,4 +1,4 @@
-package com.surajmanshal.mannsign.fragment
+package com.surajmanshal.mannsign.ui.fragments.auth
 
 import android.app.Dialog
 import android.content.Context

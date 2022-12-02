@@ -2,21 +2,17 @@ package com.surajmanshal.mannsign.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.factor.bouncy.BouncyNestedScrollView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
-import com.surajmanshal.mannsign.data.model.SubCategory
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.activity.CartActivity
@@ -99,7 +95,7 @@ class HomeFragment : Fragment() {
             binding.rvCategories.adapter = CategoryAdapter(requireContext(), it)
         }
         vm.products.observe(viewLifecycleOwner) {
-            binding.rvProducts.adapter = ProductAdapter(requireContext(), it, vm)
+            binding.rvProducts.adapter = ProductAdapter(requireContext(), it, vm,)
         }
     }
 }

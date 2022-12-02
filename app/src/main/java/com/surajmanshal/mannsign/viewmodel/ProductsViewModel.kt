@@ -22,8 +22,8 @@ class ProductsViewModel : ViewModel() {
     val _currentProduct = MutableLiveData<Product>()
     val _currentProductCategory = MutableLiveData<Category>()
     val _currentProductSubCategory = MutableLiveData<SubCategory>()
-    val _currentProductMaterial = MutableLiveData<Material>()
-    val _currentProductLanguage = MutableLiveData<Language>()
+    val _currentProductMaterial = MutableLiveData<MutableList<Material>>(mutableListOf())
+    val _currentProductLanguage = MutableLiveData<MutableList<Language>>(mutableListOf())
 //    val currentProduct : LiveData<Product> get() = _currentProduct
 
     fun getPosters() {
@@ -71,7 +71,10 @@ class ProductsViewModel : ViewModel() {
         response.enqueue(object : Callback<Material>{
             override fun onResponse(call: Call<Material>, response: Response<Material>) {
                 println(response.body())
-                response.body()?.let { _currentProductMaterial.value = it }
+                response.body()?.let {
+                    _currentProductMaterial.value?.add(it)
+                    _currentProductMaterial.postValue(_currentProductMaterial.value)
+                }
             }
             override fun onFailure(call: Call<Material>, t: Throwable) {
 //                TODO("Not yet implemented")
@@ -84,7 +87,10 @@ class ProductsViewModel : ViewModel() {
         response.enqueue(object : Callback<Language>{
             override fun onResponse(call: Call<Language>, response: Response<Language>) {
                 println(response.body())
-                response.body()?.let { _currentProductLanguage.value = it }
+                response.body()?.let {
+                    _currentProductLanguage.value?.add(it)
+                    _currentProductLanguage.postValue(_currentProductLanguage.value)
+                }
             }
             override fun onFailure(call: Call<Language>, t: Throwable) {
 //                TODO("Not yet implemented")

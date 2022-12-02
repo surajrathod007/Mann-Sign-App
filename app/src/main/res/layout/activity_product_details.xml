@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.ProductDetailsActivity">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:layout_marginBottom="56dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/ivProduct"
+                android:layout_width="180dp"
+                android:layout_height="240dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                app:shapeAppearance="@style/ShapeAppearanceOverlay.Material3.Chip"
+                android:background="@color/bg_color"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Title"/>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Short Description"/>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Long Description"/>
+
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:text="Variant Availability"/>
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/sizeSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/materialSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/languageSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poster Category: "
+                android:textStyle="bold"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvSubCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Poster SubCategory: "
+                android:textStyle="bold"
+                />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/tvBasePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Base Price: ₹"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp"/>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="3"
+            android:layout_gravity="bottom">
+
+            <com.google.android.material.button.MaterialButton
+                android:layout_weight="1.3"
+                android:id="@+id/btnCopyCode"
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:text="Add to Cart"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_weight="1.7"
+                android:id="@+id/btnShareProgram"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="16dp"
+
+                android:clickable="true"
+                android:drawablePadding="12dp"
+
+                android:padding="12dp"
+                android:gravity="center"
+                android:paddingStart="24dp"
+                android:text="Order Now"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                app:drawableTint="@color/white"
+                android:focusable="true"
+                tools:ignore="RtlSymmetry" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </FrameLayout>
+
+</ScrollView>
+
