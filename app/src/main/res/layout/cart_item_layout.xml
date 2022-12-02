@@ -7,8 +7,9 @@
     </data>
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_marginBottom="6dp"
-        app:cardCornerRadius="8dp"
+
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="14dp"
         app:cardBackgroundColor="@color/bg_color"
         app:cardElevation="0dp"
         android:background="@color/bg_color"

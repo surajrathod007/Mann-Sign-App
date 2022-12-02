@@ -28,6 +28,9 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".ui.activity.CustomBannerActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.OrderDetailsActivity"
             android:exported="false" />
         <activity

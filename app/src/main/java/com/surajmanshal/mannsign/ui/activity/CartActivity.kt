@@ -31,6 +31,11 @@ class CartActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        binding.btnCartBack.setOnClickListener {
+            onBackPressed()
+            finish()
+        }
+
 
         binding.sRefresh.setOnRefreshListener {
             loadCarts("surajsinhrathod75@gmail.com")
@@ -41,7 +46,9 @@ class CartActivity : AppCompatActivity() {
         vm.cartItems.observe(this) {
             if (it.isNullOrEmpty()) {
                 binding.btnPlaceOrder.isEnabled = false
+                binding.sCartNested.visibility = View.GONE
             }else{
+                binding.sCartNested.visibility = View.VISIBLE
                 binding.btnPlaceOrder.isEnabled = true
             }
             binding.rvCartItems.adapter = CartItemAdapter(this@CartActivity, it, vm)
