@@ -21,6 +21,9 @@
         android:theme="@style/Theme.MannSignApp"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activity.TransactionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.activity.ReviewsActivity"
             android:exported="false" />
         <activity

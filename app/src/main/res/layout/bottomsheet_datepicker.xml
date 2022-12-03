@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottomsheet_background">
+
+    <ImageView
+        android:layout_marginTop="8dp"
+        android:src="@drawable/bottomsheet_bar"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <!--
+    <TextView
+        android:layout_margin="8dp"
+        android:text="Choose Dates"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textColor="@color/title_text_color"
+        android:fontFamily="@font/satoshi_bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+        -->
+
+    <com.google.android.material.card.MaterialCardView
+        app:cardElevation="0dp"
+        app:cardCornerRadius="24dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <DatePicker
+                android:id="@+id/datePickerStart"
+                android:layout_gravity="center"
+                android:layout_width="210dp"
+                android:layout_height="480dp"
+                />
+
+            <TextView
+                android:text="From"
+                android:gravity="center"
+                android:fontFamily="@font/satoshi_bold"
+                android:textColor="@color/title_text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <DatePicker
+                android:id="@+id/datePickerEnd"
+                android:layout_gravity="center"
+                android:layout_width="210dp"
+                android:layout_height="480dp"
+                />
+
+            <TextView
+                android:text="To"
+                android:gravity="center"
+                android:fontFamily="@font/satoshi_bold"
+                android:textColor="@color/title_text_color"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"/>
+
+        </LinearLayout>
+
+
+
+
+    </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+
+
+    <com.google.android.material.button.MaterialButton
+        android:backgroundTint="@color/white"
+        android:textColor="@color/teal_700"
+        android:id="@+id/btnFilterDate"
+        android:layout_margin="10dp"
+        android:textAllCaps="false"
+        android:text="Filter Date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:clickable="true"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_margin="8dp"
+        android:id="@+id/cardItemTransaction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="0dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_margin="5dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/lnTransaction"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtTransactionId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_bold"
+                        android:text="ta1999009"
+                        android:textColor="@color/title_text_color" />
+
+                    <TextView
+                        android:id="@+id/txtTransactionEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="surajsinhrathod@gmail.com"
+                        android:textColor="@color/title_text_color" />
+
+                    <TextView
+                        android:id="@+id/txtTransactionAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_bold"
+                        android:text="₹50.00"
+                        android:textColor="@color/order_selected_text_color" />
+
+
+                </LinearLayout>
+
+                <ImageView
+                    android:id="@+id/btnExpand"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_baseline_keyboard_arrow_down_24"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <LinearLayout
+                android:id="@+id/transactionDetailsView"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="2"
+                    android:rowCount="4">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/title_text_color"
+                        android:text="Transaction Date : "
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/txtTransactionDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/text_normal_color"
+                        android:text=""
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/title_text_color"
+                        android:text="Shipping Charge : "
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/txtTransactionDeliveryCharge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/order_selected_text_color"
+                        android:text=""
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/title_text_color"
+                        android:text="Mode : "
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/txtTransactionMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/text_normal_color"
+                        android:text=""
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/title_text_color"
+                        android:text="Order Id : "
+                        android:textSize="12sp"/>
+
+                    <TextView
+                        android:id="@+id/txtTransactionOrderId"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:textColor="@color/text_normal_color"
+                        android:text=""
+                        android:textSize="12sp"/>
+
+
+                </GridLayout>
+
+            </LinearLayout>
+
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </com.google.android.material.card.MaterialCardView>
+</layout>

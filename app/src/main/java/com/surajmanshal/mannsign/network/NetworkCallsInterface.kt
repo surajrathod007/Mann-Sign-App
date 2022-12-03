@@ -171,4 +171,10 @@ interface NetworkCallsInterface {
 
     @POST("review/delete")
     fun deleteReview(@Query("reviewId") reviewId : Int) : Call<SimpleResponse>
+
+    @POST("transaction/getUserTransaction")
+    fun getUserTransactions(@Body date : DateFilter,@Query("emailId") emailId : String) : Call<List<Transaction>>
+
+    @POST("transaction/getUserAllTransaction")
+    fun getUserAllTransaction(@Query("emailId") emailId : String) : Call<List<Transaction>>
 }

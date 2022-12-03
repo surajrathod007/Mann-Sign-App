@@ -19,6 +19,7 @@ import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
 import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
+import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import nl.joery.animatedbottombar.AnimatedBottomBar
@@ -87,6 +88,9 @@ class HomeFragment : Fragment() {
         }
         btnProfile.setOnClickListener {
             startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+        }
+        btnTransactions.setOnClickListener {
+            startActivity(Intent(requireActivity(), TransactionsActivity::class.java))
         }
         bottomMenu.setContentView(sheetView)
         bottomMenu.show()
