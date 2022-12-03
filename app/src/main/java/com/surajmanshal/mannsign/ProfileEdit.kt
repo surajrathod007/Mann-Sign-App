@@ -90,6 +90,9 @@ class ProfileEdit : AppCompatActivity() {
                                 lastName = editLastName.text.toString(),
                                 address = editAddress.text.toString(),
                                 token = "",
+                                phoneNumber = user.phoneNumber,
+                                pinCode = user.pinCode,
+                                profileImage = user.profileImage
                             )
                         )
                         if (res.success) {

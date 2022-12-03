@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.surajmanshal.mannsign.ProfileActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
@@ -76,11 +77,16 @@ class HomeFragment : Fragment() {
 
         val btnOrders = sheetView.findViewById<LinearLayout>(R.id.btnOrdersBottomSheet)
         val btnMyReviews = sheetView.findViewById<LinearLayout>(R.id.btnMyReviewsBottomSheet)
+        val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
+        val btnTransactions = sheetView.findViewById<LinearLayout>(R.id.btnTransactionsBottomSheet)
         btnOrders.setOnClickListener {
             startActivity(Intent(requireActivity(), OrdersActivity::class.java))
         }
         btnMyReviews.setOnClickListener {
             startActivity(Intent(requireActivity(), ReviewsActivity::class.java))
+        }
+        btnProfile.setOnClickListener {
+            startActivity(Intent(requireActivity(), ProfileActivity::class.java))
         }
         bottomMenu.setContentView(sheetView)
         bottomMenu.show()
