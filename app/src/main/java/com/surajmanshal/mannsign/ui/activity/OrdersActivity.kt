@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
@@ -18,8 +19,11 @@ class OrdersActivity : AppCompatActivity() {
         binding = ActivityOrdersBinding.inflate(layoutInflater)
         setContentView(binding.root)
         vm = ViewModelProvider(this).get(OrdersViewModel::class.java)
+        val sharedPreference =  getSharedPreferences("user_e", Context.MODE_PRIVATE)
 
-        loadOrders()
+        val email = sharedPreference.getString("email","")
+        if(!email.isNullOrEmpty())
+            loadOrders(email)
         setObservers()
 
         binding.btnOrderBack.setOnClickListener {
@@ -29,8 +33,8 @@ class OrdersActivity : AppCompatActivity() {
 
     }
 
-    private fun loadOrders(){
-        vm.getCustomerOrders("surajsinhrathod75@gmail.com")
+    private fun loadOrders(email : String){
+        vm.getCustomerOrders(email)
     }
 
     private fun setObservers(){

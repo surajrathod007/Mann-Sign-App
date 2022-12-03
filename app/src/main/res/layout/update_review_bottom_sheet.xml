@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="26dp"
+    android:elevation="0dp"
+    app:cardElevation="0dp">
+
+    <LinearLayout
+        android:layout_margin="20dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginBottom="10dp"
+            android:text="Update Review"
+            android:gravity="center"
+            android:textColor="@color/title_text_color"
+            android:fontFamily="@font/satoshi_bold"
+            android:textSize="18sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+        <RatingBar
+            android:id="@+id/ratingBarUpdateReview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:numStars="5"
+            android:rating="1"
+            android:stepSize="1.0"
+            />
+
+        <EditText
+            android:id="@+id/edUpdateReview"
+            android:padding="10dp"
+            android:gravity="top"
+            android:background="@drawable/search_bar_bg"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:hint="Enter your Review..."
+            android:fontFamily="@font/satoshi_medium"
+            android:textColor="@color/text_normal_color"
+            android:textSize="14sp"
+            android:layout_marginBottom="10dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnUpdateReviewBottomSheet"
+            android:layout_margin="10dp"
+            android:background="@drawable/normal_button_bg"
+            android:text="Update Review"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

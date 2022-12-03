@@ -165,4 +165,10 @@ interface NetworkCallsInterface {
 
     @POST("order/id")
     fun getOrderById(@Query("id") id : String) : Call<Order>
+
+    @POST("review/getAllUserReview")
+    fun getAllUserReview(@Query("emailId") emailId: String) : Call<List<Review>>
+
+    @POST("review/delete")
+    fun deleteReview(@Query("reviewId") reviewId : Int) : Call<SimpleResponse>
 }

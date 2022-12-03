@@ -17,6 +17,7 @@ import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
+import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import nl.joery.animatedbottombar.AnimatedBottomBar
@@ -74,8 +75,12 @@ class HomeFragment : Fragment() {
             LayoutInflater.from(requireContext()).inflate(R.layout.bottom_sheet_menu, null)
 
         val btnOrders = sheetView.findViewById<LinearLayout>(R.id.btnOrdersBottomSheet)
+        val btnMyReviews = sheetView.findViewById<LinearLayout>(R.id.btnMyReviewsBottomSheet)
         btnOrders.setOnClickListener {
             startActivity(Intent(requireActivity(), OrdersActivity::class.java))
+        }
+        btnMyReviews.setOnClickListener {
+            startActivity(Intent(requireActivity(), ReviewsActivity::class.java))
         }
         bottomMenu.setContentView(sheetView)
         bottomMenu.show()

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:background="#048F55"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.activity.ReviewsActivity">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/reviewsAppBar"
+            android:elevation="0dp"
+            app:elevation="0dp"
+            android:background="#048F55"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="56dp">
+
+            <LinearLayout
+                android:weightSum="1"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:id="@+id/btnReviewBack"
+                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                    android:layout_width="0dp"
+                    android:layout_height="30dp"/>
+                <TextView
+                    android:layout_weight="0.6"
+                    android:textSize="22sp"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/satoshi_bold"
+                    android:text="My Reviews"
+                    android:gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"/>
+
+
+
+            </LinearLayout>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <com.factor.bouncy.BouncyNestedScrollView
+            app:layout_constraintTop_toBottomOf="@id/reviewsAppBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp">
+
+            <LinearLayout
+                android:padding="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/content_background"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="18dp"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginRight="6dp"
+                    tools:listitem="@layout/item_review_layout"
+                    android:id="@+id/rvReviews"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+
+        </com.factor.bouncy.BouncyNestedScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
