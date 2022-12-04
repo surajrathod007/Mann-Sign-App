@@ -155,13 +155,12 @@
                         android:textSize="18sp" />
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rvProducts"
+                        tools:listitem="@layout/item_products_main_layout"
+                        android:id="@+id/rvProductsMain"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:orientation="vertical"
-                        app:spanCount="2"
-                        app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                          />
 
                     <TextView

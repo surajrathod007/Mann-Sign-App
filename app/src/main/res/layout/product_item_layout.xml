@@ -11,7 +11,7 @@
         android:foreground="?attr/selectableItemBackground"
         android:layout_margin="10dp"
         android:orientation="vertical"
-        android:layout_width="160dp"
+        android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:background="@drawable/product_bg">
 

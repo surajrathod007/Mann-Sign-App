@@ -13,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.ProfileActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
-import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
+import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.activity.CartActivity
@@ -109,8 +109,11 @@ class HomeFragment : Fragment() {
         vm.subCategories.observe(viewLifecycleOwner) {
             binding.rvCategories.adapter = CategoryAdapter(requireContext(), it)
         }
-        vm.products.observe(viewLifecycleOwner) {
-            binding.rvProducts.adapter = ProductAdapter(requireContext(), it, vm,)
+//        vm.products.observe(viewLifecycleOwner) {
+//            binding.rvProductsMain.adapter = ProductAdapter(requireContext(), it, vm,)
+//        }
+        vm.posters.observe(viewLifecycleOwner){
+            binding.rvProductsMain.adapter = ProductsMainAdapter(requireContext(),it,vm,viewLifecycleOwner)
         }
     }
 }
