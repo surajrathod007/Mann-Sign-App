@@ -14,6 +14,8 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constMain"
+            android:animateLayoutChanges="true"
             android:background="#048F55"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -68,10 +70,31 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
+            <LinearLayout
+                android:visibility="visible"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:id="@+id/llLoading"
+                app:layout_constraintTop_toBottomOf="@id/appBar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="#048F55"
+                android:layout_width="match_parent"
+                android:layout_height="0dp">
+
+                <ProgressBar
+                    android:layout_gravity="center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
 
             <com.factor.bouncy.BouncyNestedScrollView
                 android:id="@+id/boucneScroll"
                 app:layout_constraintTop_toBottomOf="@id/appBar"
+                app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_width="match_parent"
                 android:layout_height="0dp">
 
@@ -79,7 +102,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
                 >
 
@@ -118,20 +141,24 @@
 
                 </LinearLayout>
 
+
+
                 <LinearLayout
+                    android:visibility="gone"
                     android:id="@+id/linearContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:background="@drawable/content_background"
                     android:orientation="vertical"
-                    android:padding="22dp">
+                    android:padding="16dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/satoshi_medium"
                         android:text="Categories"
+
                         android:textColor="@color/title_text_color"
                         android:textSize="18sp" />
 
@@ -163,11 +190,6 @@
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                          />
 
-                    <TextView
-                        android:layout_marginTop="56dp"
-                        android:id="@+id/extraView"
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"/>
 
                 </LinearLayout>
 

@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,10 @@ import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.transition.Fade
+import androidx.transition.Slide
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.ProfileActivity
 import com.surajmanshal.mannsign.R
@@ -103,6 +108,17 @@ class HomeFragment : Fragment() {
     }
 
     private fun setupObservers() {
+
+        val slideUp : Transition = Fade(Fade.OUT)
+        val f = Fade(Fade.IN)
+        f.setDuration(2000)
+        slideUp.setDuration(2000)
+        //slideUp.addTarget(binding.linearContent)
+        slideUp.addTarget(binding.llLoading)
+        f.addTarget(binding.linearContent)
+        TransitionManager.beginDelayedTransition(binding.constMain,slideUp)
+        TransitionManager.beginDelayedTransition(binding.constMain,f)
+
         vm.msg.observe(viewLifecycleOwner) {
             Functions.makeToast(requireContext(), it)
         }
@@ -114,6 +130,15 @@ class HomeFragment : Fragment() {
 //        }
         vm.posters.observe(viewLifecycleOwner){
             binding.rvProductsMain.adapter = ProductsMainAdapter(requireContext(),it,vm,viewLifecycleOwner)
+        }
+        vm.isLoading.observe(viewLifecycleOwner){
+            if(it){
+                binding.linearContent.visibility = View.GONE
+                binding.llLoading.visibility = View.VISIBLE
+            }else{
+                binding.linearContent.visibility = View.VISIBLE
+                binding.llLoading.visibility = View.GONE
+            }
         }
     }
 }
