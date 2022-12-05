@@ -98,14 +98,14 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    fun getSubCategoryById(id: Int) : String{
+    fun getSubCategoryById(id: Int,onResponse : (String) -> Unit) : String{
         val response = db.fetchSubCategoryById(id)
         response.enqueue(object : Callback<SubCategory> {
             override fun onResponse(call: Call<SubCategory>, response: Response<SubCategory>) {
                 println(response.body())
                 response.body()?.let {
                     _subName.postValue(it.name)
-                    catname = it.name
+                    onResponse(it.name)
                 }
             }
             override fun onFailure(call: Call<SubCategory>, t: Throwable) {

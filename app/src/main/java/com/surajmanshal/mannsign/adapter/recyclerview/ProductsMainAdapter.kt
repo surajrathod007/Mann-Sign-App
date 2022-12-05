@@ -35,11 +35,13 @@ class ProductsMainAdapter(
         )
     }
 
-    //TODO : Fetch categories by id
+
     override fun onBindViewHolder(holder: ProductMainViewHolder, position: Int) {
         val d = l[position]
 
-            holder.txtCat.text = vm.getSubCategoryById(d.subCategory.toInt())
+            vm.getSubCategoryById(d.subCategory.toInt()){
+                holder.txtCat.text = it
+            }
 
         with(holder){
             rvChild.adapter = ProductAdapter(c,d.posters,vm)
