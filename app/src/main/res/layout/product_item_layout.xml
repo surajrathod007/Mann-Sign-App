@@ -9,7 +9,7 @@
         android:id="@+id/productCard"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
-        android:layout_margin="10dp"
+        android:layout_margin="4dp"
         android:orientation="vertical"
         android:layout_width="146dp"
         android:layout_height="wrap_content"

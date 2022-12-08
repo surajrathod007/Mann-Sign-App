@@ -14,7 +14,7 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 
-class ProductAdapter(val context: Context, val list: List<Product>, val vm: HomeViewModel) :
+class ProductAdapter(val context: Context, val list: List<Product>, val vm: HomeViewModel= HomeViewModel()) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(val binding: ProductItemLayoutBinding) :
