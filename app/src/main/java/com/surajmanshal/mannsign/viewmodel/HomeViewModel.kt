@@ -4,8 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.surajmanshal.mannsign.data.model.SubCategory
+import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.product.MainPoster
 import com.surajmanshal.mannsign.data.model.product.Product
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel.Companion.repository
 import retrofit2.Call
@@ -113,5 +115,21 @@ class HomeViewModel : ViewModel() {
             }
         })
         return catname
+    }
+
+    fun setDeviceID(log : LoginReq){
+        val r = db.setDeviceId(log)
+        r.enqueue(object : Callback<SimpleResponse?> {
+            override fun onResponse(
+                call: Call<SimpleResponse?>,
+                response: Response<SimpleResponse?>
+            ) {
+                _msg.postValue(response.body()?.message)
+            }
+
+            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                _msg.postValue(t.message.toString())
+            }
+        })
     }
 }

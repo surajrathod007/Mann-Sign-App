@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.fragments
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
@@ -15,10 +16,12 @@ import androidx.transition.Slide
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.ProfileActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
+import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.activity.CartActivity
@@ -36,6 +39,8 @@ class HomeFragment : Fragment() {
     lateinit var vm: HomeViewModel
     lateinit var bottomNavigation: AnimatedBottomBar
 
+    var email : String? = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
@@ -49,6 +54,12 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         binding = DataBindingUtil.bind(view)!!
+
+
+        val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        email = sharedPreference.getString("email", "")
+
+        setupDeviceId()
 
         bottomNavigation = requireActivity().findViewById(R.id.bottomNavigationView)
         binding.btnHamBurgur.setOnClickListener {
@@ -139,6 +150,13 @@ class HomeFragment : Fragment() {
                 binding.linearContent.visibility = View.VISIBLE
                 binding.llLoading.visibility = View.GONE
             }
+        }
+    }
+
+    private fun setupDeviceId(){
+        val id = OneSignal.getDeviceState()?.userId
+        if(!id.isNullOrEmpty()){
+            vm.setDeviceID(LoginReq(email!!,"",id))
         }
     }
 }

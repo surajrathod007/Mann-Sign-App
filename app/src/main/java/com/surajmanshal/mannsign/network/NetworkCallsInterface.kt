@@ -177,4 +177,7 @@ interface NetworkCallsInterface {
 
     @POST("transaction/getUserAllTransaction")
     fun getUserAllTransaction(@Query("emailId") emailId : String) : Call<List<Transaction>>
+
+    @POST("user/updateDeviceId")
+    fun setDeviceId(@Body loginReq: LoginReq) : Call<SimpleResponse>
 }

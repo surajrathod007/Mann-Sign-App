@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
+import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.MainActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
@@ -75,7 +76,7 @@ class LoginFrag : Fragment() {
        lifecycleScope.launch {
            var response : LoginResponse? = null
            try {
-                response =  NetworkService.networkInstance.loginUser(LoginReq(email,password))
+                response =  NetworkService.networkInstance.loginUser(LoginReq(email,password,OneSignal.getDeviceState()!!.userId))
               }catch (e:Exception){
                activity?.let { ExceptionHandler.catchOnContext(it, getString(R.string.generalErrorMsg)) }
                d.toggleDialog(dd)

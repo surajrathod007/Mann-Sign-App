@@ -15,7 +15,7 @@
         android:text="Let's Sign in !"
         android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="@color/head_text"
+        android:textColor="@color/title_text_color"
         android:fontFamily="@font/satoshi_medium"
         app:layout_constraintBottom_toTopOf="@+id/ETEmail"
         app:layout_constraintLeft_toLeftOf="parent"
