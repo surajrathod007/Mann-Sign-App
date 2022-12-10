@@ -136,26 +136,26 @@ class HomeViewModel : ViewModel() {
         })
     }
 
-    fun logout(email : String,token : String,logou : (Boolean) -> Unit = {}){
-        val r = db.logout(email,token)
-        r.enqueue(object : Callback<SimpleResponse?> {
-            override fun onResponse(
-                call: Call<SimpleResponse?>,
-                response: Response<SimpleResponse?>
-            ) {
-                val r = response.body()!!
-                if(r.success){
-                    _msg.postValue(r.message)
-                    _isLoggedOut.postValue(true)
-                }else{
-
-                    _msg.postValue(r.message)
+    fun logout(email : String,token : String){
+        try{
+            val r = db.logout(email,token)
+            r.enqueue(object : Callback<SimpleResponse?> {
+                override fun onResponse(
+                    call: Call<SimpleResponse?>,
+                    response: Response<SimpleResponse?>
+                ) {
+                    val r = response.body()!!
+                    if(r.success){
+                        _isLoggedOut.postValue(true)
+                    }
                 }
-            }
-            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                    _msg.postValue(t.message.toString())
+                }
+            })
+        }catch (e : Exception){
+            _msg.postValue(e.message.toString())
+        }
 
-                _msg.postValue(t.message.toString())
-            }
-        })
     }
 }

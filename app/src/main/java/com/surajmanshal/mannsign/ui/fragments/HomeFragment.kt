@@ -146,6 +146,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
             try{
                 vm.logout(email!!,jwttoken!!)
+                Functions.makeToast(requireContext(),"$email $jwttoken")
             }catch (e : Exception){
                 Functions.makeToast(requireContext(),e.message.toString())
             }
@@ -157,13 +158,11 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         bottomMenu.show()
     }
 
-    private fun logout(done : (Boolean) -> Unit = {}) {
+    private fun logout() {
         CoroutineScope(Dispatchers.IO).launch{
-            done(false)
             requireActivity().preferenceDataStoreAuth.edit {
                 it[stringPreferencesKey(JWT_TOKEN)] = ""
             }
-            done(true)
         }
     }
 
@@ -212,6 +211,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
             if(it){
                 logout()
                 requireActivity().finish()
+                Functions.makeToast(requireContext(),"Logged out")
             }
         }
     }
