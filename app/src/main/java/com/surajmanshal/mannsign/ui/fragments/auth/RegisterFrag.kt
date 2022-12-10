@@ -3,8 +3,12 @@ package com.surajmanshal.mannsign.ui.fragments.auth
 
 import android.app.Dialog
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.text.TextUtils
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,6 +53,11 @@ class RegisterFrag : Fragment() {
         //Functions.makeToast(requireContext(),OneSignal.getDeviceState()?.userId.toString())
 
         // Event Listeners
+
+        emailFocusListner()
+        passwordFocusListner()
+        phoneFocusListner()
+
         binding.tvLoginHere.setOnClickListener {
             findNavController().navigate(R.id.action_registerFrag_to_loginFrag)
         }
@@ -73,6 +82,67 @@ class RegisterFrag : Fragment() {
 
         return view
     }
+
+    private fun emailFocusListner() {
+        binding.ETEmail.setOnFocusChangeListener { _, focused ->
+            if(!focused){
+                binding.edEmailContainer.setHelperTextColor(ColorStateList.valueOf(Color.RED))
+                binding.edEmailContainer.helperText = validEmail()
+            }
+        }
+    }
+
+    private fun passwordFocusListner() {
+        binding.ETPassword.setOnFocusChangeListener { _, focused ->
+            if(!focused){
+                binding.edPasswordContainer.setHelperTextColor(ColorStateList.valueOf(Color.RED))
+                binding.edPasswordContainer.helperText = validPassword()
+            }
+        }
+    }
+
+    private fun phoneFocusListner() {
+        binding.etMobileNumber.setOnFocusChangeListener { _, focused ->
+            if(!focused){
+                binding.edPhoneContainer.setHelperTextColor(ColorStateList.valueOf(Color.RED))
+                binding.edPhoneContainer.helperText = validPhone()
+            }
+        }
+    }
+
+    private fun validPassword(): String? {
+        val passwordText = binding.ETPassword.text.toString()
+        if(passwordText.length <8){
+            return "Minimum 8 character required for password"
+        }
+        if(!passwordText.matches(".*[A-Z].*".toRegex())){
+            return "Must contain 1 Upper-case character"
+        }
+        if(!passwordText.matches(".*[a-z].*".toRegex())){
+            return "Must contain 1 Lower-case character"
+        }
+        if(!passwordText.matches(".*[@#\$%^&+=].*".toRegex())){
+            return "Must contain 1 Special character (@#\$%^&+=)"
+        }
+        return null
+    }
+
+    private fun validPhone(): String? {
+        val phoneText = binding.etMobileNumber.text.toString()
+        if(phoneText.length != 10){
+            return "Must be 10 digit phone number"
+        }
+        return null
+    }
+
+    private fun validEmail(): String? {
+        val emailText = binding.ETEmail.text.toString()
+        if(!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()){
+            return "Invalid email address"
+        }
+        return null
+    }
+
     private fun isDataFillled(view: TextView) : Boolean{
         if (TextUtils.isEmpty(view.text.toString().trim() { it <= ' ' })) {
             when(view){
@@ -84,6 +154,8 @@ class RegisterFrag : Fragment() {
         }
         return true
     }
+
+
     private fun registerUser(user: User){
         d.toggleDialog(dd)  // show
        lifecycleScope.launch {

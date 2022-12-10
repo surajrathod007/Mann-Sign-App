@@ -192,73 +192,74 @@
                 android:background="?android:attr/listDivider"
                 android:layout_marginHorizontal="56dp"/>
 
-            <TextView
+
+
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edEmailContainer"
+                app:helperText="Required"
+                android:layout_marginTop="34dp"
+                android:hint="Enter email"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="64dp"
-                android:layout_marginBottom="4dp"
-                android:fontFamily="@font/satoshi_regular"
-                android:text="Email Address"
-                android:textColor="@color/title_text"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
 
-
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/ETEmail"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:hint="Enter your email.."
-                android:paddingLeft="10dp"
                 android:fontFamily="@font/satoshi_regular"
                 android:textColor="@color/title_text"
-                android:background="@drawable/edittext_bg"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/satoshi_regular"
-                android:text="Password"
-                android:textColor="@color/title_text"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatEditText
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edPasswordContainer"
+                app:helperText="Required"
+                app:counterEnabled="true"
+                app:counterMaxLength="16"
+                app:passwordToggleEnabled="true"
+                android:layout_marginTop="16dp"
+                android:hint="Enter password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_marginTop="4dp"
                 android:id="@+id/ETPassword"
                 android:layout_width="match_parent"
-                android:hint="Don't tell anyone..."
                 android:layout_height="40dp"
-                android:paddingLeft="10dp"
-                android:background="@drawable/edittext_bg"
+                android:maxLength="16"
                 android:fontFamily="@font/satoshi_regular"
                 android:inputType="textPassword"
                 android:textColor="@color/title_text"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <TextView
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/edPhoneContainer"
+                app:helperText="Required"
+                app:counterEnabled="true"
+                app:counterMaxLength="10"
+                android:layout_marginTop="16dp"
+                android:hint="Enter phone number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/satoshi_regular"
-                android:text="Mobile no."
-                android:textColor="@color/title_text"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.AppCompatEditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:layout_marginTop="4dp"
-
                 android:id="@+id/etMobileNumber"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@drawable/edittext_bg"
-                android:paddingLeft="10dp"
-                android:hint="Enter your number..."
                 android:fontFamily="@font/satoshi_regular"
                 android:inputType="number"
                 android:maxLength="10"
@@ -266,6 +267,7 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
+            </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnRegister"
