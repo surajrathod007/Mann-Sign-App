@@ -180,4 +180,7 @@ interface NetworkCallsInterface {
 
     @POST("user/updateDeviceId")
     fun setDeviceId(@Body loginReq: LoginReq) : Call<SimpleResponse>
+
+    @POST("user/logout")
+    fun logout(@Query("email") email : String,@Query("token") token : String) : Call<SimpleResponse>
 }

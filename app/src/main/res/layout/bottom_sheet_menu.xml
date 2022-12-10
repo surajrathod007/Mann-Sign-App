@@ -132,15 +132,35 @@
                 android:fontFamily="@font/satoshi_medium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
+
+
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/btnLogoutBottomSheet"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_baseline_login_24"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+            <TextView
+                android:layout_margin="10dp"
+                android:text="Logout"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
 
-
-
-
-
-
+        </LinearLayout>
 
     </LinearLayout>
 

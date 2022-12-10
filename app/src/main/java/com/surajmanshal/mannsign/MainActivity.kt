@@ -20,6 +20,7 @@ import com.surajmanshal.mannsign.ui.fragments.CustomOrderFragment
 import com.surajmanshal.mannsign.ui.fragments.HomeFragment
 import com.surajmanshal.mannsign.ui.fragments.UserProfileFragment
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding : ActivityMainBinding
     var isRead = false
     var isWrite = false
+    var token : String? = ""
 
     lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
 
@@ -39,6 +41,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        token = intent.getStringExtra(DataStore.JWT_TOKEN)
+
 
         binding.viewPager.isUserInputEnabled = false
 
@@ -55,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager(){
-        val flist = listOf(HomeFragment(),CustomOrderFragment(),UserProfileFragment())
+        val flist = listOf(HomeFragment(token),CustomOrderFragment(),UserProfileFragment())
         binding.viewPager.adapter = MainViewPagerAdapter(flist,this@MainActivity)
         binding.bottomNavigationView.setupWithViewPager2(binding.viewPager)
     }

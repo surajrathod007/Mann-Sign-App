@@ -50,6 +50,11 @@ class TransactionsActivity : AppCompatActivity() {
         setObserver()
 
 
+
+        binding.btnTransactionBack.setOnClickListener {
+            finish()
+        }
+
         binding.spTransactions.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(

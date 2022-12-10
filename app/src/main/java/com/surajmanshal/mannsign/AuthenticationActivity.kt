@@ -17,7 +17,7 @@ class AuthenticationActivity : AppCompatActivity() {
         setContentView(R.layout.activity_auth)
         CoroutineScope(Dispatchers.IO).launch{
             val token = isLoggedIn(DataStore.JWT_TOKEN)
-            if(token!=null){
+            if(!token.isNullOrEmpty()){
                 val intent = Intent(this@AuthenticationActivity, MainActivity::class.java)
                 intent.putExtra(DataStore.JWT_TOKEN,token)
                 startActivity(intent)

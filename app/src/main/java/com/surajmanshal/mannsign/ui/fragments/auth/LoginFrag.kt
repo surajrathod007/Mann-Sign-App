@@ -101,6 +101,7 @@ class LoginFrag : Fragment() {
         val sharedPreference =  requireActivity().getSharedPreferences("user_e",Context.MODE_PRIVATE)
         val editor = sharedPreference.edit()
         editor.putString("email",user.emailId)
+        editor.putString("token",user.token)
         editor.commit()
 
         val intent = Intent(requireActivity(), MainActivity::class.java)

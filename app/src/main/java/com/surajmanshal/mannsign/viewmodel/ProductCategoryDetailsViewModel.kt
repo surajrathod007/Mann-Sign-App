@@ -14,26 +14,53 @@ class ProductCategoryDetailsViewModel : ViewModel() {
     private var _products = MutableLiveData<List<Product>>()
     val products : LiveData<List<Product>> get() = _products
 
+    private var _filteredProducts =  MutableLiveData<List<Product>>()
+    val filteredProducts : LiveData<List<Product>> get() = _filteredProducts
+
+    private var _msg = MutableLiveData<String>()
+    val msg: LiveData<String> get() = _msg
+
     companion object{
         val db = NetworkService.networkInstance
     }
 
-    fun loadProductByCat(id : Int){
+    fun loadProductByCat(id: Int, name: String? = null, done: (Boolean) -> Unit){
         val r = db.fetchAllPosters()
         r.enqueue(object : Callback<List<Product>?> {
             override fun onResponse(
                 call: Call<List<Product>?>,
                 response: Response<List<Product>?>
             ) {
-                val l = response.body()!!.filter {
-                    it.subCategory == id
+                if(!name.isNullOrEmpty()){
+
+                    val l = response.body()!!.filter {
+                        it.posterDetails!!.title.contains(name,true)
+                    }
+                    _products.postValue(response.body()!!)
+                    _filteredProducts.postValue(l)
+
+                }else{
+
+                    val l = response.body()!!.filter {
+                        it.subCategory == id
+                    }
+                    _products.postValue(response.body()!!)
+                    _filteredProducts.postValue(l)
+                    done(true)
+
                 }
-                _products.postValue(l)
             }
 
             override fun onFailure(call: Call<List<Product>?>, t: Throwable) {
 
             }
         })
+    }
+
+    fun searchProduct(name : String){
+        val l = _products.value!!.filter {
+            it.posterDetails!!.title.contains(name,true)
+        }
+        _filteredProducts.postValue(l)
     }
 }

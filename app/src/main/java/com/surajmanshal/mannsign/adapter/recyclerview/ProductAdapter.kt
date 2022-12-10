@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.product.Product
@@ -14,7 +15,7 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 
-class ProductAdapter(val context: Context, val list: List<Product>, val vm: HomeViewModel= HomeViewModel()) :
+class ProductAdapter(val context: Context, val list: List<Product>, val vm: ViewModel= HomeViewModel()) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(val binding: ProductItemLayoutBinding) :

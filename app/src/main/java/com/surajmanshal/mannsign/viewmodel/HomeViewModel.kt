@@ -36,6 +36,9 @@ class HomeViewModel : ViewModel() {
     private var _subName = MutableLiveData<String>()
     val subName : LiveData<String> get() = _subName
 
+    private var _isLoggedOut = MutableLiveData<Boolean>(false)
+    val isLoggedOut : LiveData<Boolean> get() = _isLoggedOut
+
     companion object {
         val db = NetworkService.networkInstance
     }
@@ -128,6 +131,29 @@ class HomeViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                _msg.postValue(t.message.toString())
+            }
+        })
+    }
+
+    fun logout(email : String,token : String,logou : (Boolean) -> Unit = {}){
+        val r = db.logout(email,token)
+        r.enqueue(object : Callback<SimpleResponse?> {
+            override fun onResponse(
+                call: Call<SimpleResponse?>,
+                response: Response<SimpleResponse?>
+            ) {
+                val r = response.body()!!
+                if(r.success){
+                    _msg.postValue(r.message)
+                    _isLoggedOut.postValue(true)
+                }else{
+
+                    _msg.postValue(r.message)
+                }
+            }
+            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+
                 _msg.postValue(t.message.toString())
             }
         })

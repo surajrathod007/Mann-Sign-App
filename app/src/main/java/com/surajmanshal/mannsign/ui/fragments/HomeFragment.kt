@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.transition.Fade
@@ -24,15 +27,23 @@ import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.ui.activity.CartActivity
-import com.surajmanshal.mannsign.ui.activity.OrdersActivity
-import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
-import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
+import com.surajmanshal.mannsign.ui.activity.*
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.auth.DataStore
+import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
+import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
+import com.surajrathod.authme.util.GetInput
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
-class HomeFragment : Fragment() {
+class HomeFragment(var jwttoken : String?) : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var bottomMenu: BottomSheetDialog
@@ -40,6 +51,7 @@ class HomeFragment : Fragment() {
     lateinit var bottomNavigation: AnimatedBottomBar
 
     var email : String? = ""
+    var token : String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +67,15 @@ class HomeFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         binding = DataBindingUtil.bind(view)!!
 
-
         val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
+        token = sharedPreference.getString("token","")      //not in use
+
+        if(jwttoken.isNullOrEmpty()){
+            CoroutineScope(Dispatchers.IO).launch {
+                jwttoken = getToken(JWT_TOKEN)
+            }
+        }
 
         setupDeviceId()
 
@@ -71,8 +89,17 @@ class HomeFragment : Fragment() {
             startActivity(i)
         }
 
+        binding.btnSearch.setOnClickListener {
+            try{
+                val i = Intent(requireActivity(), ProductCategoryDetailsActivity::class.java)
+                val text = GetInput.takeFrom(binding.edSearch)
+                i.putExtra("name",text.trim())
+                requireActivity().startActivity(i)
+            }catch (e : Exception){
+                Functions.makeToast(requireContext(),e.message.toString())
+            }
 
-
+        }
 
         if (NetworkService.checkForInternet(requireContext())) {
             loadData()
@@ -88,6 +115,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun showBottomMenu() {
+
         bottomMenu = BottomSheetDialog(requireContext(), R.style.BottomSheetTheme)
         val sheetView =
             LayoutInflater.from(requireContext()).inflate(R.layout.bottom_sheet_menu, null)
@@ -96,20 +124,47 @@ class HomeFragment : Fragment() {
         val btnMyReviews = sheetView.findViewById<LinearLayout>(R.id.btnMyReviewsBottomSheet)
         val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
         val btnTransactions = sheetView.findViewById<LinearLayout>(R.id.btnTransactionsBottomSheet)
+        val btnLogout = sheetView.findViewById<LinearLayout>(R.id.btnLogoutBottomSheet)
+
         btnOrders.setOnClickListener {
             startActivity(Intent(requireActivity(), OrdersActivity::class.java))
         }
+
         btnMyReviews.setOnClickListener {
             startActivity(Intent(requireActivity(), ReviewsActivity::class.java))
         }
+
         btnProfile.setOnClickListener {
             startActivity(Intent(requireActivity(), ProfileActivity::class.java))
         }
+
         btnTransactions.setOnClickListener {
             startActivity(Intent(requireActivity(), TransactionsActivity::class.java))
         }
+
+        btnLogout.setOnClickListener {
+
+            try{
+                vm.logout(email!!,jwttoken!!)
+            }catch (e : Exception){
+                Functions.makeToast(requireContext(),e.message.toString())
+            }
+
+        }
+
         bottomMenu.setContentView(sheetView)
+
         bottomMenu.show()
+    }
+
+    private fun logout(done : (Boolean) -> Unit = {}) {
+        CoroutineScope(Dispatchers.IO).launch{
+            done(false)
+            requireActivity().preferenceDataStoreAuth.edit {
+                it[stringPreferencesKey(JWT_TOKEN)] = ""
+            }
+            done(true)
+        }
     }
 
 
@@ -142,6 +197,7 @@ class HomeFragment : Fragment() {
         vm.posters.observe(viewLifecycleOwner){
             binding.rvProductsMain.adapter = ProductsMainAdapter(requireContext(),it,vm,viewLifecycleOwner)
         }
+
         vm.isLoading.observe(viewLifecycleOwner){
             if(it){
                 binding.linearContent.visibility = View.GONE
@@ -149,6 +205,13 @@ class HomeFragment : Fragment() {
             }else{
                 binding.linearContent.visibility = View.VISIBLE
                 binding.llLoading.visibility = View.GONE
+            }
+        }
+
+        vm.isLoggedOut.observe(viewLifecycleOwner){
+            if(it){
+                logout()
+                requireActivity().finish()
             }
         }
     }
@@ -159,4 +222,10 @@ class HomeFragment : Fragment() {
             vm.setDeviceID(LoginReq(email!!,"",id))
         }
     }
+
+    suspend fun getToken(key : String) : String? {
+        val data = requireActivity().preferenceDataStoreAuth.data.first()
+        return data[stringPreferencesKey(key)]
+    }
+
 }

@@ -27,7 +27,6 @@ import java.io.File
 
 class CustomAcpBoardActivity : AppCompatActivity() {
 
-
     lateinit var binding: ActivityCustomAcpBoardBinding
     lateinit var downLoadManager: DownloadManager
     lateinit var vm: CustomAcpViewModel
@@ -43,6 +42,7 @@ class CustomAcpBoardActivity : AppCompatActivity() {
         downLoadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         vm = ViewModelProvider(this).get(CustomAcpViewModel::class.java)
 
+        //todo : fetch links from database
         val fontUrls = arrayListOf<String>(
             "https://fontsfree.net//wp-content/fonts/basic/sans-serif/dDihapus404.ttf",
             "https://fontsfree.net//wp-content/fonts/basic/sans-serif/FontsFree-Net-ALSDirect2.ttf"
