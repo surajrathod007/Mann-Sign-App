@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.PopupWindow
 import android.widget.Toast
@@ -27,6 +28,7 @@ class CartActivity : AppCompatActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(CartViewModel::class.java)
 
+        binding.shimmerCartLoading.startShimmer()
         loadCarts("surajsinhrathod75@gmail.com")
         setContentView(binding.root)
 
@@ -81,9 +83,13 @@ class CartActivity : AppCompatActivity() {
         }
         vm.isLoading.observe(this) {
             if (it) {
-                binding.progressCart.visibility = View.VISIBLE
+                binding.shimmerCartLoading.visibility = View.VISIBLE
+                binding.sCartNested.visibility = View.GONE
             } else {
-                binding.progressCart.visibility = View.GONE
+                Handler().postDelayed({
+                    binding.shimmerCartLoading.visibility = View.GONE
+                    binding.sCartNested.visibility = View.VISIBLE
+                },1500)
             }
         }
         vm.orderPlaced.observe(this) {
