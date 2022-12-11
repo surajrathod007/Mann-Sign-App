@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.ui.fragments
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -34,14 +35,12 @@ import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import com.surajrathod.authme.util.GetInput
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import kotlin.time.Duration
 
 class HomeFragment(var jwttoken : String?) : Fragment() {
 
@@ -71,6 +70,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         email = sharedPreference.getString("email", "")
         token = sharedPreference.getString("token","")      //not in use
 
+        binding.shimmerView.startShimmer()
         if(jwttoken.isNullOrEmpty()){
             CoroutineScope(Dispatchers.IO).launch {
                 jwttoken = getToken(JWT_TOKEN)
@@ -146,7 +146,6 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
             try{
                 vm.logout(email!!,jwttoken!!)
-                Functions.makeToast(requireContext(),"$email $jwttoken")
             }catch (e : Exception){
                 Functions.makeToast(requireContext(),e.message.toString())
             }
@@ -174,16 +173,6 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
     private fun setupObservers() {
 
-        val slideUp : Transition = Fade(Fade.OUT)
-        val f = Fade(Fade.IN)
-        f.setDuration(2000)
-        slideUp.setDuration(2000)
-        //slideUp.addTarget(binding.linearContent)
-        slideUp.addTarget(binding.llLoading)
-        f.addTarget(binding.linearContent)
-        TransitionManager.beginDelayedTransition(binding.constMain,slideUp)
-        TransitionManager.beginDelayedTransition(binding.constMain,f)
-
         vm.msg.observe(viewLifecycleOwner) {
             Functions.makeToast(requireContext(), it)
         }
@@ -200,18 +189,22 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         vm.isLoading.observe(viewLifecycleOwner){
             if(it){
                 binding.linearContent.visibility = View.GONE
-                binding.llLoading.visibility = View.VISIBLE
+                binding.shimmerView.visibility = View.VISIBLE
             }else{
-                binding.linearContent.visibility = View.VISIBLE
-                binding.llLoading.visibility = View.GONE
+                Handler().postDelayed({
+                    binding.linearContent.visibility = View.VISIBLE
+                    binding.shimmerView.visibility = View.GONE
+                },1500)
             }
         }
 
         vm.isLoggedOut.observe(viewLifecycleOwner){
             if(it){
                 logout()
-                requireActivity().finish()
                 Functions.makeToast(requireContext(),"Logged out")
+                Handler().postDelayed({
+                    requireActivity().finish()
+                },2000)
             }
         }
     }

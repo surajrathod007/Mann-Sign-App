@@ -127,7 +127,7 @@ class HomeViewModel : ViewModel() {
                 call: Call<SimpleResponse?>,
                 response: Response<SimpleResponse?>
             ) {
-                _msg.postValue(response.body()?.message)
+
             }
 
             override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {

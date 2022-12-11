@@ -42,14 +42,15 @@
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/frag_register.xml" value="0.22" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_custom_order.xml" value="0.2552083333333333" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_forgot_password.xml" value="0.22" />
-        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_home.xml" value="0.25" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_home.xml" value="0.2275894101254064" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_reset_password.xml" value="0.2" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/fragment_user_profile.xml" value="0.2552083333333333" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/item_products_main_layout.xml" value="0.2" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/item_review_layout.xml" value="0.25" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/loading_home_place_holder.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/order_item_layout.xml" value="0.22" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/order_product_items_layout.xml" value="0.25" />
-        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/product_item_layout.xml" value="0.5" />
+        <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/product_item_layout.xml" value="0.22" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/profile_card_views.xml" value="0.2552083333333333" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/transaction_item_layout.xml" value="0.25" />
         <entry key="..\:/Users/Asus/AndroidStudioProjects/MannSignApp/app/src/main/res/layout/update_review_bottom_sheet.xml" value="0.2" />

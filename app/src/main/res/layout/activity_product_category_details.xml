@@ -16,8 +16,8 @@
         <com.google.android.material.appbar.AppBarLayout
             android:background="@color/white"
             android:layout_width="match_parent"
-            app:elevation="10dp"
-            android:elevation="10dp"
+            android:elevation="0dp"
+            app:elevation="0dp"
             android:layout_height="56dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
