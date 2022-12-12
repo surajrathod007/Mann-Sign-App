@@ -3,10 +3,7 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsign.data.model.Category
-import com.surajmanshal.mannsign.data.model.Language
-import com.surajmanshal.mannsign.data.model.Material
-import com.surajmanshal.mannsign.data.model.SubCategory
+import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.repository.Repository
 import retrofit2.Call
@@ -24,6 +21,7 @@ class ProductsViewModel : ViewModel() {
     val _currentProductSubCategory = MutableLiveData<SubCategory>()
     val _currentProductMaterial = MutableLiveData<MutableList<Material>>(mutableListOf())
     val _currentProductLanguage = MutableLiveData<MutableList<Language>>(mutableListOf())
+    val _currentProductReviews = MutableLiveData<List<Review>>()
 //    val currentProduct : LiveData<Product> get() = _currentProduct
 
     fun getPosters() {
@@ -98,5 +96,16 @@ class ProductsViewModel : ViewModel() {
         })
     }
 
+    fun fetchProductReview(productId : Int){
+        val response = repository.getReview(productId.toString())
+        response.enqueue(object : Callback<List<Review>> {
+            override fun onResponse(call: Call<List<Review>>, response: Response<List<Review>>) {
+                _currentProductReviews.postValue(response.body())
+            }
+            override fun onFailure(call: Call<List<Review>?>, t: Throwable) {
+                println("Failed to fetch product reviews : $t")
+            }
+        })
+    }
 
 }

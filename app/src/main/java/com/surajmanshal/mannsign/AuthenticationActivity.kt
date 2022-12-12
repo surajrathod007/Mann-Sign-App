@@ -24,8 +24,6 @@ class AuthenticationActivity : AppCompatActivity() {
                 finish()
             }
         }
-
-
     }
     suspend fun isLoggedIn(key : String) : String? {
         val data = preferenceDataStoreAuth.data.first()
