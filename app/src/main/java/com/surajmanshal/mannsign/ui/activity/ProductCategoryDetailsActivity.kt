@@ -2,8 +2,10 @@ package com.surajmanshal.mannsign.ui.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
@@ -26,6 +28,7 @@ class ProductCategoryDetailsActivity : AppCompatActivity() {
 
 
         setContentView(binding.root)
+        binding.shimmerSearchLoading.startShimmer()
         loadData(id,name)
 
         search()
@@ -50,12 +53,23 @@ class ProductCategoryDetailsActivity : AppCompatActivity() {
             binding.rvProductCatDetails.layoutManager = GridLayoutManager(this,2)
             binding.rvProductCatDetails.adapter = ProductAdapter(this@ProductCategoryDetailsActivity,it)
         }
+        vm.isLoading.observe(this){
+            if(it){
+                binding.shimmerSearchLoading.visibility = View.VISIBLE
+                binding.rvProductCatDetails.visibility = View.GONE
+            }else{
+                Handler().postDelayed({
+                    binding.shimmerSearchLoading.visibility = View.GONE
+                    binding.rvProductCatDetails.visibility = View.VISIBLE
+                },1000)
+            }
+        }
     }
 
     fun search(){
         binding.editProductCategorySearch.addTextChangedListener(object : TextWatcher{
             override fun beforeTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                vm.searchProduct(text.toString())
+                //vm.searchProduct(text.toString())
             }
             override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 vm.searchProduct(text.toString())

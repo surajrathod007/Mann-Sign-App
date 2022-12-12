@@ -20,11 +20,15 @@ class ProductCategoryDetailsViewModel : ViewModel() {
     private var _msg = MutableLiveData<String>()
     val msg: LiveData<String> get() = _msg
 
+    private var _isLoading = MutableLiveData<Boolean>(true)
+    val isLoading : LiveData<Boolean> get() = _isLoading
+
     companion object{
         val db = NetworkService.networkInstance
     }
 
     fun loadProductByCat(id: Int, name: String? = null, done: (Boolean) -> Unit){
+        _isLoading.postValue(true)
         val r = db.fetchAllPosters()
         r.enqueue(object : Callback<List<Product>?> {
             override fun onResponse(
@@ -39,6 +43,7 @@ class ProductCategoryDetailsViewModel : ViewModel() {
                     _products.postValue(response.body()!!)
                     _filteredProducts.postValue(l)
 
+                    _isLoading.postValue(false)
                 }else{
 
                     val l = response.body()!!.filter {
@@ -47,12 +52,12 @@ class ProductCategoryDetailsViewModel : ViewModel() {
                     _products.postValue(response.body()!!)
                     _filteredProducts.postValue(l)
                     done(true)
-
+                    _isLoading.postValue(false)
                 }
             }
 
             override fun onFailure(call: Call<List<Product>?>, t: Throwable) {
-
+                _isLoading.postValue(false)
             }
         })
     }

@@ -8,7 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="#048F55"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.ReviewsActivity">
@@ -17,7 +17,7 @@
             android:id="@+id/reviewsAppBar"
             android:elevation="0dp"
             app:elevation="0dp"
-            android:background="#048F55"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,11 +38,12 @@
                     android:id="@+id/btnReviewBack"
                     android:src="@drawable/ic_baseline_arrow_back_ios_24"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"/>
+                    android:layout_height="30dp"
+                    app:tint="@color/title_text_color" />
                 <TextView
                     android:layout_weight="0.6"
                     android:textSize="22sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/title_text_color"
                     android:fontFamily="@font/satoshi_bold"
                     android:text="My Reviews"
                     android:gravity="center"
@@ -65,14 +66,23 @@
 
             <LinearLayout
                 android:padding="10dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/content_background"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerReviewLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        layout="@layout/review_loading_place_holder"/>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
-                    android:layout_marginTop="18dp"
+                    android:visibility="gone"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
                     tools:listitem="@layout/item_review_layout"

@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
@@ -42,8 +43,9 @@ class TransactionsActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "").toString()
         if (email != "")
-            loadTransactions("surajsinhrathod75@gmail.com")
+            loadTransactions(email)
 
+        binding.shimmerTransactions.startShimmer()
 
 
         setupSpinner()
@@ -196,6 +198,17 @@ class TransactionsActivity : AppCompatActivity() {
         }
         vm.transactionItems.observe(this){
             binding.rvTransactions.adapter = TransactionAdapter(it)
+        }
+        vm.isLoading.observe(this){
+            if(it){
+                binding.shimmerTransactions.visibility = View.VISIBLE
+                binding.rvTransactions.visibility = View.GONE
+            }else{
+                Handler().postDelayed({
+                    binding.shimmerTransactions.visibility = View.GONE
+                    binding.rvTransactions.visibility = View.VISIBLE
+                },1500)
+            }
         }
     }
 }

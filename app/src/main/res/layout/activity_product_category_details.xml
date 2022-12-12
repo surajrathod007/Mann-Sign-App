@@ -90,7 +90,19 @@
 
                 </LinearLayout>
 
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerSearchLoading"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <include
+                        layout="@layout/search_product_loading_place_holder"/>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
+                    android:visibility="gone"
                     android:id="@+id/rvProductCatDetails"
                     android:layout_gravity="center"
                     android:layout_margin="18dp"

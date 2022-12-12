@@ -3,7 +3,9 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.Toast
@@ -33,6 +35,7 @@ class ReviewsActivity : AppCompatActivity() {
         if (email != "")
             loadUserReviews(email!!)
 
+        binding.shimmerReviewLoading.startShimmer()
         binding.btnReviewBack.setOnClickListener {
             onBackPressed()
             finish()
@@ -53,6 +56,17 @@ class ReviewsActivity : AppCompatActivity() {
         }
         vm.selectedReview.observe(this){
             showBottomSheet(this)
+        }
+        vm.isLoading.observe(this){
+            if(it){
+                binding.shimmerReviewLoading.visibility = View.VISIBLE
+                binding.rvReviews.visibility = View.GONE
+            }else{
+                Handler().postDelayed({
+                    binding.shimmerReviewLoading.visibility = View.GONE
+                    binding.rvReviews.visibility = View.VISIBLE
+                },1500)
+            }
         }
     }
 
