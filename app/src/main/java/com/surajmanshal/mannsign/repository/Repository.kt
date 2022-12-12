@@ -1,12 +1,11 @@
 package com.surajmanshal.mannsign.repository
 
-import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.Category
 import com.surajmanshal.mannsign.data.model.DiscountCoupon
 import com.surajmanshal.mannsign.data.model.SubCategory
+import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.data.response.SimpleResponse
 import okhttp3.MultipartBody
 
 open class Repository() {
@@ -60,5 +59,7 @@ open class Repository() {
     fun getMaterialById(id:Int) =  server.fetchMaterialById(id)
 
     fun getLanguageById(id:Int) =  server.fetchLanguageById(id)
+
+    fun getReview(productId: String) = server.getReview(productId)
 
 }

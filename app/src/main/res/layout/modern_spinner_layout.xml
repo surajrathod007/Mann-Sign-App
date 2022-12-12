@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout android:id="@+id/resSpinnerContainer"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:expandedHintEnabled="false"
+    app:boxCornerRadiusBottomEnd="@dimen/margin_medium"
+    app:boxCornerRadiusBottomStart="@dimen/margin_medium"
+    app:boxCornerRadiusTopEnd="@dimen/margin_medium"
+    app:boxCornerRadiusTopStart="@dimen/margin_medium"
+    android:textColorHint="@color/black"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingVertical="8dp"
+    app:endIconMode="dropdown_menu"
+    app:boxStrokeColor="@color/teal_200"
+    app:hintTextColor="@color/teal_700"
+    app:hintTextAppearance="@style/TextAppearance.AppCompat.Subhead"
+    >
+
+
+    <AutoCompleteTextView
+        android:id="@+id/resSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="none"
+        />
+
+</com.google.android.material.textfield.TextInputLayout>

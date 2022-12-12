@@ -1,28 +1,24 @@
 package com.surajmanshal.mannsign.adapter.recyclerview
 
 import android.content.Context
-import android.content.DialogInterface
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.RatingBar
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.Review
 import com.surajmanshal.mannsign.databinding.ItemReviewLayoutBinding
+import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import java.time.format.DateTimeFormatter
 
-class ReviewAdapter(val c: Context, val list: List<Review>, val vm: ReviewsViewModel) :
+class ReviewAdapter(val c: Context, val list: List<Review>, val vm: ReviewsViewModel?=null, private val currentUser: UserEntity? =null) :
     RecyclerView.Adapter<ReviewAdapter.ReviewViewHolder>() {
     class ReviewViewHolder(val binding: ItemReviewLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val txtUserNameReview = binding.txtUserNameReview
-        val imgUserProfileReview = binding.imgUserProfileReview
+        val ivReviewerProfile = binding.imgUserProfileReview
         val btnDeleteReview = binding.btnDeleteReview
         val ratingBar = binding.ratingBar
         val txtUserReview = binding.txtUserReview
@@ -37,41 +33,50 @@ class ReviewAdapter(val c: Context, val list: List<Review>, val vm: ReviewsViewM
     }
 
     override fun onBindViewHolder(holder: ReviewViewHolder, position: Int) {
-        val d = list[position]
+        val review = list[position]
         with(holder) {
-            txtUserNameReview.text = d.emailId
-            txtUserReview.text = d.comment
+            txtUserNameReview.text = review.emailId
+            txtUserReview.text = review.comment
             txtReviewDate.text =
-                d.reviewDate.format(DateTimeFormatter.ofPattern("E, dd MMM yyyy hh:mm a"))
-            ratingBar.rating = d.rating.toFloat()
-            btnDeleteReview.setOnClickListener {
-                val builder = AlertDialog.Builder(it.context)
-                builder.setTitle("Are you sure?")
-                builder.setMessage("Do you want to delete this review?")
-                builder.setPositiveButton("Yes",
-                    DialogInterface.OnClickListener { dialogInterface, i ->
-                        vm.deleteReview(d.reviewId!!)
-                        vm.getReviewByEmailId(d.emailId)
-                    })
-                builder.setNegativeButton(
-                    "No",
-                    DialogInterface.OnClickListener { dialogInterface, i ->
+                review.reviewDate.format(DateTimeFormatter.ofPattern("E, dd MMM yyyy hh:mm a"))
+            ratingBar.rating = review.rating.toFloat()
+            btnDeleteReview.apply {
+                if(review.emailId!=currentUser!!.emailId){
+                    hide()
+                    return@apply
+                }
+                setOnClickListener {
+                    val builder = AlertDialog.Builder(it.context)
+                    builder.setTitle("Are you sure?")
+                    builder.setMessage("Do you want to delete this review?")
+                    builder.setPositiveButton("Delete"
+                    ) { _, i ->
+                        vm?.deleteReview(review.reviewId!!)
+                        vm?.getReviewByEmailId(review.emailId)
+                    }
+                    builder.setNegativeButton(
+                        "Cancel"
+                    ) { _, i ->
                         Toast.makeText(it.context, "Action cancelled", Toast.LENGTH_LONG).show()
-                    })
-                builder.show()
+                    }
+                    builder.show()
+                }
             }
-            btnUpdateReview.setOnClickListener {
-                vm.selectReview(d)
-                //showBottomSheet(c,vm)
+            btnUpdateReview.apply {
+                if(review.emailId!=currentUser!!.emailId){
+                    hide()
+                    return@apply
+                }
+                setOnClickListener {
+                    vm?.selectReview(review)
+                    //showBottomSheet(c,vm)
+                }
             }
-            //TODO : Setup user profile image !
         }
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
-
-
 
 }
