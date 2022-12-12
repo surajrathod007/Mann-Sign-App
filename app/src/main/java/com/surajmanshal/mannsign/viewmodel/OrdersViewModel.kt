@@ -70,10 +70,12 @@ class OrdersViewModel : ViewModel() {
                     _msg.postValue("No Orders , Please Order Something!")
                 }
                 _customerOrders.postValue(response.body()!!)
+                isLoading.postValue(false)
             }
 
             override fun onFailure(call: Call<List<Order>?>, t: Throwable) {
                 _msg.postValue(t.message.toString())
+                isLoading.postValue(false)
             }
         })
     }

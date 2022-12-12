@@ -3,6 +3,8 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.OrdersAdapter
@@ -21,9 +23,11 @@ class OrdersActivity : AppCompatActivity() {
         vm = ViewModelProvider(this).get(OrdersViewModel::class.java)
         val sharedPreference =  getSharedPreferences("user_e", Context.MODE_PRIVATE)
 
+        binding.shimmerOrderLoading.startShimmer()
         val email = sharedPreference.getString("email","")
         if(!email.isNullOrEmpty())
             loadOrders(email)
+
         setObservers()
 
         binding.btnOrderBack.setOnClickListener {
@@ -40,6 +44,17 @@ class OrdersActivity : AppCompatActivity() {
     private fun setObservers(){
         vm.customerOrders.observe(this){
             binding.rvOrders.adapter = OrdersAdapter(this@OrdersActivity,it)
+        }
+        vm.isLoading.observe(this){
+            if(it){
+                binding.shimmerOrderLoading.visibility = View.VISIBLE
+                binding.rvOrders.visibility = View.GONE
+            }else{
+                Handler().postDelayed({
+                    binding.shimmerOrderLoading.visibility = View.GONE
+                    binding.rvOrders.visibility = View.VISIBLE
+                },1500)
+            }
         }
     }
 }

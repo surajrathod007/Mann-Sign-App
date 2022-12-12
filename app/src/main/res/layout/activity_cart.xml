@@ -213,7 +213,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
     -->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="#048F55"
+        android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.CartActivity">
@@ -227,7 +227,7 @@
             android:id="@+id/cartsAppBar"
             android:elevation="0dp"
             app:elevation="0dp"
-            android:background="#048F55"
+            android:background="@color/white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -248,11 +248,12 @@
                     android:id="@+id/btnCartBack"
                     android:src="@drawable/ic_baseline_arrow_back_ios_24"
                     android:layout_width="0dp"
-                    android:layout_height="30dp"/>
+                    android:layout_height="30dp"
+                    app:tint="@color/title_text_color" />
                 <TextView
                     android:layout_weight="0.6"
                     android:textSize="22sp"
-                    android:textColor="@color/white"
+                    android:textColor="@color/title_text_color"
                     android:fontFamily="@font/satoshi_bold"
                     android:text="Cart"
                     android:gravity="center"
@@ -275,9 +276,19 @@
             app:layout_constraintBottom_toBottomOf="parent">
 
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmerCartLoading"
+                android:visibility="visible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <include layout="@layout/loading_cart_place_holder"/>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
         <com.factor.bouncy.BouncyNestedScrollView
+            android:visibility="gone"
             android:id="@+id/sCartNested"
-            android:background="@drawable/content_background"
             android:layout_marginTop="10dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -287,11 +298,6 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <ProgressBar
-                    android:visibility="visible"
-                    android:id="@+id/progressCart"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvCartItems"
                     android:layout_width="match_parent"
