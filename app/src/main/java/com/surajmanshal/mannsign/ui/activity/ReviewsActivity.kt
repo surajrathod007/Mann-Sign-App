@@ -36,7 +36,7 @@ class ReviewsActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val email = sharedPreference.getString("email", "")
         if (email != "")
-            loadUserReviews("surajsinhrathod75@gmail.com")
+            loadUserReviews(email!!)
 
         val db = UserDatabase.getDatabase(this).userDao()
 
