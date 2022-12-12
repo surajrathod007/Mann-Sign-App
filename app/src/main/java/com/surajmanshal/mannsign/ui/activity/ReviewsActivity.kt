@@ -16,6 +16,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.databinding.ActivityReviewsBinding
+import com.surajmanshal.mannsign.room.UserDatabase
+import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 
 class ReviewsActivity : AppCompatActivity() {
@@ -23,6 +25,7 @@ class ReviewsActivity : AppCompatActivity() {
     lateinit var binding: ActivityReviewsBinding
     lateinit var vm: ReviewsViewModel
     var email : String = ""
+    private var currentUser : UserEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +36,14 @@ class ReviewsActivity : AppCompatActivity() {
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val email = sharedPreference.getString("email", "")
         if (email != "")
-            loadUserReviews(email!!)
+            loadUserReviews("surajsinhrathod75@gmail.com")
+
+        val db = UserDatabase.getDatabase(this).userDao()
+
+        val user = db.getUser(email!!)
+        user.observe(this){
+            currentUser = it
+        }
 
         binding.shimmerReviewLoading.startShimmer()
         binding.btnReviewBack.setOnClickListener {
@@ -52,7 +62,7 @@ class ReviewsActivity : AppCompatActivity() {
             Toast.makeText(this@ReviewsActivity, it.toString(), Toast.LENGTH_SHORT).show()
         }
         vm.userAllReviews.observe(this){
-            binding.rvReviews.adapter = ReviewAdapter(this@ReviewsActivity,it,vm)
+            binding.rvReviews.adapter = ReviewAdapter(this@ReviewsActivity,it,vm,currentUser)
         }
         vm.selectedReview.observe(this){
             showBottomSheet(this)

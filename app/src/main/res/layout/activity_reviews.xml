@@ -72,6 +72,7 @@
                 android:layout_height="match_parent">
 
                 <com.facebook.shimmer.ShimmerFrameLayout
+                    android:visibility="gone"
                     android:id="@+id/shimmerReviewLoading"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
@@ -82,7 +83,6 @@
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:visibility="gone"
                     android:layout_marginLeft="6dp"
                     android:layout_marginRight="6dp"
                     tools:listitem="@layout/item_review_layout"
