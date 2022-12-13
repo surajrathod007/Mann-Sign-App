@@ -64,9 +64,12 @@ class CartActivity : AppCompatActivity() {
             if (it.isNullOrEmpty()) {
                 binding.btnPlaceOrder.isEnabled = false
                 binding.sCartNested.visibility = View.GONE
+                binding.emptyCartView.root.visibility = View.VISIBLE
+                binding.shimmerCartLoading.visibility = View.GONE
             } else {
                 binding.sCartNested.visibility = View.VISIBLE
                 binding.btnPlaceOrder.isEnabled = true
+                binding.emptyCartView.root.visibility = View.GONE
             }
             binding.rvCartItems.adapter = CartItemAdapter(this@CartActivity, it, vm)
             if (binding.sRefresh.isRefreshing)
@@ -101,13 +104,16 @@ class CartActivity : AppCompatActivity() {
                 if (it) {
                     binding.shimmerCartLoading.visibility = View.VISIBLE
                     binding.sCartNested.visibility = View.GONE
+                    //binding.emptyCartView.root.visibility = View.GONE
                 } else {
                     Handler().postDelayed({
                         binding.shimmerCartLoading.visibility = View.GONE
+                        //binding.emptyCartView.root.visibility = View.GONE
                         binding.sCartNested.visibility = View.VISIBLE
                     }, 1500)
                 }
             } else {
+                binding.emptyCartView.root.visibility = View.GONE
                 binding.shimmerCartLoading.visibility = View.GONE
                 binding.sCartNested.visibility = View.GONE
                 binding.sRefresh.visibility = View.GONE
