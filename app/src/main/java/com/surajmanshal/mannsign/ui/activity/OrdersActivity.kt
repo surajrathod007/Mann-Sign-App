@@ -34,6 +34,7 @@ class OrdersActivity : AppCompatActivity() {
 
         setObservers()
 
+        binding.emptyOrderView.txtEmptyMessage.text = "No orders !"
         binding.btnOrderBack.setOnClickListener {
             onBackPressed()
             finish()
@@ -51,6 +52,12 @@ class OrdersActivity : AppCompatActivity() {
 
     private fun setObservers(){
         vm.customerOrders.observe(this){
+            if(it.isNullOrEmpty()){
+                binding.shimmerOrderLoading.visibility = View.GONE
+                binding.rvOrders.visibility = View.GONE
+                //binding.bounceScroll.visibility = View.GONE
+                binding.emptyOrderView.root.visibility = View.VISIBLE
+            }
             binding.rvOrders.adapter = OrdersAdapter(this@OrdersActivity,it)
         }
         vm.isLoading.observe(this){
@@ -59,13 +66,16 @@ class OrdersActivity : AppCompatActivity() {
                 if(it){
                     binding.shimmerOrderLoading.visibility = View.VISIBLE
                     binding.rvOrders.visibility = View.GONE
+                    binding.emptyOrderView.root.visibility = View.GONE
                 }else{
                     Handler().postDelayed({
                         binding.shimmerOrderLoading.visibility = View.GONE
                         binding.rvOrders.visibility = View.VISIBLE
+                        binding.bounceScroll.visibility = View.VISIBLE
                     },1500)
                 }
             }else{
+                binding.emptyOrderView.root.visibility = View.GONE
                 binding.rvOrders.visibility = View.GONE
                 binding.shimmerOrderLoading.visibility = View.GONE
                 binding.bounceScroll.visibility = View.GONE

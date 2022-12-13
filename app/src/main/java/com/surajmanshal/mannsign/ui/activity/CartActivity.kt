@@ -49,6 +49,8 @@ class CartActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.emptyCartView.txtEmptyMessage.text = "Cart is empty !"
+
         binding.btnLoginRegisterCart.setOnClickListener {
             startActivity(Intent(this, AuthenticationActivity::class.java))
             finish()
@@ -63,12 +65,21 @@ class CartActivity : AppCompatActivity() {
         vm.cartItems.observe(this) {
             if (it.isNullOrEmpty()) {
                 binding.btnPlaceOrder.isEnabled = false
-                binding.sCartNested.visibility = View.GONE
+                //binding.sCartNested.visibility = View.GONE
                 binding.emptyCartView.root.visibility = View.VISIBLE
                 binding.shimmerCartLoading.visibility = View.GONE
+                binding.sCartNested.visibility = View.GONE
+
+
             } else {
-                binding.sCartNested.visibility = View.VISIBLE
-                binding.btnPlaceOrder.isEnabled = true
+                //Functions.makeToast(this@CartActivity,"${it.size}")
+                Handler().postDelayed({
+                    binding.shimmerCartLoading.visibility = View.GONE
+                    binding.sCartNested.visibility = View.VISIBLE
+                    binding.btnPlaceOrder.isEnabled = true
+                }, 1500)
+
+
                 binding.emptyCartView.root.visibility = View.GONE
             }
             binding.rvCartItems.adapter = CartItemAdapter(this@CartActivity, it, vm)
@@ -104,12 +115,15 @@ class CartActivity : AppCompatActivity() {
                 if (it) {
                     binding.shimmerCartLoading.visibility = View.VISIBLE
                     binding.sCartNested.visibility = View.GONE
+                    binding.emptyCartView.root.visibility = View.GONE
                     //binding.emptyCartView.root.visibility = View.GONE
                 } else {
                     Handler().postDelayed({
                         binding.shimmerCartLoading.visibility = View.GONE
                         //binding.emptyCartView.root.visibility = View.GONE
-                        binding.sCartNested.visibility = View.VISIBLE
+                        //binding.sCartNested.visibility = View.VISIBLE
+                        if(vm.showScroll.value!!)
+                            binding.sCartNested.visibility = View.VISIBLE
                     }, 1500)
                 }
             } else {
@@ -125,6 +139,7 @@ class CartActivity : AppCompatActivity() {
             if (it) {
                 loadCarts(email!!)
                 vm.clearValues()
+                vm.setScrollVisibility(false)
                 val b = AlertDialog.Builder(this)
                 b.setTitle("Your order is placed !")
                 b.setMessage("Thanks you for ordering from mann sign ;)")
