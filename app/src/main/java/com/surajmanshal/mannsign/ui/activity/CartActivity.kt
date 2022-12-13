@@ -1,6 +1,8 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.onesignal.OSNotificationReceivedEvent
 import com.onesignal.OneSignal
+import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CartItemAdapter
 import com.surajmanshal.mannsign.databinding.ActivityCartBinding
@@ -22,14 +25,22 @@ class CartActivity : AppCompatActivity() {
     lateinit var binding: ActivityCartBinding
     lateinit var vm: CartViewModel
 
+    var email: String? = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityCartBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(CartViewModel::class.java)
 
+        val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        email = sharedPreference.getString("email", "")
+
         binding.shimmerCartLoading.startShimmer()
-        loadCarts("surajsinhrathod75@gmail.com")
+        if (!email.isNullOrEmpty()) {
+            loadCarts(email!!)
+        }
+
         setContentView(binding.root)
 
 
@@ -38,9 +49,13 @@ class CartActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.btnLoginRegisterCart.setOnClickListener {
+            startActivity(Intent(this, AuthenticationActivity::class.java))
+            finish()
+        }
 
         binding.sRefresh.setOnRefreshListener {
-            loadCarts("surajsinhrathod75@gmail.com")
+            loadCarts(email!!)
         }
         vm.msg.observe(this) {
             Toast.makeText(this@CartActivity, it.toString(), Toast.LENGTH_LONG).show()
@@ -49,7 +64,7 @@ class CartActivity : AppCompatActivity() {
             if (it.isNullOrEmpty()) {
                 binding.btnPlaceOrder.isEnabled = false
                 binding.sCartNested.visibility = View.GONE
-            }else{
+            } else {
                 binding.sCartNested.visibility = View.VISIBLE
                 binding.btnPlaceOrder.isEnabled = true
             }
@@ -82,19 +97,27 @@ class CartActivity : AppCompatActivity() {
             binding.txtDeliveryCharge.text = "+$" + it.toString()
         }
         vm.isLoading.observe(this) {
-            if (it) {
-                binding.shimmerCartLoading.visibility = View.VISIBLE
-                binding.sCartNested.visibility = View.GONE
+            if (!email.isNullOrEmpty()) {
+                if (it) {
+                    binding.shimmerCartLoading.visibility = View.VISIBLE
+                    binding.sCartNested.visibility = View.GONE
+                } else {
+                    Handler().postDelayed({
+                        binding.shimmerCartLoading.visibility = View.GONE
+                        binding.sCartNested.visibility = View.VISIBLE
+                    }, 1500)
+                }
             } else {
-                Handler().postDelayed({
-                    binding.shimmerCartLoading.visibility = View.GONE
-                    binding.sCartNested.visibility = View.VISIBLE
-                },1500)
+                binding.shimmerCartLoading.visibility = View.GONE
+                binding.sCartNested.visibility = View.GONE
+                binding.sRefresh.visibility = View.GONE
+                binding.cartLogin.visibility = View.VISIBLE
             }
+
         }
         vm.orderPlaced.observe(this) {
             if (it) {
-                loadCarts("surajsinhrathod75@gmail.com")
+                loadCarts(email!!)
                 vm.clearValues()
                 val b = AlertDialog.Builder(this)
                 b.setTitle("Your order is placed !")

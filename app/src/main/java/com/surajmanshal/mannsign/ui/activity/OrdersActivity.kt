@@ -1,11 +1,13 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
+import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.OrdersAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrdersBinding
@@ -15,6 +17,7 @@ class OrdersActivity : AppCompatActivity() {
 
     lateinit var binding : ActivityOrdersBinding
     lateinit var vm : OrdersViewModel
+    var email : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,14 +27,19 @@ class OrdersActivity : AppCompatActivity() {
         val sharedPreference =  getSharedPreferences("user_e", Context.MODE_PRIVATE)
 
         binding.shimmerOrderLoading.startShimmer()
-        val email = sharedPreference.getString("email","")
+        email = sharedPreference.getString("email","")
         if(!email.isNullOrEmpty())
-            loadOrders(email)
+            loadOrders(email!!)
+
 
         setObservers()
 
         binding.btnOrderBack.setOnClickListener {
             onBackPressed()
+            finish()
+        }
+        binding.loginRegisterOrder.btnLoginRegister.setOnClickListener {
+            startActivity(Intent(this, AuthenticationActivity::class.java))
             finish()
         }
 
@@ -46,15 +54,24 @@ class OrdersActivity : AppCompatActivity() {
             binding.rvOrders.adapter = OrdersAdapter(this@OrdersActivity,it)
         }
         vm.isLoading.observe(this){
-            if(it){
-                binding.shimmerOrderLoading.visibility = View.VISIBLE
-                binding.rvOrders.visibility = View.GONE
+            if(!email.isNullOrEmpty())
+            {
+                if(it){
+                    binding.shimmerOrderLoading.visibility = View.VISIBLE
+                    binding.rvOrders.visibility = View.GONE
+                }else{
+                    Handler().postDelayed({
+                        binding.shimmerOrderLoading.visibility = View.GONE
+                        binding.rvOrders.visibility = View.VISIBLE
+                    },1500)
+                }
             }else{
-                Handler().postDelayed({
-                    binding.shimmerOrderLoading.visibility = View.GONE
-                    binding.rvOrders.visibility = View.VISIBLE
-                },1500)
+                binding.rvOrders.visibility = View.GONE
+                binding.shimmerOrderLoading.visibility = View.GONE
+                binding.bounceScroll.visibility = View.GONE
+                binding.loginRegisterOrder.root.visibility = View.VISIBLE
             }
+
         }
     }
 }

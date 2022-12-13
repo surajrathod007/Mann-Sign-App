@@ -56,7 +56,19 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <include
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/orderAppBar"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/loginRegisterOrder"
+            layout="@layout/login_place_holder"/>
+
         <com.factor.bouncy.BouncyNestedScrollView
+            android:id="@+id/bounceScroll"
             app:layout_constraintTop_toBottomOf="@id/orderAppBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

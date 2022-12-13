@@ -1,6 +1,7 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.AppCompatButton
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.databinding.ActivityReviewsBinding
@@ -24,7 +26,7 @@ class ReviewsActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityReviewsBinding
     lateinit var vm: ReviewsViewModel
-    var email : String = ""
+    var email : String? = null
     private var currentUser : UserEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +36,8 @@ class ReviewsActivity : AppCompatActivity() {
 
 
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val email = sharedPreference.getString("email", "")
-        if (email != "")
+        email = sharedPreference.getString("email", "")
+        if (!email.isNullOrEmpty())
             loadUserReviews(email!!)
 
         val db = UserDatabase.getDatabase(this).userDao()
@@ -48,6 +50,10 @@ class ReviewsActivity : AppCompatActivity() {
         binding.shimmerReviewLoading.startShimmer()
         binding.btnReviewBack.setOnClickListener {
             onBackPressed()
+            finish()
+        }
+        binding.loginRegisterReviews.btnLoginRegister.setOnClickListener {
+            startActivity(Intent(this, AuthenticationActivity::class.java))
             finish()
         }
 
@@ -68,15 +74,22 @@ class ReviewsActivity : AppCompatActivity() {
             showBottomSheet(this)
         }
         vm.isLoading.observe(this){
-            if(it){
-                binding.shimmerReviewLoading.visibility = View.VISIBLE
-                binding.rvReviews.visibility = View.GONE
+            if(!email.isNullOrEmpty()){
+                if(it){
+                    binding.shimmerReviewLoading.visibility = View.VISIBLE
+                    binding.rvReviews.visibility = View.GONE
+                }else{
+                    Handler().postDelayed({
+                        binding.shimmerReviewLoading.visibility = View.GONE
+                        binding.rvReviews.visibility = View.VISIBLE
+                    },1500)
+                }
             }else{
-                Handler().postDelayed({
-                    binding.shimmerReviewLoading.visibility = View.GONE
-                    binding.rvReviews.visibility = View.VISIBLE
-                },1500)
+                binding.shimmerReviewLoading.visibility = View.GONE
+                binding.bounceReviewScroll.visibility = View.GONE
+                binding.loginRegisterReviews.root.visibility = View.VISIBLE
             }
+
         }
     }
 

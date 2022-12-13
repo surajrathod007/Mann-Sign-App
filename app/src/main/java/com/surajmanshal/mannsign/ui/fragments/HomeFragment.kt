@@ -9,11 +9,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.transition.Fade
 import androidx.transition.Slide
@@ -21,6 +24,7 @@ import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
+import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.ProfileActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
@@ -77,7 +81,19 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
             }
         }
 
-        setupDeviceId()
+
+        if (NetworkService.checkForInternet(requireContext())) {
+            if(!email.isNullOrEmpty()){
+                setupDeviceId()
+                Functions.makeToast(requireContext(),"Device id set $email")
+            }
+            loadData()
+            setupObservers()
+
+        } else {
+            Functions.makeToast(requireContext(), "No internet", true)
+        }
+
 
         bottomNavigation = requireActivity().findViewById(R.id.bottomNavigationView)
         binding.btnHamBurgur.setOnClickListener {
@@ -101,13 +117,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         }
 
-        if (NetworkService.checkForInternet(requireContext())) {
-            loadData()
-            setupObservers()
 
-        } else {
-            Functions.makeToast(requireContext(), "No internet", true)
-        }
 
 
 
@@ -125,7 +135,11 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
         val btnTransactions = sheetView.findViewById<LinearLayout>(R.id.btnTransactionsBottomSheet)
         val btnLogout = sheetView.findViewById<LinearLayout>(R.id.btnLogoutBottomSheet)
+        val logoutText = sheetView.findViewById<TextView>(R.id.btnLogOutText)
 
+        if(email.isNullOrEmpty()){
+            logoutText.text = "Login"
+        }
         btnOrders.setOnClickListener {
             startActivity(Intent(requireActivity(), OrdersActivity::class.java))
         }
@@ -135,7 +149,11 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         }
 
         btnProfile.setOnClickListener {
-            startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+            if(!email.isNullOrEmpty()){
+                startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+            }else{
+                startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
+            }
         }
 
         btnTransactions.setOnClickListener {
@@ -144,11 +162,18 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         btnLogout.setOnClickListener {
 
-            try{
-                vm.logout(email!!,jwttoken!!)
-            }catch (e : Exception){
-                Functions.makeToast(requireContext(),e.message.toString())
+            if(!email.isNullOrEmpty())
+            {
+                try{
+                    vm.logout(email!!,jwttoken!!)
+                }catch (e : Exception){
+                    Functions.makeToast(requireContext(),e.message.toString())
+                }
+            }else{
+                startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
+                requireActivity().finish()
             }
+
 
         }
 
@@ -158,6 +183,10 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
     }
 
     private fun logout() {
+        val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        val ed = sharedPreference.edit()
+        ed.putString("email",null)
+        ed.commit()
         CoroutineScope(Dispatchers.IO).launch{
             requireActivity().preferenceDataStoreAuth.edit {
                 it[stringPreferencesKey(JWT_TOKEN)] = ""
@@ -199,12 +228,17 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         }
 
         vm.isLoggedOut.observe(viewLifecycleOwner){
-            if(it){
-                logout()
-                Functions.makeToast(requireContext(),"Logged out")
-                Handler().postDelayed({
-                    requireActivity().finish()
-                },2000)
+            if(!email.isNullOrEmpty())
+            {
+                if(it){
+                    logout()
+                    Functions.makeToast(requireContext(),"Logged out")
+                    Handler().postDelayed({
+                        requireActivity().finish()
+                    },2000)
+                }
+            }else{
+                //Functions.makeToast(requireContext(),"Can not logout")
             }
         }
     }

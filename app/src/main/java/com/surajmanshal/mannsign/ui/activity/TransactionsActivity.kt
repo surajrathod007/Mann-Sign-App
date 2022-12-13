@@ -1,6 +1,7 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -14,6 +15,7 @@ import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.TransactionAdapter
 import com.surajmanshal.mannsign.data.model.DateFilter
@@ -31,7 +33,7 @@ class TransactionsActivity : AppCompatActivity() {
     lateinit var binding : ActivityTransactionsBinding
     lateinit var vm : TransactionViewModel
     lateinit var bottomSheetDialog: BottomSheetDialog
-    var email : String = ""
+    var email : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,9 +43,9 @@ class TransactionsActivity : AppCompatActivity() {
 
         setContentView(binding.root)
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        email = sharedPreference.getString("email", "").toString()
-        if (email != "")
-            loadTransactions(email)
+        email = sharedPreference.getString("email", "")
+        if (!email.isNullOrEmpty())
+            loadTransactions(email!!)
 
         binding.shimmerTransactions.startShimmer()
 
@@ -51,12 +53,14 @@ class TransactionsActivity : AppCompatActivity() {
         setupSpinner()
         setObserver()
 
-
-
         binding.btnTransactionBack.setOnClickListener {
             finish()
         }
 
+        binding.loginRegisterTransaction.btnLoginRegister.setOnClickListener {
+            startActivity(Intent(this, AuthenticationActivity::class.java))
+            finish()
+        }
         binding.spTransactions.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
@@ -200,15 +204,23 @@ class TransactionsActivity : AppCompatActivity() {
             binding.rvTransactions.adapter = TransactionAdapter(it)
         }
         vm.isLoading.observe(this){
-            if(it){
-                binding.shimmerTransactions.visibility = View.VISIBLE
-                binding.rvTransactions.visibility = View.GONE
+            if(!email.isNullOrEmpty()){
+                if(it){
+                    binding.shimmerTransactions.visibility = View.VISIBLE
+                    binding.rvTransactions.visibility = View.GONE
+                }else{
+                    Handler().postDelayed({
+                        binding.shimmerTransactions.visibility = View.GONE
+                        binding.rvTransactions.visibility = View.VISIBLE
+                    },1500)
+                }
             }else{
-                Handler().postDelayed({
-                    binding.shimmerTransactions.visibility = View.GONE
-                    binding.rvTransactions.visibility = View.VISIBLE
-                },1500)
+                binding.shimmerTransactions.visibility = View.GONE
+                binding.rvTransactions.visibility = View.GONE
+                binding.bounceTransactionScroll.visibility = View.GONE
+                binding.loginRegisterTransaction.root.visibility = View.VISIBLE
             }
+
         }
     }
 }
