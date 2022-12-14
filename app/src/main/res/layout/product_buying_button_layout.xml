@@ -3,7 +3,58 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvVariantPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected variant price: ₹"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:id="@+id/qtyInputLayout"
+            android:layout_width="92dp"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:layout_gravity="end"
+            app:expandedHintEnabled="false"
+            android:hint="Qty"
+            app:boxCornerRadiusBottomEnd="@dimen/very_low_radius"
+            app:boxCornerRadiusBottomStart="@dimen/very_low_radius"
+            app:boxCornerRadiusTopEnd="@dimen/very_low_radius"
+            app:boxCornerRadiusTopStart="@dimen/very_low_radius"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/teal_200"
+            app:hintTextColor="@color/teal_700"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/evQty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:paddingHorizontal="8dp"
+                android:textSize="14sp"
+                android:text="1"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </FrameLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="0dp"
@@ -20,7 +71,7 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 android:padding="2dp"
-                android:text="Selected Variant Price"
+                android:text="Total Price"
                 android:textColor="@color/design_default_color_on_secondary" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -36,7 +87,7 @@
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/btnBidPoll"
+        android:id="@+id/btnAddVariantToCart"
         android:background="@drawable/round_button_shape"
         android:textFontWeight="600"
         android:textSize="16sp"
@@ -48,5 +99,6 @@
         android:layout_weight="1.9"
         android:layout_margin="8dp" />
 
+    </LinearLayout>
 
 </LinearLayout>

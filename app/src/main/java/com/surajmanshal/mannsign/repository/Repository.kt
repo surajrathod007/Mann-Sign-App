@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.repository
 import com.surajmanshal.mannsign.data.model.Category
 import com.surajmanshal.mannsign.data.model.DiscountCoupon
 import com.surajmanshal.mannsign.data.model.SubCategory
+import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.network.NetworkService
@@ -61,5 +62,7 @@ open class Repository() {
     fun getLanguageById(id:Int) =  server.fetchLanguageById(id)
 
     fun getReview(productId: String) = server.getReview(productId)
+
+    suspend fun addToCart(email: String, variant: Variant, qty : Int) = server.insertToCartItem(email,variant,qty)
 
 }

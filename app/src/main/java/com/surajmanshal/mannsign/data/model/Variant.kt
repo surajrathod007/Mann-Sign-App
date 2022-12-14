@@ -4,9 +4,9 @@ import java.io.Serializable
 
 data class Variant(
     val variantId : Int? = null,
-    val productId : Int,
-    val sizeId : Int,
-    val materialId : Int,
-    val languageId : Int,
-    val variantPrice : Float
+    var productId : Int? = null,
+    var sizeId : Int? = null,
+    var materialId : Int? = null,
+    var languageId : Int? = null,
+    var variantPrice : Float? = null
 ) : Serializable

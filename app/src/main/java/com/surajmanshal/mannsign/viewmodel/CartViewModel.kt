@@ -4,18 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.surajmanshal.mannsign.data.model.Area
+import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.ordering.CartItem
 import com.surajmanshal.mannsign.data.model.ordering.Carts
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import okhttp3.internal.http2.Http2Stream
-import retrofit2.*
+import com.surajmanshal.mannsign.repository.Repository
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CartViewModel : ViewModel() {
 
+    val repository = Repository()
     private val _cartItems = MutableLiveData<List<CartItem>>(emptyList())
     val cartItems: LiveData<List<CartItem>> get() = _cartItems
 
@@ -33,6 +34,11 @@ class CartViewModel : ViewModel() {
 
     var _orderPlaced = MutableLiveData<Boolean>(false)
     val orderPlaced : LiveData<Boolean> get() = _orderPlaced
+
+    val _selectedVariant = MutableLiveData<Variant>(Variant())
+
+    private val _serverResponse = MutableLiveData<SimpleResponse>()
+    val serverResponse : LiveData<SimpleResponse> get() = _serverResponse               //SERVER RESPONSE
 
     init {
         getArea()
@@ -182,4 +188,17 @@ class CartViewModel : ViewModel() {
         _discount.postValue(0f)
         _orderPlaced.postValue(false)
     }
+
+
+    fun refreshVariant() = _selectedVariant.postValue(_selectedVariant.value)
+
+    suspend fun addToCart(email: String, variant: Variant, qty : Int = 1 ){
+        try {
+            val response = repository.addToCart(email,variant,qty)
+            _serverResponse.postValue(response)
+        }catch (e : Exception){
+            println("Failed to add into cart : $e")
+        }
+    }
+
 }

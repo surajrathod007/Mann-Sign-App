@@ -157,6 +157,7 @@ interface NetworkCallsInterface {
 
     @GET("discount/use")
     fun userCoupon(@Query("code") code : String) : Call<Int>
+
     @POST("user/updateProfilePic")
     suspend fun updateUserProfile(@Query("emailId")emailId: String,@Query("imgUrl") imgUrl: String): SimpleResponse
 
@@ -183,4 +184,8 @@ interface NetworkCallsInterface {
 
     @POST("user/logout")
     fun logout(@Query("email") email : String,@Query("token") token : String) : Call<SimpleResponse>
+
+    @POST("cart/add")
+    suspend fun insertToCartItem(@Query("email") email: String,@Body variant: Variant,@Query("qty") qty: Int) : SimpleResponse
+
 }

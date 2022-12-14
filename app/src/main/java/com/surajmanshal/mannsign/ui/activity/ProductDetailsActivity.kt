@@ -4,8 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,12 +22,17 @@ import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
+import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ProductDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding : ActivityProductDetailsBinding
     private lateinit var vm : ProductsViewModel
+    private lateinit var cartVm : CartViewModel
     private var currentUser : UserEntity? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,10 +40,17 @@ class ProductDetailsActivity : AppCompatActivity() {
         binding = ActivityProductDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
+        cartVm = ViewModelProvider(this)[CartViewModel::class.java]
+
         val owner = this
+        val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        val email = sharedPreferences.getString("email","no email")
 
         with(vm){
             _currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
+
+
+            // Observers ----------------------------------------------------------------------------------
             _currentProductCategory.observe(owner, Observer {
                 setupCategoryView(it.name)
             })
@@ -47,8 +61,10 @@ class ProductDetailsActivity : AppCompatActivity() {
                 mutableListOf<String>().apply {
                     materials?.forEach {
                         add(it.name)
-                        if(isNotEmpty()) binding.materialSpinner.resSpinner.setText(get(0))
-                        if(size== materials.size) setupSpinner(binding.materialSpinner.resSpinner,this)
+                        if(isNotEmpty())
+                            binding.materialSpinner.resSpinner.setText(get(0))
+                        if(size== materials.size)
+                            setupSpinner(binding.materialSpinner.resSpinner,this)
                     }
                     binding.materialSpinner.resSpinnerContainer.hint = "Material"
                 }
@@ -68,8 +84,20 @@ class ProductDetailsActivity : AppCompatActivity() {
                 binding.rvProductReviews.isVisible = it.isNotEmpty()
                 setupProductReviews(it)
             }
+
+            cartVm.serverResponse.observe(owner){
+                Toast.makeText(owner, "${it.message}", Toast.LENGTH_SHORT).show()
+            }
+
             _currentProduct.value?.let { product->
                 with(product){
+                    cartVm._selectedVariant.value?.apply {
+                        this.productId = product.productId
+                        sizeId = sizes?.get(0)?.sid
+                        materialId = materials?.get(0)
+                        languageId = languages?.get(0)
+                        cartVm.refreshVariant()
+                    }
                     materials?.forEach { materialId -> getMaterialById(materialId) }
                     languages?.forEach { languageId -> getLanguageById(languageId) }
                     category?.let { categoryId -> getCategoryById(categoryId) }
@@ -104,13 +132,53 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                     tvBasePrice.text = "${tvBasePrice.text} ${product.basePrice}"
 
+                    // Click Listeners ----------------------------------------------------------------------------------
+                    productBuyingLayout.apply {
+                        btnAddVariantToCart.setOnClickListener {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                cartVm.addToCart(
+                                    email!!,
+                                    cartVm._selectedVariant.value!!,
+                                    binding.productBuyingLayout.evQty.text.toString().toInt()
+                                )
+                            }
+                        }
+                    }
+                    sizeSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+                        cartVm._selectedVariant.value?.apply {
+                            _currentProduct.value?.let {
+                                sizeId = it.sizes?.get(index)?.sid
+                            }
+                        }
+                    }
+                    materialSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+                        cartVm._selectedVariant.value?.apply {
+                            _currentProduct.value?.let {
+                                materialId = it.materials?.get(index)
+                            }
+                        }
+                    }
+                    languageSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+                        cartVm._selectedVariant.value?.apply {
+                            _currentProduct.value?.let {
+                                languageId = it.languages?.get(index)
+                            }
+                        }
+                    }
+                    // Text changed Listeners ----------------------------------------------------------------------------------
+                    with(productBuyingLayout){
+                        evQty.setText("1")
+                        evQty.doOnTextChanged{ text,start,before,count ->
+                            tvAmount.text = "${cartVm._selectedVariant.value?.variantPrice?.times(
+                                text.toString().toInt()
+                            )}"
+                        }
+                    }
                 }
             }
         }
-        val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email","no email")
-        val db = UserDatabase.getDatabase(this).userDao()
 
+        val db = UserDatabase.getDatabase(this).userDao()
         val user = db.getUser(email!!)
         user.observe(this){
             currentUser = it
