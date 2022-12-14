@@ -53,6 +53,13 @@ class TransactionsActivity : AppCompatActivity() {
         setupSpinner()
         setObserver()
 
+        binding.emptyTransaction.txtEmptyMessage.text = "You have no transactions !"
+        binding.refreshTransaction.setOnRefreshListener {
+            if (!email.isNullOrEmpty())
+                loadTransactions(email!!)
+            else
+                binding.refreshTransaction.isRefreshing = false
+        }
         binding.btnTransactionBack.setOnClickListener {
             finish()
         }
@@ -71,13 +78,16 @@ class TransactionsActivity : AppCompatActivity() {
                 ) {
                     when (position) {
                         0 -> {
-                            Toast.makeText(
-                                this@TransactionsActivity,
-                                "Fetch All Transactions",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            CoroutineScope(Dispatchers.IO).launch {
-                                vm.getUserAllTransactions(email!!)
+                            if(!email.isNullOrEmpty())
+                            {
+                                Toast.makeText(
+                                    this@TransactionsActivity,
+                                    "Fetch All Transactions",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    vm.getUserAllTransactions(email!!)
+                                }
                             }
                         }
                         1 -> {
@@ -201,6 +211,13 @@ class TransactionsActivity : AppCompatActivity() {
             Functions.makeToast(this@TransactionsActivity,it)
         }
         vm.transactionItems.observe(this){
+            if(it.isNullOrEmpty()){
+                binding.shimmerTransactions.visibility = View.GONE
+                binding.emptyTransaction.root.visibility = View.VISIBLE
+                binding.refreshTransaction.isRefreshing = false
+            }else{
+                binding.emptyTransaction.root.visibility = View.GONE
+            }
             binding.rvTransactions.adapter = TransactionAdapter(it)
         }
         vm.isLoading.observe(this){
@@ -212,6 +229,7 @@ class TransactionsActivity : AppCompatActivity() {
                     Handler().postDelayed({
                         binding.shimmerTransactions.visibility = View.GONE
                         binding.rvTransactions.visibility = View.VISIBLE
+                        binding.refreshTransaction.isRefreshing = false
                     },1500)
                 }
             }else{
@@ -219,6 +237,8 @@ class TransactionsActivity : AppCompatActivity() {
                 binding.rvTransactions.visibility = View.GONE
                 binding.bounceTransactionScroll.visibility = View.GONE
                 binding.loginRegisterTransaction.root.visibility = View.VISIBLE
+                binding.emptyTransaction.root.visibility = View.GONE
+                binding.refreshTransaction.isRefreshing = false
             }
 
         }

@@ -51,8 +51,8 @@ class ReviewAdapter(val c: Context, val list: List<Review>, val vm: ReviewsViewM
                     builder.setMessage("Do you want to delete this review?")
                     builder.setPositiveButton("Delete"
                     ) { _, i ->
-                        vm?.deleteReview(review.reviewId!!)
-                        vm?.getReviewByEmailId(review.emailId)
+                        vm?.deleteReview(review.reviewId!!,review.emailId)
+                        //vm?.getReviewByEmailId(review.emailId)
                     }
                     builder.setNegativeButton(
                         "Cancel"

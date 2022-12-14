@@ -78,14 +78,21 @@
             android:id="@+id/loginRegisterOrder"
             layout="@layout/login_place_holder"/>
 
-        <com.factor.bouncy.BouncyNestedScrollView
-            android:id="@+id/bounceScroll"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshOrder"
             app:layout_constraintTop_toBottomOf="@id/orderAppBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_width="match_parent"
             android:layout_height="0dp">
+
+
+        <com.factor.bouncy.BouncyNestedScrollView
+            android:id="@+id/bounceScroll"
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/llOrderContent"
@@ -116,6 +123,8 @@
 
 
         </com.factor.bouncy.BouncyNestedScrollView>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.fragments
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -164,17 +165,25 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
             if(!email.isNullOrEmpty())
             {
-                try{
-                    vm.logout(email!!,jwttoken!!)
-                }catch (e : Exception){
-                    Functions.makeToast(requireContext(),e.message.toString())
+                //bottomMenu.dismiss()
+                val d = AlertDialog.Builder(requireContext())
+                d.setTitle("Do you want to logout ?")
+                d.setMessage("You can login anytime ;)")
+                d.setPositiveButton("Yes"){v,m ->
+                    try{
+                        vm.logout(email!!,jwttoken!!)
+                    }catch (e : Exception){
+                        Functions.makeToast(requireContext(),e.message.toString())
+                    }
                 }
+                d.setNegativeButton("No"){v,m->
+                    v.dismiss()
+                }
+                d.show()
             }else{
                 startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
                 requireActivity().finish()
             }
-
-
         }
 
         bottomMenu.setContentView(sheetView)

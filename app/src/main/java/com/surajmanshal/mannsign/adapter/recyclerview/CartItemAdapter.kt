@@ -48,8 +48,8 @@ class CartItemAdapter(val context: Context, val list: List<CartItem>, val vm: Ca
             builder.setTitle("Are you sure?")
             builder.setMessage("Do you want to remove this cart?")
             builder.setPositiveButton("Yes",DialogInterface.OnClickListener { dialogInterface, i ->
-                vm.removeCart(l.cartItemId)
-                vm.getCartItems(l.emailId)
+                vm.removeCart(l.cartItemId,l.emailId)
+                //vm.getCartItems(l.emailId)
                 vm._discount.postValue(0f)
             })
             builder.setNegativeButton("No",DialogInterface.OnClickListener { dialogInterface, i ->

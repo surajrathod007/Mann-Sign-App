@@ -80,7 +80,7 @@ class CartViewModel : ViewModel() {
 
     }
 
-    fun removeCart(id : Int){
+    fun removeCart(id : Int,email : String = ""){
         val r = db.removeCartItem(id)
         r.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
@@ -90,6 +90,7 @@ class CartViewModel : ViewModel() {
                 val r = response.body()!!
                 if(r.success){
                     _msg.postValue(r.message)
+                    getCartItems(email)
                 }else{
                     _msg.postValue(r.message)
                 }

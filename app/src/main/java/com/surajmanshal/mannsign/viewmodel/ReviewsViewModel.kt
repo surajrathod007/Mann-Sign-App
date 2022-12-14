@@ -1,6 +1,5 @@
 package com.surajmanshal.mannsign.viewmodel
 
-import android.widget.RatingBar
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -48,7 +47,7 @@ class ReviewsViewModel : ViewModel() {
         })
     }
 
-    fun deleteReview(id: Int) {
+    fun deleteReview(id: Int, emailId: String) {
         val r = db.deleteReview(id)
         r.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
@@ -56,6 +55,9 @@ class ReviewsViewModel : ViewModel() {
                 response: Response<SimpleResponse?>
             ) {
                 with(response.body()!!) {
+                    if(this.success){
+                        getReviewByEmailId(emailId)
+                    }
                     _msg.postValue(this.message)
                 }
             }

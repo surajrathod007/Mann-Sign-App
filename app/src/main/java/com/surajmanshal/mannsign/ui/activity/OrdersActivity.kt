@@ -34,6 +34,12 @@ class OrdersActivity : AppCompatActivity() {
 
         setObservers()
 
+        binding.swipeRefreshOrder.setOnRefreshListener {
+            if(!email.isNullOrEmpty())
+                loadOrders(email!!)
+            else
+                binding.swipeRefreshOrder.isRefreshing = false
+        }
         binding.emptyOrderView.txtEmptyMessage.text = "No orders !"
         binding.btnOrderBack.setOnClickListener {
             onBackPressed()
@@ -72,7 +78,9 @@ class OrdersActivity : AppCompatActivity() {
                         binding.shimmerOrderLoading.visibility = View.GONE
                         binding.rvOrders.visibility = View.VISIBLE
                         binding.bounceScroll.visibility = View.VISIBLE
+                        binding.swipeRefreshOrder.isRefreshing = false
                     },1500)
+
                 }
             }else{
                 binding.emptyOrderView.root.visibility = View.GONE
@@ -80,6 +88,7 @@ class OrdersActivity : AppCompatActivity() {
                 binding.shimmerOrderLoading.visibility = View.GONE
                 binding.bounceScroll.visibility = View.GONE
                 binding.loginRegisterOrder.root.visibility = View.VISIBLE
+                binding.swipeRefreshOrder.isRefreshing = false
             }
 
         }

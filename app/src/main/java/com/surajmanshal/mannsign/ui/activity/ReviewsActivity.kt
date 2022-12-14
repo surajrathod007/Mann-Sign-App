@@ -47,6 +47,7 @@ class ReviewsActivity : AppCompatActivity() {
             currentUser = it
         }
 
+        binding.emptyReviews.txtEmptyMessage.text = "You have no reviews !"
         binding.shimmerReviewLoading.startShimmer()
         binding.btnReviewBack.setOnClickListener {
             onBackPressed()
@@ -56,8 +57,15 @@ class ReviewsActivity : AppCompatActivity() {
             startActivity(Intent(this, AuthenticationActivity::class.java))
             finish()
         }
+        binding.refreshReview.setOnRefreshListener {
+            if (!email.isNullOrEmpty())
+                loadUserReviews(email!!)
+            else
+                binding.refreshReview.isRefreshing = false
+        }
 
         setObservers()
+
 
 
         setContentView(binding.root)
@@ -68,6 +76,14 @@ class ReviewsActivity : AppCompatActivity() {
             Toast.makeText(this@ReviewsActivity, it.toString(), Toast.LENGTH_SHORT).show()
         }
         vm.userAllReviews.observe(this){
+            if(it.isNullOrEmpty()){
+                binding.emptyReviews.root.visibility = View.VISIBLE
+                binding.shimmerReviewLoading.visibility = View.GONE
+                binding.rvReviews.visibility = View.GONE
+                binding.refreshReview.isRefreshing = false
+            }else{
+                binding.emptyReviews.root.visibility = View.GONE
+            }
             binding.rvReviews.adapter = ReviewAdapter(this@ReviewsActivity,it,vm,currentUser)
         }
         vm.selectedReview.observe(this){
@@ -77,17 +93,18 @@ class ReviewsActivity : AppCompatActivity() {
             if(!email.isNullOrEmpty()){
                 if(it){
                     binding.shimmerReviewLoading.visibility = View.VISIBLE
-                    binding.rvReviews.visibility = View.GONE
                 }else{
                     Handler().postDelayed({
                         binding.shimmerReviewLoading.visibility = View.GONE
                         binding.rvReviews.visibility = View.VISIBLE
+                        binding.refreshReview.isRefreshing = false
                     },1500)
                 }
             }else{
                 binding.shimmerReviewLoading.visibility = View.GONE
                 binding.bounceReviewScroll.visibility = View.GONE
                 binding.loginRegisterReviews.root.visibility = View.VISIBLE
+                binding.refreshReview.isRefreshing = false
             }
 
         }
