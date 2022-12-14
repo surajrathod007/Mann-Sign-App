@@ -35,6 +35,8 @@ class CartViewModel : ViewModel() {
     var _orderPlaced = MutableLiveData<Boolean>(false)
     val orderPlaced : LiveData<Boolean> get() = _orderPlaced
 
+    var _showScroll = MutableLiveData<Boolean>(false)
+    val showScroll : LiveData<Boolean> get() = _showScroll
     val _selectedVariant = MutableLiveData<Variant>(Variant())
 
     private val _serverResponse = MutableLiveData<SimpleResponse>()
@@ -45,6 +47,10 @@ class CartViewModel : ViewModel() {
     }
     companion object {
         val db = NetworkService.networkInstance
+    }
+
+    fun setScrollVisibility(v : Boolean){
+        _showScroll.postValue(v)
     }
 
     fun getCartItems(email: String) {
@@ -158,6 +164,7 @@ class CartViewModel : ViewModel() {
                     }
                 }
                 isLoading.postValue(false)
+                _showScroll.postValue(true)
             }
 
             override fun onFailure(call: Call<Int?>, t: Throwable) {

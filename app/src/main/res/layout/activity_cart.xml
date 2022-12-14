@@ -266,6 +266,30 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+        <include
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/cartsAppBar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/emptyCartView"
+            layout="@layout/empty_cart_place_holder"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            app:layout_constraintTop_toBottomOf="@id/cartsAppBar"
+            android:id="@+id/shimmerCartLoading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="0dp"
+            android:layout_height="0dp">
+
+            <include layout="@layout/loading_cart_place_holder"/>
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
         <LinearLayout
             android:visibility="gone"
             android:id="@+id/cartLogin"
@@ -305,18 +329,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-
-
-
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmerCartLoading"
-                android:visibility="visible"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include layout="@layout/loading_cart_place_holder"/>
-
-            </com.facebook.shimmer.ShimmerFrameLayout>
 
 
 
