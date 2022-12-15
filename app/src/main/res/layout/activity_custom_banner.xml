@@ -8,12 +8,54 @@
     </data>
 
     <LinearLayout
+        android:id="@+id/llMain"
+        android:animateLayoutChanges="true"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.CustomBannerActivity">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <ImageView
+            android:src="@drawable/ic_launcher_background"
+            android:scaleType="centerCrop"
+            android:layout_gravity="center"
+            android:id="@+id/sampleView"
+            android:background="#DDDDDD"
+            android:layout_width="200dp"
+            android:layout_height="200dp"/>
+
+
+        <EditText
+            android:text="200"
+            android:id="@+id/edWidth"
+            android:inputType="number"
+            android:layout_marginTop="56dp"
+            android:hint="Enter width"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <EditText
+            android:text="200"
+            android:id="@+id/edHeight"
+            android:inputType="number"
+            android:layout_marginTop="20dp"
+            android:hint="Enter height"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/btnApplyImage"
+            android:text="Apply changes"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+</layout>
+<!--
+<androidx.constraintlayout.widget.ConstraintLayout
             android:layout_gravity="center"
             android:id="@+id/framLayout"
             android:background="@color/black"
@@ -40,6 +82,4 @@
             android:text="Position"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-</layout>
+-->

@@ -1,16 +1,20 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.animation.LayoutTransition
 import android.app.ActionBar
 import android.content.ClipData
 import android.content.ClipDescription
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Point
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.text.TextWatcher
 import android.util.LayoutDirection
+import android.util.TypedValue
 import android.view.DragEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +31,9 @@ import androidx.core.view.updateLayoutParams
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.databinding.ActivityCustomBannerBinding
 import com.surajmanshal.mannsign.utils.Functions
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 class CustomBannerActivity : AppCompatActivity() {
 
@@ -40,11 +47,97 @@ class CustomBannerActivity : AppCompatActivity() {
 
         binding = ActivityCustomBannerBinding.inflate(layoutInflater)
 
-        binding.framLayout.setOnDragListener(dragListner)
-        attachViewDragListener()
+//        binding.framLayout.setOnDragListener(dragListner)
+//        attachViewDragListener()
+
+        binding.llMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        binding.btnApplyImage.setOnClickListener {
+            //onApply()
+            calculateMeasures()
+        }
+
+
+        editTextWatchers()
         setContentView(binding.root)
     }
 
+    fun onApply() {
+        val params = binding.sampleView.layoutParams
+        params.height = pxToDp(binding.edHeight.text.toString().toFloat())
+        params.width = pxToDp(binding.edWidth.text.toString().toFloat())
+
+        binding.sampleView.layoutParams = params
+
+    }
+
+    fun editTextWatchers(){
+        binding.edWidth.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                if(!text.isNullOrEmpty())
+//                    calculateMeasures()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+
+        binding.edHeight.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+
+            }
+
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
+//                if(!text.isNullOrEmpty())
+//                    calculateMeasures()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+
+            }
+        })
+    }
+
+
+    fun calculateMeasures(){
+
+        val AREA = 200
+        val height = binding.edHeight.text.toString().toFloat()
+        val width = binding.edWidth.text.toString().toFloat()
+
+        var newHeight = 0f
+        var newWidth = 0f
+
+        if(height>width){
+            newHeight = AREA.toFloat()
+            newWidth = (min(height,width)*AREA)/max(height,width)
+        }else if(height<width){
+            newWidth = AREA.toFloat()
+            newHeight = (min(height,width)*AREA)/max(height,width)
+        }else{
+            newWidth = AREA.toFloat()
+            newHeight = AREA.toFloat()
+        }
+
+        val params = binding.sampleView.layoutParams
+        params.height = pxToDp(newHeight)
+        params.width = pxToDp(newWidth)
+
+        binding.sampleView.layoutParams = params
+
+    }
+
+    private fun Context.pxToDp(value : Float) : Int{
+        val r : Resources = resources
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,value,r.displayMetrics
+        ).roundToInt()
+    }
+    /*
     private fun attachViewDragListener() {
         binding.txtDragMe.setOnLongClickListener { view: View ->
 
@@ -133,6 +226,7 @@ class CustomBannerActivity : AppCompatActivity() {
         }
     }
 
+     */
 }
 
 
