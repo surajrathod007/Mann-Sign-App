@@ -251,7 +251,7 @@ class RegisterFrag : Fragment() {
         }
 
         if (!binding.edPasswordContainer.helperText.isNullOrEmpty()) {
-            Snackbar.make(binding.ETPassword, "Passworf must be valid", 1000).show()
+            Snackbar.make(binding.ETPassword, "Password must be valid", 1000).show()
             return false
         }
         return true
