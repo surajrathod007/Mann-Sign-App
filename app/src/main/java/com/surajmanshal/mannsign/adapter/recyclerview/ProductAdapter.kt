@@ -44,6 +44,7 @@ class ProductAdapter(val context: Context, val list: List<Product>, val vm: View
         //todo : fetch banners
         if (data.posterDetails != null) {
             with(holder) {
+                if(data.images?.isNotEmpty() == true)
                 Glide.with(context).load(Uri.parse(Functions.urlMaker(data.images?.get(0)?.url.toString())))
                     .into(imgProduct)
                 txtProductName.text = data.posterDetails!!.title

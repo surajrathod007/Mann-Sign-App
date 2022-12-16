@@ -41,7 +41,9 @@ class CartItemAdapter(val context: Context, val list: List<CartItem>, val vm: Ca
             txtQuantity.text = "Quantity : " + l.quantity.toString()
             txtTotal.text = "Total : " + l.totalPrice.toString()
             edQuantity.setText(l.quantity.toString())
-            Glide.with(context).load(Uri.parse(Functions.urlMaker(l.product?.images?.get(0)!!.url)))
+
+            if(l.product?.images?.isNotEmpty() == true)
+                Glide.with(context).load(Uri.parse(Functions.urlMaker(l.product?.images?.get(0)!!.url)))
                 .into(imgProduct)
         }
 

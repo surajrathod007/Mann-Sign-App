@@ -15,7 +15,7 @@
             android:id="@+id/tvVariantPrice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Selected variant price: ₹"
+            android:text="@string/selected_variant_price"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"/>
 
@@ -44,6 +44,7 @@
                 android:inputType="number"
                 android:paddingHorizontal="8dp"
                 android:textSize="14sp"
+                android:maxLength="4"
                 android:text="1"
                 />
 
@@ -65,7 +66,7 @@
         >
 
         <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tvTotalAmount"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15sp"

@@ -3,8 +3,7 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsign.data.model.Area
-import com.surajmanshal.mannsign.data.model.Variant
+import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.ordering.CartItem
 import com.surajmanshal.mannsign.data.model.ordering.Carts
 import com.surajmanshal.mannsign.data.response.SimpleResponse
@@ -38,6 +37,9 @@ class CartViewModel : ViewModel() {
     var _showScroll = MutableLiveData<Boolean>(false)
     val showScroll : LiveData<Boolean> get() = _showScroll
     val _selectedVariant = MutableLiveData<Variant>(Variant())
+    val _selectedSize = MutableLiveData<Size>()
+    val _selectedMaterial = MutableLiveData<Material>()
+    val _selectedLanguage = MutableLiveData<Language>()
 
     private val _serverResponse = MutableLiveData<SimpleResponse>()
     val serverResponse : LiveData<SimpleResponse> get() = _serverResponse               //SERVER RESPONSE
@@ -198,6 +200,11 @@ class CartViewModel : ViewModel() {
     }
 
 
+    fun setVariantPrice(price : Float){
+        _selectedVariant.value?.variantPrice = price
+        refreshVariant()
+    }
+
     fun refreshVariant() = _selectedVariant.postValue(_selectedVariant.value)
 
     suspend fun addToCart(email: String, variant: Variant, qty : Int = 1 ){
@@ -208,6 +215,12 @@ class CartViewModel : ViewModel() {
             println("Failed to add into cart : $e")
         }
     }
+
+    /*suspend fun isProductInCart(){
+        try {
+            repository.
+        }
+    }*/
 
     fun updateCart(cartId : Int,qty: Int,email : String = ""){
         isLoading.postValue(true)
