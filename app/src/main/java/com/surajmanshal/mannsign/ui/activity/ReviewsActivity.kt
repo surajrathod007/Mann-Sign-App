@@ -104,6 +104,7 @@ class ReviewsActivity : AppCompatActivity() {
                 binding.shimmerReviewLoading.visibility = View.GONE
                 binding.bounceReviewScroll.visibility = View.GONE
                 binding.loginRegisterReviews.root.visibility = View.VISIBLE
+                binding.refreshReview.visibility = View.GONE
                 binding.refreshReview.isRefreshing = false
             }
 

@@ -238,6 +238,7 @@ class TransactionsActivity : AppCompatActivity() {
                 binding.bounceTransactionScroll.visibility = View.GONE
                 binding.loginRegisterTransaction.root.visibility = View.VISIBLE
                 binding.emptyTransaction.root.visibility = View.GONE
+                binding.refreshTransaction.visibility = View.GONE
                 binding.refreshTransaction.isRefreshing = false
             }
 

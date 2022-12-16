@@ -87,6 +87,7 @@ class OrdersActivity : AppCompatActivity() {
                 binding.rvOrders.visibility = View.GONE
                 binding.shimmerOrderLoading.visibility = View.GONE
                 binding.bounceScroll.visibility = View.GONE
+                binding.swipeRefreshOrder.visibility = View.GONE
                 binding.loginRegisterOrder.root.visibility = View.VISIBLE
                 binding.swipeRefreshOrder.isRefreshing = false
             }

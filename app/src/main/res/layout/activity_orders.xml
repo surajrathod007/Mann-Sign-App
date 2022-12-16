@@ -56,6 +56,9 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
+
+
         <include
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/orderAppBar"
@@ -66,6 +69,7 @@
             android:layout_height="0dp"
             android:id="@+id/emptyOrderView"
             layout="@layout/empty_cart_place_holder"/>
+
 
         <include
             android:visibility="gone"
