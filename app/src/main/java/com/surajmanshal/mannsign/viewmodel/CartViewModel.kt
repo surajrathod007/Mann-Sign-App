@@ -209,4 +209,28 @@ class CartViewModel : ViewModel() {
         }
     }
 
+    fun updateCart(cartId : Int,qty: Int,email : String = ""){
+        isLoading.postValue(true)
+        val r = db.updateCart(cartId,qty)
+        r.enqueue(object : Callback<SimpleResponse?> {
+            override fun onResponse(
+                call: Call<SimpleResponse?>,
+                response: Response<SimpleResponse?>
+            ) {
+                val r = response.body()
+                if(r != null){
+                    _msg.postValue(r.message)
+                    getCartItems(email)
+                }else{
+                    _msg.postValue("Response is null")
+                }
+                isLoading.postValue(false)
+            }
+
+            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                _msg.postValue(t.message.toString())
+                isLoading.postValue(false)
+            }
+        })
+    }
 }

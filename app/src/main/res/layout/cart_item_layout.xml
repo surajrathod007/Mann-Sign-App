@@ -85,6 +85,41 @@
                 />
 
 
+            <LinearLayout
+                app:layout_constraintTop_toBottomOf="@id/btnRemoveCartItem"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:gravity="center"
+                    android:textSize="12sp"
+                    android:inputType="number"
+                    android:hint="Quantity"
+                    android:id="@+id/edCartQuantity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="10dp"/>
+
+                <TextView
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:textSize="12sp"
+                    android:paddingBottom="6dp"
+                    android:paddingTop="4dp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:paddingHorizontal="20dp"
+                    android:id="@+id/btnUpdateCart"
+                    android:background="@drawable/normal_button_bg"
+                    android:text="Update"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

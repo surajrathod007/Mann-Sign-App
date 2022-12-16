@@ -188,4 +188,7 @@ interface NetworkCallsInterface {
     @POST("cart/add")
     suspend fun insertToCartItem(@Query("email") email: String,@Body variant: Variant,@Query("qty") qty: Int) : SimpleResponse
 
+    @POST("cart/update")
+    fun updateCart(@Query("cartid") cartid: Int,@Query("qty") qty: Int) : Call<SimpleResponse>
+
 }
