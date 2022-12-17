@@ -31,6 +31,8 @@ class CartViewModel : ViewModel() {
 
     var _areas = MutableLiveData<List<Area>>()
 
+    var _currrentProductInCartVariants = MutableLiveData<List<Variant>>(emptyList())
+
     var _orderPlaced = MutableLiveData<Boolean>(false)
     val orderPlaced : LiveData<Boolean> get() = _orderPlaced
 
@@ -200,6 +202,17 @@ class CartViewModel : ViewModel() {
     }
 
 
+    fun setVariantSize(size: Size?) {
+        _selectedSize.postValue(size)
+    }
+    fun setVariantMaterial(material: Int?) {
+        _selectedVariant.value?.materialId = material
+        refreshVariant()
+    }
+    fun setVariantLanguage(languageId: Int?) {
+        _selectedVariant.value?.languageId = languageId
+        refreshVariant()
+    }
     fun setVariantPrice(price : Float){
         _selectedVariant.value?.variantPrice = price
         refreshVariant()
@@ -213,6 +226,29 @@ class CartViewModel : ViewModel() {
             _serverResponse.postValue(response)
         }catch (e : Exception){
             println("Failed to add into cart : $e")
+        }
+    }
+
+    fun getMyCartVariants(email: String,productId : Int){
+        try {
+            val response = repository.fetchProductVariants(email,productId)
+            println("response is $response")
+            response.enqueue(object : Callback<List<Variant>?> {
+                override fun onResponse(
+                    call: Call<List<Variant>?>,
+                    response: Response<List<Variant>?>
+                ) {
+                    println("inner response is $response")
+                    response.body()?.let{
+                        _currrentProductInCartVariants.postValue(it)
+                    }
+                }
+                override fun onFailure(call: Call<List<Variant>?>, t: Throwable) {
+                    println("Failed to fetch cartItem variants : $t")
+                }
+            })
+        }catch (e : Exception){
+            println("$e")
         }
     }
 

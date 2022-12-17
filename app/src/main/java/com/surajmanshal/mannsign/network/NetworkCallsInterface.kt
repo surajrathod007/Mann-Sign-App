@@ -191,4 +191,7 @@ interface NetworkCallsInterface {
     @POST("cart/update")
     fun updateCart(@Query("cartid") cartid: Int,@Query("qty") qty: Int) : Call<SimpleResponse>
 
+    @GET("cart/varientByEmail")
+    fun fetchProductVariants(@Query("email") email: String,@Query("productId") productId: Int) : Call<List<Variant>>
+
 }

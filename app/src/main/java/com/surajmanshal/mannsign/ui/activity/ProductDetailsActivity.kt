@@ -17,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.data.model.Review
+import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.ActivityProductDetailsBinding
 import com.surajmanshal.mannsign.room.UserDatabase
@@ -47,9 +48,15 @@ class ProductDetailsActivity : AppCompatActivity() {
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("email","no email")
+        vm._currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
 
         with(cartVm){
 
+            vm._currentProduct.value?.let {
+                if (email != null) {
+                    cartVm.getMyCartVariants(email, it.productId)
+                }
+            }
             // Observers ----------------------------------------------------------------------------------
 
             _selectedVariant.observe(owner){
@@ -57,6 +64,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                     tvVariantPrice.text = resources.getString(com.surajmanshal.mannsign.R.string.selected_variant_price)+it.variantPrice
                     tvAmount.text = "${it.variantPrice?.times(evQty.text.toString().toInt())}"
                 }
+                it.productId?.let { it1 -> setupButtonAction(email!!, it1) }
             }
 
             _selectedSize.observe(owner){
@@ -66,14 +74,16 @@ class ProductDetailsActivity : AppCompatActivity() {
                 calculateVariantPrice()
             }
 
+            _currrentProductInCartVariants.observe(owner){
+                vm._currentProduct.value?.let { it1 -> setupButtonAction(email!!, it1.productId) }
+            }
+
             cartVm.serverResponse.observe(owner){
                 Toast.makeText(owner, it.message, Toast.LENGTH_SHORT).show()
-                if(it.success) setupGoToCart()
             }
 
         }
         with(vm){
-            _currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
 
             // Observers ----------------------------------------------------------------------------------
             _currentProductCategory.observe(owner, Observer {
@@ -165,14 +175,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                     // Click Listeners ----------------------------------------------------------------------------------
                     productBuyingLayout.apply {
                         btnAddVariantToCart.setOnClickListener {
-                            CoroutineScope(Dispatchers.IO).launch {
-                                cartVm.addToCart(
-                                    email!!,
-                                    cartVm._selectedVariant.value!!,
-                                    if(binding.productBuyingLayout.evQty.text.toString()=="") 1 else
-                                        binding.productBuyingLayout.evQty.text.toString().toInt()
-                                )
-                            }
+                            addVariantToCart(email!!,product.productId)
                         }
                     }
                     sizeSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
@@ -180,7 +183,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                             _selectedVariant.value?.apply {
                             _currentProduct.value?.let {
                                 sizeId = it.sizes?.get(index)?.sid
-                                _selectedSize.value = it.sizes?.get(index)
+                                setVariantSize(it.sizes?.get(index))
                             }
                         }}
                     }
@@ -188,7 +191,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                         with(cartVm) {
                             _selectedVariant.value?.apply {
                                 _currentProduct.value?.let {
-                                    materialId = it.materials?.get(index)
+                                    cartVm.setVariantMaterial(it.materials?.get(index))
                                     _selectedMaterial.value = vm._currentProductMaterial.value?.get(index)
                                 }
                             }
@@ -198,7 +201,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                         with(cartVm){
                             _selectedVariant.value?.apply {
                                 _currentProduct.value?.let {
-                                    languageId = it.languages?.get(index)
+                                    cartVm.setVariantLanguage(it.languages?.get(index))
                                     _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
                                 }
                             }
@@ -238,12 +241,49 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     }
 
+    private fun setupButtonAction(email : String,productId: Int){
+        if(cartVm._selectedVariant.value?.let { it1 -> isVariantInCart(it1) } == true) setupGoToCart()
+        else setupAddToCart(email, productId)
+    }
+
+    private fun isVariantInCart(variant: Variant): Boolean {
+        cartVm._currrentProductInCartVariants.value?.forEach {
+            if(variant.sizeId==it.sizeId)
+                if(variant.materialId==it.materialId)
+                    if(variant.languageId==it.languageId)
+                        return true
+        }
+        return false
+    }
+
+    fun addVariantToCart(email : String,productId : Int){
+        CoroutineScope(Dispatchers.IO).launch {
+            cartVm.addToCart(
+                email,
+                cartVm._selectedVariant.value!!,
+                if(binding.productBuyingLayout.evQty.text.toString()=="") 1 else
+                    binding.productBuyingLayout.evQty.text.toString().toInt()
+            )
+            cartVm.getMyCartVariants(email,productId)
+        }
+    }
+
     private fun setupGoToCart(){
         with(binding.productBuyingLayout){
             btnAddVariantToCart.apply {
                 backgroundTintList = resources.getColorStateList(R.color.buttonColor)
                 text = context.getString(R.string.go_to_cart)
                 setOnClickListener { startActivity(Intent(this@ProductDetailsActivity,CartActivity::class.java)) }
+            }
+        }
+    }
+
+    private fun setupAddToCart(email: String,productId: Int){
+        with(binding.productBuyingLayout){
+            btnAddVariantToCart.apply {
+                backgroundTintList = resources.getColorStateList(R.color.order_selected_text_color)
+                text = context.getString(R.string.add_to_cart)
+                setOnClickListener { addVariantToCart(email, productId) }
             }
         }
     }

@@ -10,4 +10,5 @@
     <string name="generalErrorMsg">Something went wrong</string>
     <string name="go_to_cart">Go to cart</string>
     <string name="selected_variant_price">Selected variant price: ₹</string>
+    <string name="add_to_cart">Add to Cart</string>
 </resources>
