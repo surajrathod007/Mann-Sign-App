@@ -1,36 +1,22 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.animation.LayoutTransition
-import android.app.ActionBar
-import android.content.ClipData
-import android.content.ClipDescription
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.res.Resources
-import android.graphics.Canvas
-import android.graphics.Point
-import android.os.Build
+import android.graphics.BitmapFactory
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.LayoutDirection
+import android.util.DisplayMetrics
 import android.util.TypedValue
-import android.view.DragEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.annotation.Px
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.view.marginTop
-import androidx.core.view.setMargins
-import androidx.core.view.updateLayoutParams
-import com.surajmanshal.mannsign.R
+import android.view.WindowManager
 import com.surajmanshal.mannsign.databinding.ActivityCustomBannerBinding
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.URIPathHelper
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
@@ -41,19 +27,25 @@ class CustomBannerActivity : AppCompatActivity() {
     private val maskOn = "Bingo! Mask On"
     private val maskOff = "Mask off"
 
+    var mHeight = 100f
+    var mWidth = 100f
+
+    val REQUEST_CODE = 0
+
     lateinit var binding: ActivityCustomBannerBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityCustomBannerBinding.inflate(layoutInflater)
 
-//        binding.framLayout.setOnDragListener(dragListner)
-//        attachViewDragListener()
 
         binding.llMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         binding.btnApplyImage.setOnClickListener {
             //onApply()
             calculateMeasures()
+        }
+        binding.customPosterImage.setOnClickListener {
+            chooseImage()
         }
 
 
@@ -62,11 +54,11 @@ class CustomBannerActivity : AppCompatActivity() {
     }
 
     fun onApply() {
-        val params = binding.sampleView.layoutParams
+        val params = binding.customPosterImage.layoutParams
         params.height = pxToDp(binding.edHeight.text.toString().toFloat())
         params.width = pxToDp(binding.edWidth.text.toString().toFloat())
 
-        binding.sampleView.layoutParams = params
+        binding.customPosterImage.layoutParams = params
 
     }
 
@@ -105,7 +97,16 @@ class CustomBannerActivity : AppCompatActivity() {
 
     fun calculateMeasures(){
 
-        val AREA = 200
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+
+        val wManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val density = resources.displayMetrics.density
+        val displayWidth = display.widthPixels/density
+
+        val AREA = displayWidth
+
         val height = binding.edHeight.text.toString().toFloat()
         val width = binding.edWidth.text.toString().toFloat()
 
@@ -123,11 +124,11 @@ class CustomBannerActivity : AppCompatActivity() {
             newHeight = AREA.toFloat()
         }
 
-        val params = binding.sampleView.layoutParams
+        val params = binding.customPosterImage.layoutParams
         params.height = pxToDp(newHeight)
         params.width = pxToDp(newWidth)
 
-        binding.sampleView.layoutParams = params
+        binding.customPosterImage.layoutParams = params
 
     }
 
@@ -137,96 +138,70 @@ class CustomBannerActivity : AppCompatActivity() {
             TypedValue.COMPLEX_UNIT_DIP,value,r.displayMetrics
         ).roundToInt()
     }
-    /*
-    private fun attachViewDragListener() {
-        binding.txtDragMe.setOnLongClickListener { view: View ->
 
-            val item = ClipData.Item(maskDragMessage)
+    fun chooseImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
 
-            val dataToDrag =
-                ClipData(maskDragMessage, arrayOf(ClipDescription.MIMETYPE_TEXT_PLAIN), item)
-
-            val maskShadow = View.DragShadowBuilder(view)
-
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                //support pre-Nougat versions
-                @Suppress("DEPRECATION")
-                view.startDrag(dataToDrag, maskShadow, view, 0)
-            } else {
-                //supports Nougat and beyond
-                view.startDragAndDrop(dataToDrag, maskShadow, view, 0)
-            }
-
-            //view.visibility = View.INVISIBLE
-
-            true
-        }
+        startActivityForResult(intent, REQUEST_CODE)
     }
 
-    val dragListner = View.OnDragListener { view, dragEvent ->
-
-        var xAxis = dragEvent.x
-        var yAxis = dragEvent.y
-
-        when(dragEvent.action){
-            DragEvent.ACTION_DRAG_STARTED->{
-
-                //dragEvent.clipDescription.hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)
-                true
-            }
-            DragEvent.ACTION_DRAG_ENTERED ->{
-                view.invalidate()
-                true
-            }
-            DragEvent.ACTION_DRAG_LOCATION->{
-                true
-            }
-            DragEvent.ACTION_DRAG_EXITED->{
-                view.invalidate()
-                true
-            }
-            DragEvent.ACTION_DROP->{
-                val item = dragEvent.clipData.getItemAt(0)
-                val dragData = item.text
-                Functions.makeToast(this@CustomBannerActivity,dragData.toString())
-
-                view.invalidate()
-                var v = dragEvent.localState as TextView
-                val parent = v.parent as ViewGroup
-                parent.removeView(v)
-
-
-                val l = ConstraintLayout.LayoutParams(v.width,v.height)
-
-                v.layoutParams = l
-                l.setMargins(50)
-                val destination = view as ConstraintLayout
-                v.invalidate()
-                destination.addView(v)
-                v.invalidate()
-
-                v.visibility = View.VISIBLE
-                true
-            }
-            DragEvent.ACTION_DRAG_ENDED->{
-                //view.invalidate()
-                binding.txtPosition.text = xAxis.toString() + " " + yAxis.toString()
-                true
-            }
-            DragEvent.ACTION_DRAG_LOCATION->{
-                xAxis = dragEvent.x
-                yAxis = dragEvent.y
-                binding.txtPosition.text = xAxis.toString() + " " + yAxis.toString()
-
-                true
-            }
-            else -> {
-                false
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == Activity.RESULT_OK && requestCode==REQUEST_CODE){
+            //you got the image
+            var uri = data?.data
+            if(uri != null){
+                setImageHeightWidth(this@CustomBannerActivity,uri)
             }
         }
     }
 
-     */
+    fun setImageHeightWidth(c : Context,uri : Uri?){
+
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+
+        val wManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val density = resources.displayMetrics.density
+        val displayWidth = display.widthPixels/density
+
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true
+        BitmapFactory.decodeFile(uri?.let { URIPathHelper().getPath(c, it) },options)
+        //Functions.makeToast(c,"Height = ${options.outHeight} Width = ${options.outWidth}")
+        val width = options.outWidth.toFloat()
+        val height = options.outHeight.toFloat()
+
+        binding.edHeight.setText(height.toInt().toString())
+        binding.edWidth.setText(width.toInt().toString())
+
+
+        Functions.makeToast(c,"Total width is $displayWidth",true)
+
+        val AREA = displayWidth
+        var newHeight = 0f
+        var newWidth = 0f
+
+        if(height>width){
+            newHeight = AREA.toFloat()
+            newWidth = (min(height,width)*AREA)/max(height,width)
+        }else if(height<width){
+            newWidth = AREA.toFloat()
+            newHeight = (min(height,width)*AREA)/max(height,width)
+        }else{
+            newWidth = AREA.toFloat()
+            newHeight = AREA.toFloat()
+        }
+
+        val params = binding.customPosterImage.layoutParams
+        params.height = pxToDp(newHeight)
+        params.width = pxToDp(newWidth)
+
+        binding.customPosterImage.layoutParams = params
+        binding.customPosterImage.setImageURI(uri)
+    }
 }
 
 
