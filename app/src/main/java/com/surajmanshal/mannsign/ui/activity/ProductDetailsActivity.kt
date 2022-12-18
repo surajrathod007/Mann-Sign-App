@@ -94,7 +94,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
             _currentProductMaterial.observe(owner, Observer { materials->
                 mutableListOf<String>().apply {
-                    materials?.forEach {
+                    materials?.sortedBy { it.id }?.forEach {
                         add(it.name)
                         if(isNotEmpty())
                             binding.materialSpinner.resSpinner.setText(get(0))
@@ -108,7 +108,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
             _currentProductLanguage.observe(owner, Observer { languages ->
                 mutableListOf<String>().apply {
-                    languages?.forEach {
+                    languages?.sortedBy { it.id }?.forEach {
                         add(it.name)
                         if(isNotEmpty()) binding.languageSpinner.resSpinner.setText(get(0))
                         if(size== languages.size){
