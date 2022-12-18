@@ -81,7 +81,7 @@ class HomeViewModel : ViewModel() {
                 val mylist = mutableListOf<MainPoster>()
                 val subCats = data.map {
                     it.subCategory
-                }.distinct()
+                }.distinct().toMutableList()
 
                 subCats.forEach {
                     val l = data.filter { p ->

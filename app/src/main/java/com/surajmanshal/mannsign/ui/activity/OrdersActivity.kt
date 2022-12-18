@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -31,6 +32,7 @@ class OrdersActivity : AppCompatActivity() {
         if(!email.isNullOrEmpty())
             loadOrders(email!!)
 
+        window.statusBarColor = Color.BLACK
 
         setObservers()
 
@@ -87,6 +89,7 @@ class OrdersActivity : AppCompatActivity() {
                 binding.rvOrders.visibility = View.GONE
                 binding.shimmerOrderLoading.visibility = View.GONE
                 binding.bounceScroll.visibility = View.GONE
+                binding.swipeRefreshOrder.visibility = View.GONE
                 binding.loginRegisterOrder.root.visibility = View.VISIBLE
                 binding.swipeRefreshOrder.isRefreshing = false
             }

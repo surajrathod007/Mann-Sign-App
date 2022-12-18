@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -35,6 +36,7 @@ class ReviewsActivity : AppCompatActivity() {
         vm = ViewModelProvider(this).get(ReviewsViewModel::class.java)
 
 
+        window.statusBarColor = Color.BLACK
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
         if (!email.isNullOrEmpty())
@@ -104,6 +106,7 @@ class ReviewsActivity : AppCompatActivity() {
                 binding.shimmerReviewLoading.visibility = View.GONE
                 binding.bounceReviewScroll.visibility = View.GONE
                 binding.loginRegisterReviews.root.visibility = View.VISIBLE
+                binding.refreshReview.visibility = View.GONE
                 binding.refreshReview.isRefreshing = false
             }
 

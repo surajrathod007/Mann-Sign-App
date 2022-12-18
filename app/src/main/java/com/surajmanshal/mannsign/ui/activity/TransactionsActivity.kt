@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -38,6 +39,8 @@ class TransactionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTransactionsBinding.inflate(layoutInflater)
+
+        window.statusBarColor = Color.BLACK
 
         vm = ViewModelProvider(this).get(TransactionViewModel::class.java)
 
@@ -238,6 +241,7 @@ class TransactionsActivity : AppCompatActivity() {
                 binding.bounceTransactionScroll.visibility = View.GONE
                 binding.loginRegisterTransaction.root.visibility = View.VISIBLE
                 binding.emptyTransaction.root.visibility = View.GONE
+                binding.refreshTransaction.visibility = View.GONE
                 binding.refreshTransaction.isRefreshing = false
             }
 
