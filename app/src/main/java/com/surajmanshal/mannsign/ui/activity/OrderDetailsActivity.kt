@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -43,6 +44,7 @@ class OrderDetailsActivity : AppCompatActivity() {
         val id = intent.getStringExtra("id")
 
 
+        window.statusBarColor = Color.BLACK
         //TODO : Every 5 second new request is made
         mHandler = Handler()
         mHandler.post(object : Runnable {

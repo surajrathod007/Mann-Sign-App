@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
@@ -44,6 +45,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
         cartVm = ViewModelProvider(this)[CartViewModel::class.java]
 
+        window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val email = sharedPreferences.getString("email","no email")

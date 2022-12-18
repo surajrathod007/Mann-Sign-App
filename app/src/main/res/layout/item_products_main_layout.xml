@@ -22,7 +22,6 @@
             android:text="Safety Poster"
             android:textColor="@color/title_text_color"
             android:fontFamily="@font/satoshi_medium"
-            android:textStyle="bold"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 

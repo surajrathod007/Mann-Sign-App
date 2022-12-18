@@ -20,12 +20,58 @@
         android:layout_height="match_parent"
         tools:context=".ui.activity.CustomBannerActivity">
 
+        <com.google.android.material.appbar.AppBarLayout
+            android:elevation="0dp"
+            app:elevation="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:elevation="0dp"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:weightSum="1"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_gravity="center"
+                        android:layout_weight="0.2"
+                        android:clickable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:id="@+id/btnCustomBannerBack"
+                        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                        android:layout_width="0dp"
+                        android:layout_height="30dp"
+                        app:tint="@color/title_text_color" />
+                    <TextView
+                        android:layout_weight="0.6"
+                        android:textSize="22sp"
+                        android:textColor="@color/title_text_color"
+                        android:fontFamily="@font/satoshi_bold"
+                        android:text="Custom poster"
+                        android:gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
+
+
+
+                </LinearLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.AppBarLayout>
+
 
         <ImageView
             android:clickable="true"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="56dp"
+            android:layout_marginTop="10dp"
             android:src="@drawable/ic_launcher_background"
             android:scaleType="centerCrop"
             android:layout_gravity="center"
@@ -34,34 +80,99 @@
             android:layout_width="200dp"
             android:layout_height="200dp"/>
 
-        <EditText
-            android:text="200"
-            android:id="@+id/edWidth"
-            android:inputType="number"
-            android:layout_marginTop="56dp"
-            android:hint="Enter width"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-
-        <EditText
-            android:text="200"
-            android:id="@+id/edHeight"
-            android:inputType="number"
+        <LinearLayout
+            android:padding="10dp"
+            android:background="@drawable/edittext_bg"
+            android:weightSum="1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="20dp"
-            android:hint="Enter height"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnApplyImage"
-            android:text="Apply changes"
-            android:textAllCaps="false"
-            android:layout_marginTop="20dp"
-            android:layout_gravity="center"
+            <EditText
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_weight="0.4"
+                android:id="@+id/edWidth"
+                android:inputType="number"
+                android:hint="Enter width"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_weight="0.4"
+                android:id="@+id/edHeight"
+                android:inputType="number"
+                android:hint="Enter height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_weight="0.2"
+                android:background="@drawable/normal_button_bg"
+                android:textColor="@color/white"
+                android:id="@+id/btnApplyImage"
+                android:text="Apply"
+                android:textAllCaps="false"
+                android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_normal_color"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_marginHorizontal="14dp"
+            android:text="The unit of dimensions is in inches !"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
+        <include
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginHorizontal="10dp"
+            android:id="@+id/spCustomPosterType"
+            layout="@layout/modern_spinner_layout"/>
 
+        <LinearLayout
+            android:visibility="gone"
+            android:padding="6dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_bg"
+            android:id="@+id/llBanner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="Im banner details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:visibility="gone"
+            android:padding="6dp"
+            android:layout_margin="10dp"
+            android:background="@drawable/edittext_bg"
+            android:id="@+id/llPoster"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:text="Im poster details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

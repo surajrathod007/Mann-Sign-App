@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.ui.activity
 import android.app.DownloadManager
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
@@ -42,6 +43,7 @@ class CustomAcpBoardActivity : AppCompatActivity() {
         downLoadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         vm = ViewModelProvider(this).get(CustomAcpViewModel::class.java)
 
+        window.statusBarColor = Color.BLACK
         //todo : fetch links from database
         val fontUrls = arrayListOf<String>(
             "https://fontsfree.net//wp-content/fonts/basic/sans-serif/dDihapus404.ttf",

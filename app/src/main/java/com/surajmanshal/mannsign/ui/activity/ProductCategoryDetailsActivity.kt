@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -28,6 +29,8 @@ class ProductCategoryDetailsActivity : AppCompatActivity() {
 
 
         setContentView(binding.root)
+
+        window.statusBarColor = Color.BLACK
         binding.shimmerSearchLoading.startShimmer()
         loadData(id,name)
 
