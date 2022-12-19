@@ -203,7 +203,12 @@ class ProductDetailsActivity : AppCompatActivity() {
                         with(cartVm){
                             _selectedVariant.value?.apply {
                                 _currentProduct.value?.let {
-                                    cartVm.setVariantLanguage(it.languages?.get(index))
+                                    val languageId = it.languages?.get(index)
+                                    val imgUrl = it.images?.find { it.languageId == languageId }
+                                            ?.let { it1 -> urlMaker(it1.url) }
+
+                                    Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
+                                    cartVm.setVariantLanguage(languageId)
                                     _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
                                 }
                             }
