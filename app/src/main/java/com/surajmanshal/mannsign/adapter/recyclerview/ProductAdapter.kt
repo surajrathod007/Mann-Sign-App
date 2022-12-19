@@ -2,12 +2,14 @@ package com.surajmanshal.mannsign.adapter.recyclerview
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.ProductItemLayoutBinding
 import com.surajmanshal.mannsign.ui.activity.ProductDetailsActivity
@@ -45,8 +47,10 @@ class ProductAdapter(val context: Context, val list: List<Product>, val vm: View
         if (data.posterDetails != null) {
             with(holder) {
                 if(data.images?.isNotEmpty() == true)
-                Glide.with(context).load(Uri.parse(Functions.urlMaker(data.images?.get(0)?.url.toString())))
+                Glide.with(context).load(Uri.parse(Functions.urlMaker(data.images?.get(0)?.url.toString()))).placeholder(
+                    R.drawable.no_photo)
                     .into(imgProduct)
+
                 txtProductName.text = data.posterDetails!!.title
                 txtProductCategory.text = data.subCategory.toString()
                 txtProductPrice.text = "$ " + data.basePrice.toString()
@@ -64,5 +68,13 @@ class ProductAdapter(val context: Context, val list: List<Product>, val vm: View
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
 }
