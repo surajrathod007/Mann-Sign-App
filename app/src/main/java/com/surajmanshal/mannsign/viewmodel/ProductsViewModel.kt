@@ -71,7 +71,7 @@ class ProductsViewModel : ViewModel() {
                 println(response.body())
                 response.body()?.let {
                     _currentProductMaterial.value?.add(it)
-                    _currentProductMaterial.postValue(_currentProductMaterial.value)
+                    _currentProductMaterial.postValue(_currentProductMaterial.value?.sortedBy { it.id } as MutableList<Material>?)
                 }
             }
             override fun onFailure(call: Call<Material>, t: Throwable) {
@@ -87,7 +87,7 @@ class ProductsViewModel : ViewModel() {
                 println(response.body())
                 response.body()?.let {
                     _currentProductLanguage.value?.add(it)
-                    _currentProductLanguage.postValue(_currentProductLanguage.value)
+                    _currentProductLanguage.postValue(_currentProductLanguage.value?.sortedBy { it.id } as MutableList<Language>?)
                 }
             }
             override fun onFailure(call: Call<Language>, t: Throwable) {

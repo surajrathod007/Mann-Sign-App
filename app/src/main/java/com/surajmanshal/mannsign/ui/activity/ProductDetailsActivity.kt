@@ -96,13 +96,13 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
             _currentProductMaterial.observe(owner, Observer { materials->
                 mutableListOf<String>().apply {
-                    materials?.sortedBy { it.id }?.forEach {
+                    /*val materialsList = materials?.sortedBy { it.id }
+                    materialsList?*/materials.forEach {
                         add(it.name)
-                        if(isNotEmpty())
-                            binding.materialSpinner.resSpinner.setText(get(0))
+                        if(isNotEmpty()) binding.materialSpinner.resSpinner.setText(get(0))
                         if(size== materials.size){
-                            cartVm._selectedMaterial.value = materials[0]
                             setupSpinner(binding.materialSpinner.resSpinner,this)
+                            cartVm._selectedMaterial.value = materials[0]
                         }
                     }
                     binding.materialSpinner.resSpinnerContainer.hint = "Material"
@@ -110,7 +110,8 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
             _currentProductLanguage.observe(owner, Observer { languages ->
                 mutableListOf<String>().apply {
-                    languages?.sortedBy { it.id }?.forEach {
+                    /*val languageList = languages?.sortedBy { it.id }
+                        languageList?*/languages.forEach {
                         add(it.name)
                         if(isNotEmpty()) binding.languageSpinner.resSpinner.setText(get(0))
                         if(size== languages.size){
@@ -193,8 +194,24 @@ class ProductDetailsActivity : AppCompatActivity() {
                         with(cartVm) {
                             _selectedVariant.value?.apply {
                                 _currentProduct.value?.let {
-                                    cartVm.setVariantMaterial(it.materials?.get(index))
+                                    val materialId= it.materials?.get(index)
+                                    cartVm.setVariantMaterial(materialId)
                                     _selectedMaterial.value = vm._currentProductMaterial.value?.get(index)
+                                }
+                            }
+                        }
+                    }
+                    languageSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+                        with(cartVm){
+                            _selectedVariant.value?.apply {
+                                _currentProduct.value?.let {
+                                    val languageId = it.languages?.get(index)
+                                    val imgUrl = it.images?.find { it.languageId == languageId }
+                                        ?.let { it1 -> urlMaker(it1.url) }
+
+                                    Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
+                                    cartVm.setVariantLanguage(languageId)
+                                    _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
                                 }
                             }
                         }
@@ -246,6 +263,11 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
         binding.rvProductReviews.layoutManager = LinearLayoutManager(this,OrientationHelper.HORIZONTAL,false)
 
+    }
+
+    override fun onBackPressed() {
+        finish()
+        super.onBackPressed()
     }
 
     private fun setupButtonAction(email : String,productId: Int){
