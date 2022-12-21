@@ -65,9 +65,7 @@ class HomeViewModel : ViewModel() {
             _msg.postValue(e.message.toString())
             _isLoading.postValue(false)
         }
-
     }
-
     fun getAllPosters() {
         _isLoading.postValue(true)
         val r = db.fetchAllPosters()
