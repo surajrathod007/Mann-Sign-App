@@ -52,7 +52,9 @@ class HomeViewModel : ViewModel() {
                     call: Call<List<SubCategory>?>,
                     response: Response<List<SubCategory>?>
                 ) {
-                    _subCategories.postValue(response.body()!!)
+                    if(response.body() != null){
+                        _subCategories.postValue(response.body()!!)
+                    }
                     _isLoading.postValue(false)
                 }
 

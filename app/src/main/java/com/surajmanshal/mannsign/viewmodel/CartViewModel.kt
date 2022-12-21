@@ -183,8 +183,10 @@ class CartViewModel : ViewModel() {
         val r = db.fetchAreas()
         r.enqueue(object : Callback<List<Area>?> {
             override fun onResponse(call: Call<List<Area>?>, response: Response<List<Area>?>) {
-                _areas.postValue(response.body()!!)
-                _delivery.postValue(response.body()!!.random().minCharge)       //TODO : Get for the user address
+                if(response.body()!=null){
+                    _areas.postValue(response.body()!!)
+                    _delivery.postValue(response.body()!!.random().minCharge)       //TODO : Get for the user address
+                }
             }
 
             override fun onFailure(call: Call<List<Area>?>, t: Throwable) {
