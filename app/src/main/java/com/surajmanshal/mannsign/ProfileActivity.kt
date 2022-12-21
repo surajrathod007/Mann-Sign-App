@@ -8,13 +8,21 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
+import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileBinding
+import com.surajmanshal.mannsign.repository.Repository
 import com.surajmanshal.mannsign.room.UserDatabase
+import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class ProfileActivity : AppCompatActivity() {
@@ -36,20 +44,9 @@ class ProfileActivity : AppCompatActivity() {
 
         setupCards()
 
-        val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val e = sharedPreferences.getString("email","no email")
 
-        val db = UserDatabase.getDatabase(this).userDao()
 
-        val user = db.getUser(e!!)
 
-        user.observe(this) { it ->
-            txtUserName.text = it.firstName
-            txtEmail.text = it.emailId
-            it.profileImage?.let {
-                Glide.with(this).load(it).circleCrop().into(binding.layoutProfile.ivProfilePic)
-            }
-        }
         btnEdit = findViewById(R.id.btnEditProfile)
         btnEdit.setOnClickListener {
             val intent = Intent(this@ProfileActivity, ProfileEdit::class.java)
@@ -82,6 +79,48 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        val db = UserDatabase.getDatabase(this).userDao()
+        val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        val e = sharedPreferences.getString("email","no email")
+        val user = db.getUser(e!!)
+
+        user.observe(this) { it ->
+            txtEmail.text = it.emailId
+            if(it.firstName==null){
+                // Fetch the user details
+                val user = MutableLiveData<User>().apply {
+                    observe(this@ProfileActivity){
+                        txtUserName.text = it.firstName+" "+it.lastName
+                        Glide.with(this@ProfileActivity).load(it.profileImage?.let { it1 ->
+                            Functions.urlMaker(
+                                it1
+                            )
+                        }).circleCrop().into(binding.layoutProfile.ivProfilePic)
+                    }
+                }
+                CoroutineScope(Dispatchers.IO).launch {
+                    Repository().fetchUserByEmail(it.emailId).enqueue(object :
+                        Callback<User?>{
+                        override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                            response.body()?.let { user.postValue(it) }
+                        }
+
+                        override fun onFailure(call: Call<User?>, t: Throwable) {
+                            println("Failed to fetch user : $t")
+                        }
+
+                    })
+                }
+            }else{
+                with(it){
+                    txtUserName.text = firstName
+                    Glide.with(this@ProfileActivity).load(it.profileImage).circleCrop().into(binding.layoutProfile.ivProfilePic)
+                }
+            }
+        }
+        super.onResume()
+    }
 
     fun setupCards() {
         with(binding) {

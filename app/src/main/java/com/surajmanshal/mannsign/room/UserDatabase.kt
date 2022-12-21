@@ -16,7 +16,6 @@ abstract class UserDatabase : RoomDatabase(){
 
         @Volatile
         private var INSTANCE : UserDatabase? = null
-
         fun getDatabase(context: Context) : UserDatabase {
 
             if(INSTANCE ==null)
@@ -29,7 +28,6 @@ abstract class UserDatabase : RoomDatabase(){
                     ).build()
                 }
             }
-
             return INSTANCE!!
         }
     }

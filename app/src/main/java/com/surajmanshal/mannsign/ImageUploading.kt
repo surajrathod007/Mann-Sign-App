@@ -35,15 +35,15 @@ class ImageUploading(private val activity : Activity) {
                     Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
                 val storageIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 // IT IS DEPRECATED FIND LATEST METHOD FOR IT
-                startActivityForResult(storageIntent, Constants.CHOOSE_IMAGE)
+                startActivityForResult(storageIntent, Constants.CHOOSE_PROFILE_IMAGE)
             }else{
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),Constants.READ_EXTERNAL_STORAGE)
             }
         }
     }
 
-    suspend fun setupImage() {
-        with(activity){
+    suspend fun createImageMultipart(): MultipartBody.Part {
+        return with(activity){
             val dir = applicationContext.filesDir
             val file = File(dir, "image.png")
 
@@ -53,12 +53,22 @@ class ImageUploading(private val activity : Activity) {
             val requestBody = RequestBody.create(MediaType.parse("image/jpg"),file)
             val part = MultipartBody.Part.createFormData("product",file.name,requestBody)
             println("${part.body().contentType()}" +"}")
-            sendImage(part)
+            return@with part
         }
     }
-    private suspend fun sendImage(part: MultipartBody.Part){
+    suspend fun sendProductImage(part: MultipartBody.Part, languageId: Int){
         try {
-            val response = repository.uploadImage(part)
+            val response = repository.uploadProductImage(part,languageId)
+            _serverResponse.postValue(response)
+            _imageUploadResponse.postValue(response)
+        }catch (e : Exception){
+            println("$e ${serverResponse.value?.message}")
+        }
+    }
+
+     suspend fun sendProfileImage(part: MultipartBody.Part){
+        try {
+            val response = repository.uploadProfileImage(part)
             _serverResponse.postValue(response)
             _imageUploadResponse.postValue(response)
         }catch (e : Exception){

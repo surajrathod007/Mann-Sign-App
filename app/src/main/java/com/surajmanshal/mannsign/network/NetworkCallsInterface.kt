@@ -70,8 +70,12 @@ interface NetworkCallsInterface {
     fun updateOrder(@Body order: Order) : Call<SimpleResponse>
 
     @Multipart
-    @POST("image/upload")
-    suspend fun uploadImage(@Part image : MultipartBody.Part) :SimpleResponse
+    @POST("productImage/upload")
+    suspend fun uploadProductImage(@Part image : MultipartBody.Part, @Query("languageId") languageId : Int) :SimpleResponse
+
+    @Multipart
+    @POST("profileImage/upload")
+    suspend fun uploadProfileImage(@Part image : MultipartBody.Part) :SimpleResponse
 
     @GET("size")
     fun fetchSizeById(@Query("id") id:Int) : Call<Size>

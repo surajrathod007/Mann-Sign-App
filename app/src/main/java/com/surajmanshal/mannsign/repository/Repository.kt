@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.repository
 
+import android.content.Context
 import com.surajmanshal.mannsign.data.model.Category
 import com.surajmanshal.mannsign.data.model.DiscountCoupon
 import com.surajmanshal.mannsign.data.model.SubCategory
@@ -7,10 +8,28 @@ import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.room.UserDatabase
 import okhttp3.MultipartBody
 
 open class Repository() {
-    private val server = NetworkService.networkInstance
+
+    private val server = NetworkService.networkInstance // Remote
+    private lateinit var room : UserDatabase // Local
+
+    fun setupDataSources(context: Context){
+        room = UserDatabase.getDatabase(context)
+    }
+
+   /* fun getUserByEmailId(email : String,activity: Activity) : User {
+         room.userDao().getUser(email).observe(activity as LifecycleOwner){
+             if(it==null){
+                 return@observe it
+             }else{
+
+             }
+         }
+    }*/
+
     fun fetchMaterials() = server.fetchMaterials()
 
     fun fetchLanguages() = server.fetchLanguages()
@@ -33,7 +52,9 @@ open class Repository() {
 
     fun fetchPosters() = server.fetchAllPosters()
 
-    suspend fun uploadImage(part: MultipartBody.Part) = server.uploadImage(part)
+    suspend fun uploadProductImage(part: MultipartBody.Part, languageId: Int) = server.uploadProductImage(part,languageId)
+
+    suspend fun uploadProfileImage(part: MultipartBody.Part) = server.uploadProfileImage(part)
 
     suspend fun deleteCategory(id: Int) = server.deleteCategory(id)
 

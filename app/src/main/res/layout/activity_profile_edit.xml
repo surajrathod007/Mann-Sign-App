@@ -36,7 +36,6 @@
                     android:layout_height="200dp"
                     android:layout_gravity="center"
                     android:layout_margin="16dp"
-                    android:background="@color/bg_color"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/person_user" />
 

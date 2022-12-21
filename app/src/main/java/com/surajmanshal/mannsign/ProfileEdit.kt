@@ -1,31 +1,36 @@
 package com.surajmanshal.mannsign
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
-import com.google.gson.internal.LinkedTreeMap
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileEditBinding
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.repository.Repository
 import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.auth.LoadingScreen
+import kotlinx.coroutines.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class ProfileEdit : AppCompatActivity() {
 
 
     lateinit var binding: ActivityProfileEditBinding
+    lateinit var d : LoadingScreen
+    lateinit var dd : Dialog
     lateinit var imageUploading : ImageUploading
     var mUser : User = User()
 
@@ -33,34 +38,74 @@ class ProfileEdit : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_edit)
         imageUploading = ImageUploading(this)
+        d = LoadingScreen(this)
+        dd = d.loadingScreen()
 
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val e = sharedPreferences.getString("email", "no email")
 
-        val db = UserDatabase.getDatabase(this).userDao()
+        val userDatabase = UserDatabase.getDatabase(this).userDao()
 
-        val user = db.getUser(e!!)
-        user.observe(this) {
-            Glide.with(this).load(it.profileImage?.toUri()).into(binding.ivProfilePic)
+        val user = userDatabase.getUser(e!!)
+        user.observe(this){
+            if(it.firstName==null){
+                // fetch from server
+                val user = MutableLiveData<User>().apply {
+                    observe(this@ProfileEdit){
+                        with(binding){
+                            editEmailName.setText(it.emailId)
+                            editFirstName.setText(it.firstName)
+                            editLastName.setText(it.lastName)
+                            editPhone.setText(it.phoneNumber)
+                            editAddress.setText(it.address)
+//                            it.pinCode?.let { it1 -> etPinCode.setText(it1) }
+                            Glide.with(this@ProfileEdit).load(it.profileImage?.let { it1 ->
+                                Functions.urlMaker(
+                                    it1
+                                )
+                            }).circleCrop().into(binding.ivProfilePic)
+                        }
+                    }
+                }
+                CoroutineScope(Dispatchers.IO).launch {
+                        Repository().fetchUserByEmail(it.emailId).enqueue(object :
+                            Callback<User?> {
+                            override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                                response.body()?.let { user.postValue(it) }
+                            }
+
+                            override fun onFailure(call: Call<User?>, t: Throwable) {
+                                println("Failed to fetch user : $t")
+                            }
+
+                        })
+                    }
+                    return@observe
+                }
+
+            Glide.with(this).load(it.profileImage).into(binding.ivProfilePic)
             binding.editFirstName.setText(it.firstName)
             binding.editLastName.setText(it.lastName)
             binding.editAddress.setText(it.address)
             binding.editPhone.setText(it.phoneNumber)
             binding.editEmailName.setText(it.emailId)
-            binding.etPinCode.setText(it.pinCode.toString())
+            it.pinCode?.let { it1 -> binding.etPinCode.setText(it1.toString()) }
         }
 
 
         imageUploading.imageUploadResponse.observe(this){ response ->
             if(response.success){
-                val data = response.data as LinkedTreeMap<String, Any>
+                val data = response.data as String /*as LinkedTreeMap<String, Any>*/
+
                 CoroutineScope(Dispatchers.IO).launch {
                     val res = NetworkService.networkInstance.updateUserProfile(
                         binding.editEmailName.text.toString(),
-                        data["url"].toString()
+                        data
                     )
-                    mUser.profileImage = data["url"].toString()
+                    mUser.profileImage = data
                 }
+                dd.hide()
+                Toast.makeText(this, "Profile Picture Updated", Toast.LENGTH_SHORT).show()
             }else Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
         }
 
@@ -92,11 +137,11 @@ class ProfileEdit : AppCompatActivity() {
                                 token = "",
                                 phoneNumber = user.phoneNumber,
                                 pinCode = user.pinCode,
-                                profileImage = user.profileImage
+                                profileImage = mUser.profileImage
                             )
                         )
                         if (res.success) {
-                            db.updateUser(user)
+                            userDatabase.updateUser(user)
                         }
                     }
                     Toast.makeText(
@@ -116,7 +161,7 @@ class ProfileEdit : AppCompatActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode== Activity.RESULT_OK){
-            if(requestCode == Constants.CHOOSE_IMAGE){
+
                 if(data!=null){
                     try{
                         val selectedImageUri = data.data!!
@@ -124,14 +169,22 @@ class ProfileEdit : AppCompatActivity() {
                         Glide.with(this).load(selectedImageUri).into(binding.ivProfilePic)
                         CoroutineScope(Dispatchers.IO).launch {
                             imageUploading.imageUri?.let {
-                                imageUploading.setupImage()
+                                if(requestCode == Constants.CHOOSE_PROFILE_IMAGE)
+                                imageUploading.apply {
+                                    withContext(Dispatchers.Main){
+                                        dd.show()
+                                    }
+                                    sendProfileImage(createImageMultipart())
+                                }
+                                if(requestCode == Constants.CHOOSE_PRODUCT_IMAGE)
+                                    print("TODO : ")
                             }
                         }
                     }catch(e : java.lang.Exception){
                         e.printStackTrace()
                     }
                 }
-            }
+
         }else{
             Toast.makeText(this, "Req canceled", Toast.LENGTH_SHORT).show()
         }
