@@ -163,7 +163,7 @@ interface NetworkCallsInterface {
     fun userCoupon(@Query("code") code : String) : Call<Int>
 
     @POST("user/updateProfilePic")
-    suspend fun updateUserProfile(@Query("emailId")emailId: String,@Query("imgUrl") imgUrl: String): SimpleResponse
+    suspend fun updateUserProfilePic(@Query("emailId")emailId: String, @Query("imgUrl") imgUrl: String): SimpleResponse
 
     @POST("order/get")
     fun getOrderByEmail(@Query("email") email : String) : Call<List<Order>>

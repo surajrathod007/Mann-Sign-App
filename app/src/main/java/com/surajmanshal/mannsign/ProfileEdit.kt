@@ -95,23 +95,25 @@ class ProfileEdit : AppCompatActivity() {
 
         imageUploading.imageUploadResponse.observe(this){ response ->
             if(response.success){
-                val data = response.data as String /*as LinkedTreeMap<String, Any>*/
+                val data = response.message as String /*as LinkedTreeMap<String, Any>*/
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val res = NetworkService.networkInstance.updateUserProfile(
+                    val res = NetworkService.networkInstance.updateUserProfilePic(
                         binding.editEmailName.text.toString(),
                         data
                     )
                     mUser.profileImage = data
+                    withContext(Dispatchers.Main){
+                        dd.hide()
+                        Toast.makeText(this@ProfileEdit, "Profile Picture Updated", Toast.LENGTH_SHORT).show()
+                    }
                 }
-                dd.hide()
-                Toast.makeText(this, "Profile Picture Updated", Toast.LENGTH_SHORT).show()
             }else Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
         }
 
         with(binding) {
 
-            ivProfilePic.setOnClickListener { imageUploading.chooseImageFromGallary() }
+            ivProfilePic.setOnClickListener { imageUploading.chooseProfileImageFromGallary() }
 
             btnUpdateProfile.setOnClickListener {
                 val user = UserEntity(

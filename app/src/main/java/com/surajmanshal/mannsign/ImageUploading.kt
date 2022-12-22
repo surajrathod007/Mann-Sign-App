@@ -29,7 +29,7 @@ class ImageUploading(private val activity : Activity) {
     private val _imageUploadResponse = MutableLiveData<SimpleResponse>()
     val imageUploadResponse : LiveData<SimpleResponse> get() = _imageUploadResponse
 
-    fun chooseImageFromGallary(){
+    fun chooseProfileImageFromGallary(){
         with(activity){
             if(ContextCompat.checkSelfPermission(this,
                     Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
