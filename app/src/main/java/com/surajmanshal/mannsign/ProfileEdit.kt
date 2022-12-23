@@ -84,6 +84,7 @@ class ProfileEdit : AppCompatActivity() {
                 }
 
             Glide.with(this).load(it.profileImage).into(binding.ivProfilePic)
+            mUser.profileImage = it.profileImage
             binding.editFirstName.setText(it.firstName)
             binding.editLastName.setText(it.lastName)
             binding.editAddress.setText(it.address)
