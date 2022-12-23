@@ -9,7 +9,6 @@ import com.surajmanshal.mannsign.data.model.product.MainPoster
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.viewmodel.OrdersViewModel.Companion.repository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -77,22 +76,21 @@ class HomeViewModel : ViewModel() {
                 response: Response<List<Product>?>
             ) {
                 //_products.postValue(response.body()!!)
-                val data = response.body()!!
-                val mylist = mutableListOf<MainPoster>()
-                val subCats = data.map {
-                    it.subCategory
-                }.distinct().toMutableList()
+                response.body()?.let { data->
+                    val mylist = mutableListOf<MainPoster>()
+                    val subCats = data.map {
+                        it.subCategory
+                    }.distinct().toMutableList()
 
-                subCats.forEach {
-                    val l = data.filter { p ->
-                        p.subCategory == it
+                    subCats.forEach {
+                        val l = data.filter { p ->
+                            p.subCategory == it
+                        }
+                        mylist.add(MainPoster(subCategory = it.toString(), posters = l))
                     }
-                    mylist.add(MainPoster(subCategory = it.toString(), posters = l))
+                    _posters.postValue(mylist)
                 }
-
-                _posters.postValue(mylist)
                 _isLoading.postValue(false)
-
             }
 
             override fun onFailure(call: Call<List<Product>?>, t: Throwable) {

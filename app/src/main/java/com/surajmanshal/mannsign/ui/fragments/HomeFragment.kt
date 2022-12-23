@@ -5,47 +5,39 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.transition.Fade
-import androidx.transition.Slide
-import androidx.transition.Transition
-import androidx.transition.TransitionManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.ProfileActivity
+import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.ui.activity.*
 import com.surajmanshal.mannsign.utils.Functions
-import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import com.surajrathod.authme.util.GetInput
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import nl.joery.animatedbottombar.AnimatedBottomBar
-import kotlin.time.Duration
 
 class HomeFragment(var jwttoken : String?) : Fragment() {
 
@@ -56,6 +48,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
     var email : String? = ""
     var token : String? = ""
+    var isMinProfileSetupDone = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +65,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         binding = DataBindingUtil.bind(view)!!
 
         val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        email = sharedPreference.getString("email", "")
+        email = sharedPreference.getString("email", null)
         token = sharedPreference.getString("token","")      //not in use
 
         binding.shimmerView.startShimmer()
@@ -118,7 +111,12 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         }
 
+        val userDatabase = UserDatabase.getDatabase(requireContext()).userDao()
 
+        val user = email?.let { userDatabase.getUser(it) }
+        user?.observe(viewLifecycleOwner){
+            isMinProfileSetupDone = it.firstName!=null
+        }
 
 
 
@@ -151,7 +149,8 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         btnProfile.setOnClickListener {
             if(!email.isNullOrEmpty()){
-                startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+                if(isMinProfileSetupDone) startActivity(Intent(requireActivity(), ProfileActivity::class.java))
+                else startActivity(Intent(requireActivity(), ProfileEdit::class.java))
             }else{
                 startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
             }
