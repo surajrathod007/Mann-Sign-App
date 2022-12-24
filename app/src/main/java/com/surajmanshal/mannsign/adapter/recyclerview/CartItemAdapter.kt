@@ -24,8 +24,11 @@ class CartItemAdapter(val context: Context, val list: List<CartItem>, val vm: Ca
         val txtQuantity = binding.txtCartItemQuantity
         val txtTotal = binding.txtCartItemTotal
         val btnRemoveCartItem = binding.btnRemoveCartItem
-        val btnUpdateCartItem = binding.btnUpdateCart
-        val edQuantity = binding.edCartQuantity
+        val btnCartMinus = binding.btnMinusCart
+        val btnCartPlus = binding.btnPlusCart
+        val txtCartItemQuantity = binding.txtCartItemQuantityText
+        //val btnUpdateCartItem = binding.btnUpdateCart
+        //val edQuantity = binding.edCartQuantity
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartItemViewHolder {
@@ -39,12 +42,14 @@ class CartItemAdapter(val context: Context, val list: List<CartItem>, val vm: Ca
         with(holder) {
             txtCartItemTitle.text = l.product?.posterDetails?.title
             txtQuantity.text = "Quantity : " + l.quantity.toString()
-            txtTotal.text = "Total : " + l.totalPrice.toString()
-            edQuantity.setText(l.quantity.toString())
+            txtTotal.text = "Total : ₹" + l.totalPrice.toString()
+            txtCartItemQuantity.text = l.quantity.toString()
+            //edQuantity.setText(l.quantity.toString())
 
-            if(l.product?.images?.isNotEmpty() == true)
-                Glide.with(context).load(Uri.parse(Functions.urlMaker(l.product?.images?.get(0)!!.url)))
-                .into(imgProduct)
+            if (l.product?.images?.isNotEmpty() == true)
+                Glide.with(context)
+                    .load(Uri.parse(Functions.urlMaker(l.product?.images?.get(0)!!.url)))
+                    .into(imgProduct)
         }
 
         //remove cart
@@ -63,6 +68,17 @@ class CartItemAdapter(val context: Context, val list: List<CartItem>, val vm: Ca
             builder.show()
         }
 
+        holder.btnCartMinus.setOnClickListener {
+            if (l.quantity > 1) {
+                vm.updateCart(l.cartItemId, l.quantity - 1, l.emailId)
+            } else {
+                Functions.makeToast(it.context, "Quantity can not be less than 1 ")
+            }
+        }
+        holder.btnCartPlus.setOnClickListener {
+            vm.updateCart(l.cartItemId, l.quantity + 1, l.emailId)
+        }
+        /*
         holder.btnUpdateCartItem.setOnClickListener {
             if (!holder.edQuantity.text.isNullOrEmpty()) {
                 vm.updateCart(l.cartItemId, holder.edQuantity.text.toString().toInt(), l.emailId)
@@ -70,6 +86,7 @@ class CartItemAdapter(val context: Context, val list: List<CartItem>, val vm: Ca
                 Functions.makeToast(it.context,"Please enter valid quantity")
             }
         }
+         */
 
     }
 

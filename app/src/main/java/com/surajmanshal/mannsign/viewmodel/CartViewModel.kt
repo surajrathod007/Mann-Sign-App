@@ -57,9 +57,9 @@ class CartViewModel : ViewModel() {
         _showScroll.postValue(v)
     }
 
-    fun getCartItems(email: String) {
+    fun getCartItems(email: String,loading : Boolean = true) {
 
-        isLoading.postValue(true)
+        isLoading.postValue(loading)
         var r = db.fetchCartByEmail(email)
 
         r.enqueue(object : Callback<List<CartItem>?> {
@@ -67,7 +67,9 @@ class CartViewModel : ViewModel() {
                 call: Call<List<CartItem>?>,
                 response: Response<List<CartItem>?>
             ) {
-                val list = response.body()!!
+                val list = response.body()!!.sortedBy {
+                    it.cartItemId
+                }
                 _cartItems.postValue(list)
                 if(list.isEmpty()){
                     _msg.postValue("No Cart Items !")
@@ -261,7 +263,7 @@ class CartViewModel : ViewModel() {
     }*/
 
     fun updateCart(cartId : Int,qty: Int,email : String = ""){
-        isLoading.postValue(true)
+        //isLoading.postValue(true)
         val r = db.updateCart(cartId,qty)
         r.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
@@ -270,8 +272,8 @@ class CartViewModel : ViewModel() {
             ) {
                 val r = response.body()
                 if(r != null){
-                    _msg.postValue(r.message)
-                    getCartItems(email)
+                    //_msg.postValue(r.message)
+                    getCartItems(email,false)
                 }else{
                     _msg.postValue("Response is null")
                 }

@@ -101,16 +101,16 @@ class CartActivity : AppCompatActivity() {
             vm._delivery.postValue(c)
         }
         vm._total.observe(this) {
-            binding.txtSubTotal.text = "$" + it.toString()
+            binding.txtSubTotal.text = "₹" + it.toString()
         }
         vm._discount.observe(this) {
-            binding.txtDiscount.text = "-$" + it.toString()
+            binding.txtDiscount.text = "-₹" + it.toString()
         }
         vm._amountToPay.observe(this) {
-            binding.txtAmountToPay.text = "$" + it.toString()
+            binding.txtAmountToPay.text = "₹" + it.toString()
         }
         vm._delivery.observe(this) {
-            binding.txtDeliveryCharge.text = "+$" + it.toString()
+            binding.txtDeliveryCharge.text = "+₹" + it.toString()
         }
         vm.isLoading.observe(this) {
             if (!email.isNullOrEmpty()) {
@@ -152,7 +152,7 @@ class CartActivity : AppCompatActivity() {
         binding.btnPlaceOrder.setOnClickListener {
             val b = AlertDialog.Builder(this)
             b.setTitle("Confirm your order please")
-            b.setMessage("Subtotal : $${vm._total.value}\nDiscount : $${vm._discount.value}\nDelivery : $${vm._delivery.value}\nYou have to pay : $${vm._amountToPay.value}")
+            b.setMessage("Subtotal : ₹${vm._total.value}\nDiscount : ₹${vm._discount.value}\nDelivery : ₹${vm._delivery.value}\nYou have to pay : ₹${vm._amountToPay.value}")
             b.setPositiveButton("Pay") { v, m ->
                 vm.placeOrder()
             }

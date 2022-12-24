@@ -17,6 +17,7 @@
 
 
         <ImageView
+            android:layout_marginTop="6dp"
             android:layout_gravity="center"
             android:src="@drawable/poster1"
             android:id="@+id/imgProductImage"
@@ -26,7 +27,6 @@
         <TextView
             android:textSize="14sp"
             android:layout_marginLeft="10dp"
-            android:textStyle="bold"
             android:id="@+id/txtProductName"
             android:text="Fire safety poster cool na"
             android:fontFamily="@font/satoshi_medium"
@@ -61,7 +61,7 @@
                 android:id="@+id/txtProductPrice"
                 android:text="$20.00"
                 android:fontFamily="@font/satoshi_bold"
-                android:textColor="@color/order_selected_text_color"
+                android:textColor="#048F55"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 

@@ -53,7 +53,7 @@ class ProductAdapter(val context: Context, val list: List<Product>, val vm: View
 
                 txtProductName.text = data.posterDetails!!.title
                 txtProductCategory.text = data.subCategory.toString()
-                txtProductPrice.text = "$ " + data.basePrice.toString()
+                txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + data.basePrice.toString()
                 btnAddToWishList.setOnClickListener {
                     Functions.makeToast(it.context, "Add to wishlist")
                 }
