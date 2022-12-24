@@ -19,6 +19,7 @@ object Functions {
         val fileName = imageurl.substringAfter("http://localhost:8700/images/")
         return URL.IMAGE_PATH+ fileName
     }
+
     fun setTypeNumber(editText: EditText){
         editText.inputType = InputType.TYPE_CLASS_NUMBER
     }

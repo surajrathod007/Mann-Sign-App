@@ -26,7 +26,7 @@
                 android:background="@drawable/profile_image_bg"
                 android:src="@drawable/ic_user"
                 android:padding="8dp"
-                android:cropToPadding="true"
+                android:scaleType="centerCrop"
                 />
 
             <LinearLayout

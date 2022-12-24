@@ -16,6 +16,7 @@ import com.surajmanshal.mannsign.repository.Repository
 import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
+import com.surajmanshal.mannsign.utils.loadRoundedImageWithUrl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -115,7 +116,11 @@ class ProfileActivity : AppCompatActivity() {
             }else{
                 with(it){
                     txtUserName.text = firstName
-                    Glide.with(this@ProfileActivity).load(it.profileImage).circleCrop().into(binding.layoutProfile.ivProfilePic)
+                    profileImage?.let { it1 ->
+                        binding.layoutProfile.ivProfilePic.loadRoundedImageWithUrl(
+                            it1
+                        )
+                    }
                 }
             }
         }
