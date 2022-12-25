@@ -1,210 +1,279 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar">
 
     <data>
 
     </data>
 
-    <com.factor.bouncy.BouncyNestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
 
-    <LinearLayout
-        android:background="#f1f5fe"
-        android:id="@+id/llMain"
-        android:animateLayoutChanges="true"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".ui.activity.CustomBannerActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:elevation="0dp"
-            app:elevation="5dp"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:animateLayoutChanges="true"
+            android:background="#f1f5fe"
+            android:orientation="vertical"
+            tools:context=".ui.activity.CustomBannerActivity">
 
-            <androidx.appcompat.widget.Toolbar
-                android:elevation="0dp"
-                android:background="@color/white"
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:elevation="0dp"
+                app:elevation="5dp">
+
+                <androidx.appcompat.widget.Toolbar
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:elevation="0dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="1">
+
+                        <ImageView
+                            android:id="@+id/btnCustomBannerBack"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="center"
+                            android:layout_weight="0.2"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                            app:tint="@color/title_text_color" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.6"
+                            android:fontFamily="@font/satoshi_bold"
+                            android:gravity="center"
+                            android:text="Custom poster"
+                            android:textColor="@color/title_text_color"
+                            android:textSize="22sp" />
+
+
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.Toolbar>
+
+            </com.google.android.material.appbar.AppBarLayout>
+            <com.factor.bouncy.BouncyNestedScrollView
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/llMain"
+                android:animateLayoutChanges="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/customPosterImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:background="#DDDDDD"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background" />
+
+
+
+
+                <TextView
+                    android:id="@+id/txtAspectRatio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:paddingTop="10dp"
+                    android:text="Aspect ratio : 1:1"
+                    android:textColor="@color/text_normal_color" />
 
                 <LinearLayout
-                    android:weightSum="1"
-                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:orientation="horizontal"
+                    android:padding="10dp"
+                    android:weightSum="1">
 
-                    <ImageView
-                        android:layout_gravity="center"
-                        android:layout_weight="0.2"
-                        android:clickable="true"
-                        android:foreground="?attr/selectableItemBackground"
-                        android:id="@+id/btnCustomBannerBack"
-                        android:src="@drawable/ic_baseline_arrow_back_ios_24"
-                        android:layout_width="0dp"
-                        android:layout_height="30dp"
-                        app:tint="@color/title_text_color" />
-                    <TextView
-                        android:layout_weight="0.6"
-                        android:textSize="22sp"
-                        android:textColor="@color/title_text_color"
-                        android:fontFamily="@font/satoshi_bold"
-                        android:text="Custom poster"
-                        android:gravity="center"
+                    <EditText
+                        android:id="@+id/edWidth"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:hint="Enter width"
+                        android:inputType="number"
+                        android:textColor="@color/title_text_color" />
 
+                    <EditText
+                        android:id="@+id/edHeight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.4"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:hint="Enter height"
+                        android:inputType="number"
+                        android:textColor="@color/title_text_color" />
 
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnApplyImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:layout_weight="0.2"
+                        android:background="@drawable/normal_button_bg"
+                        android:text="Apply"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white" />
 
                 </LinearLayout>
 
-            </androidx.appcompat.widget.Toolbar>
+                <TextView
+                    android:id="@+id/txtAspectRatioHint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:text=""
+                    android:textColor="@color/text_normal_color" />
 
-        </com.google.android.material.appbar.AppBarLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_marginTop="4dp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:text="The unit of dimensions is in inches !"
+                    android:textColor="@color/text_normal_color" />
+
+                <include
+                    android:id="@+id/spCustomMaterial"
+                    layout="@layout/modern_spinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp" />
+
+                <include
+                    android:id="@+id/spCustomPosterType"
+                    layout="@layout/modern_spinner_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp" />
 
 
-        <ImageView
-            android:clickable="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:src="@drawable/ic_launcher_background"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center"
-            android:id="@+id/customPosterImage"
-            android:background="#DDDDDD"
-            android:layout_width="200dp"
-            android:layout_height="200dp"/>
+                <LinearLayout
+                    android:id="@+id/llBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/edittext_bg"
+                    android:orientation="vertical"
+                    android:padding="6dp"
+                    android:visibility="gone">
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Im banner details" />
 
+                </LinearLayout>
 
 
-        <TextView
-            android:paddingTop="10dp"
-            android:layout_gravity="center"
-            android:id="@+id/txtAspectRatio"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/text_normal_color"
-            android:fontFamily="@font/satoshi_medium"
-            android:layout_marginHorizontal="14dp"
-            android:text="Aspect ratio : 1:1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+                <LinearLayout
+                    android:id="@+id/llPoster"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:background="@drawable/edittext_bg"
+                    android:orientation="vertical"
+                    android:padding="6dp"
+                    android:visibility="gone">
 
-        <LinearLayout
-            android:padding="10dp"
-            android:weightSum="1"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="6dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Poster details"
+                        android:textColor="@color/title_text_color"
+                        android:textSize="18sp" />
 
-            <EditText
-                android:textColor="@color/title_text_color"
-                android:fontFamily="@font/satoshi_medium"
-                android:layout_weight="0.4"
-                android:id="@+id/edWidth"
-                android:inputType="number"
-                android:hint="Enter width"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-            <EditText
-                android:textColor="@color/title_text_color"
-                android:fontFamily="@font/satoshi_medium"
-                android:layout_weight="0.4"
-                android:id="@+id/edHeight"
-                android:inputType="number"
-                android:hint="Enter height"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edPosterTitle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/satoshi_medium"
+                            android:hint="Enter poster title"
+                            android:textColor="@color/title_text_color" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:layout_weight="0.2"
-                android:background="@drawable/normal_button_bg"
-                android:textColor="@color/white"
-                android:id="@+id/btnApplyImage"
-                android:text="Apply"
-                android:textAllCaps="false"
-                android:layout_gravity="right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_marginTop="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edPosterDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/satoshi_medium"
+                            android:hint="Enter poster description"
+                            android:textColor="@color/title_text_color" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:textColor="@color/title_text_color"
+                    android:layout_marginHorizontal="14dp"
+                    android:id="@+id/txtCustomOrderTotalPrice"
+                    android:text="Total amount to pay : "
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:text="Place custom order"
+                    android:textColor="@color/white"
+                    android:textAllCaps="false"
+                    android:layout_marginVertical="10dp"
+                    android:id="@+id/btnPlaceCustomOrder"
+                    android:background="@drawable/normal_button_bg"
+                    android:layout_marginHorizontal="14dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+            </com.factor.bouncy.BouncyNestedScrollView>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txtAspectRatioHint"
-            android:layout_marginTop="4dp"
-            android:textColor="@color/text_normal_color"
-            android:fontFamily="@font/satoshi_medium"
-            android:layout_marginHorizontal="14dp"
-            android:text=""
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <TextView
-            android:layout_marginTop="4dp"
-            android:textColor="@color/text_normal_color"
-            android:fontFamily="@font/satoshi_medium"
-            android:layout_marginHorizontal="14dp"
-            android:text="The unit of dimensions is in inches !"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-
-        <include
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_marginHorizontal="10dp"
-            android:id="@+id/spCustomPosterType"
-            layout="@layout/modern_spinner_layout"/>
-
-        <LinearLayout
-            android:visibility="gone"
-            android:padding="6dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/edittext_bg"
-            android:id="@+id/llBanner"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Im banner details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:visibility="gone"
-            android:padding="6dp"
-            android:layout_margin="10dp"
-            android:background="@drawable/edittext_bg"
-            android:id="@+id/llPoster"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Im poster details"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
-        </LinearLayout>
-    </LinearLayout>
 
 
-    </com.factor.bouncy.BouncyNestedScrollView>
 </layout>

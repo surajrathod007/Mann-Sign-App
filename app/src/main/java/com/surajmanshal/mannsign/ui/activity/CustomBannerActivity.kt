@@ -58,7 +58,12 @@ class CustomBannerActivity : AppCompatActivity() {
         binding.customPosterImage.setOnClickListener {
             chooseImage()
         }
+        binding.btnCustomBannerBack.setOnClickListener {
+            finish()
+        }
 
+
+        vm.getAllMaterials()
 
         setupSpinner()
         editTextWatchers()
@@ -99,6 +104,18 @@ class CustomBannerActivity : AppCompatActivity() {
     fun setObservers() {
         vm.msg.observe(this) {
             Functions.makeToast(this, it.toString())
+        }
+        vm.allMaterials.observe(this){
+            binding.spCustomMaterial.resSpinner.hint = "Select material"
+            binding.spCustomMaterial.resSpinner.setAdapter(
+                ArrayAdapter(
+                    this,
+                    R.layout.support_simple_spinner_dropdown_item,
+                    it.map {
+                        it.name
+                    }
+                )
+            )
         }
     }
 
@@ -191,7 +208,6 @@ class CustomBannerActivity : AppCompatActivity() {
     fun chooseImage() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
-
         startActivityForResult(intent, REQUEST_CODE)
     }
 
@@ -258,6 +274,7 @@ class CustomBannerActivity : AppCompatActivity() {
     }
 
     fun setupSpinner() {
+        //type spinner
         binding.spCustomPosterType.resSpinner.hint = "Select type"
         binding.spCustomPosterType.resSpinner.setAdapter(
             ArrayAdapter(
