@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.provider.CalendarContract
 import android.text.Editable
 import android.text.TextUtils
 import android.text.TextWatcher
@@ -137,6 +136,9 @@ class RegisterFrag : Fragment() {
         val phoneText = binding.etMobileNumber.text.toString()
         if (phoneText.length != 10) {
             return "Must be 10 digit phone number"
+        }
+        if(!phoneText.matches(Regex("^[6-9]([0-9]{9})"))){
+           return "Invalid phone number"
         }
         return null
     }
