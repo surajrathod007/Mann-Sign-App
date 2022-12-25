@@ -33,6 +33,8 @@ class CustomBannerActivity : AppCompatActivity() {
 
     val arrProductType = listOf("Poster", "Banner")
     val REQUEST_CODE = 0
+    var aspectRatio : String = ""
+
     lateinit var vm: CustomBannerViewModel
 
     lateinit var binding: ActivityCustomBannerBinding
@@ -48,8 +50,8 @@ class CustomBannerActivity : AppCompatActivity() {
         binding.llMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         binding.btnApplyImage.setOnClickListener {
             //onApply()
-            if(binding.edHeight.text.isNullOrEmpty() || binding.edWidth.text.isNullOrEmpty())
-                Functions.makeToast(this,"Please enter dimensions")
+            if (binding.edHeight.text.isNullOrEmpty() || binding.edWidth.text.isNullOrEmpty())
+                Functions.makeToast(this, "Please enter dimensions")
             else
                 calculateMeasures()
         }
@@ -81,12 +83,12 @@ class CustomBannerActivity : AppCompatActivity() {
                 Poster(title = "hii", "", null),
                 Banner(text = "Hello", font = 2)
             )
-            when(index){
-                0->{
+            when (index) {
+                0 -> {
                     binding.llPoster.visibility = View.VISIBLE
                     binding.llBanner.visibility = View.GONE
                 }
-                1->{
+                1 -> {
                     binding.llPoster.visibility = View.GONE
                     binding.llBanner.visibility = View.VISIBLE
                 }
@@ -132,6 +134,12 @@ class CustomBannerActivity : AppCompatActivity() {
         })
     }
 
+    fun gcd(a: Int, b: Int): Int {
+        if (b == 0)
+            return a
+        return gcd(b, a % b)
+    }
+
     fun calculateMeasures() {
 
         val display = DisplayMetrics()
@@ -146,6 +154,10 @@ class CustomBannerActivity : AppCompatActivity() {
 
         val height = binding.edHeight.text.toString().toFloat()
         val width = binding.edWidth.text.toString().toFloat()
+
+        //aspect ratio setup
+        val GCD = gcd(height.toInt(), width.toInt())
+        binding.txtAspectRatioHint.text = "Current aspect ratio is ${(width/GCD).toInt()} : ${(height/GCD).toInt()} \nExpected ratio is $aspectRatio"
 
         var newHeight = 0f
         var newWidth = 0f
@@ -211,9 +223,14 @@ class CustomBannerActivity : AppCompatActivity() {
         val width = options.outWidth.toFloat()
         val height = options.outHeight.toFloat()
 
-        binding.edHeight.setText(height.toInt().toString())
-        binding.edWidth.setText(width.toInt().toString())
+        //binding.edHeight.setText(height.toInt().toString())
+        //binding.edWidth.setText(width.toInt().toString())
 
+        //Aspect ratio setup
+        val GCD = gcd(width.toInt(), height.toInt())
+        aspectRatio = "${(width/GCD).toInt()} : ${(height/GCD).toInt()}"
+        binding.txtAspectRatio.text =
+            "Aspect ratio is " + (width / GCD).toInt() + " : " + (height / GCD).toInt() + " (${width.toInt()} x ${height.toInt()})"
 
         Functions.makeToast(c, "Total width is $displayWidth", true)
 

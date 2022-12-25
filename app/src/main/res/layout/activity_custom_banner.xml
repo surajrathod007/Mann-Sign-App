@@ -13,6 +13,7 @@
 
 
     <LinearLayout
+        android:background="#f1f5fe"
         android:id="@+id/llMain"
         android:animateLayoutChanges="true"
         android:orientation="vertical"
@@ -22,7 +23,7 @@
 
         <com.google.android.material.appbar.AppBarLayout
             android:elevation="0dp"
-            app:elevation="0dp"
+            app:elevation="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -81,12 +82,29 @@
             android:layout_height="200dp"/>
 
         <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+        <TextView
+            android:paddingTop="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/txtAspectRatio"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_normal_color"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_marginHorizontal="14dp"
+            android:text="Aspect ratio : 1:1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
             android:padding="10dp"
-            android:background="@drawable/edittext_bg"
             android:weightSum="1"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -123,6 +141,16 @@
                 android:layout_height="wrap_content"/>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtAspectRatioHint"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/text_normal_color"
+            android:fontFamily="@font/satoshi_medium"
+            android:layout_marginHorizontal="14dp"
+            android:text=""
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
 
         <TextView
             android:layout_marginTop="4dp"
@@ -174,6 +202,7 @@
 
         </LinearLayout>
 
+        </LinearLayout>
     </LinearLayout>
 
 
