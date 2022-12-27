@@ -20,6 +20,7 @@ class ChatActivity : AppCompatActivity() {
     var email: String? = null
 
 
+    //TODO : Do api call in every 1-2 seconds , using handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
