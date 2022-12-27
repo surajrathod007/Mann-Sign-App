@@ -13,16 +13,18 @@
         android:layout_height="wrap_content">
 
         <com.google.android.material.card.MaterialCardView
+            app:cardElevation="0dp"
             android:layout_margin="4dp"
-            app:cardCornerRadius="10dp"
-            android:backgroundTint="#3C2088"
+            app:cardCornerRadius="22dp"
+            android:backgroundTint="@color/bg_color"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
-                android:layout_margin="6dp"
-                android:textColor="@color/white"
-                android:textSize="18sp"
+                android:layout_margin="10dp"
+                android:textColor="@color/title_text_color"
+                android:textSize="16sp"
+                android:fontFamily="@font/satoshi_medium"
                 android:id="@+id/txtMessageOther"
                 android:text="Hello how are you?"
                 android:layout_width="wrap_content"
@@ -34,6 +36,7 @@
             android:layout_marginHorizontal="10dp"
             android:id="@+id/txtMessageTimeOther"
             android:text="15:09 Pm"
+            android:textSize="10sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>

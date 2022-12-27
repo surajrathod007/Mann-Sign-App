@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -58,11 +59,17 @@ class OrderDetailsActivity : AppCompatActivity() {
             }
         })
 
+
         setObservers()
 
         binding.btnOrderDetailBack.setOnClickListener {
             onBackPressed()
             finish()
+        }
+        binding.btnOrderChat.setOnClickListener {
+            val i = Intent(this,ChatActivity::class.java)
+            i.putExtra("id",id)
+            startActivity(i)
         }
 
 
@@ -79,9 +86,9 @@ class OrderDetailsActivity : AppCompatActivity() {
                 binding.edTrackingUrl.setText(it.trackingUrl.toString())
             binding.txtOrderPaymentStatus.text = if (it.paymentStatus == 0) "Pending" else "Done"
             binding.txtOrderQuantityDetails.text = it.quantity.toString()
-            binding.txtOrderDiscountDetails.text = "- $" + it.discount
-            binding.txtOrderDeliveryDetails.text = "+ $" + it.deliveryCharge
-            binding.txtOrderGrandTotalDetails.text = "$" + it.totalRecieved
+            binding.txtOrderDiscountDetails.text = "- ₹" + it.discount
+            binding.txtOrderDeliveryDetails.text = "+ ₹" + it.deliveryCharge
+            binding.txtOrderGrandTotalDetails.text = "₹" + it.totalRecieved
             if(it.paymentStatus == 0)
                 binding.txtYouHaveToPay.text = "You have to pay : "
             else

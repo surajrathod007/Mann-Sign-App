@@ -4,12 +4,14 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.data.model.ordering.Message
 import com.surajmanshal.mannsign.databinding.ItemMeMessageBinding
 import com.surajmanshal.mannsign.databinding.ItemOtherMessageBinding
+import com.surajmanshal.mannsign.utils.Functions
 
 
-class ChatAdapter(val context: Context, val msg: List<Message>) :
+class ChatAdapter(val context: Context, val msg: List<ChatMessage>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -23,7 +25,7 @@ class ChatAdapter(val context: Context, val msg: List<Message>) :
 
     override fun getItemViewType(position: Int): Int {
         val msg = msg[position]
-        if (msg.sender.emailId == "surajsinhrathod75@gmail.com") {
+        if (msg.emailId == "surajsinhrathod75@gmail.com") {
             return VIEW_SEND_TYPE
         } else {
             return VIEW_RECEIVE_TYPE
@@ -34,9 +36,9 @@ class ChatAdapter(val context: Context, val msg: List<Message>) :
         RecyclerView.ViewHolder(binding.root) {
         val txtMessageMe = binding.txtMessageMe
         val txtMessageTimeMe = binding.txtMessageTimeMe
-        fun bind(msg: Message) {
+        fun bind(msg: ChatMessage) {
             txtMessageMe.text = msg.message
-            txtMessageTimeMe.text = msg.createdAt.toString()
+            txtMessageTimeMe.text = Functions.timeStampToDate(msg.timeStamp)
         }
     }
 
@@ -45,9 +47,9 @@ class ChatAdapter(val context: Context, val msg: List<Message>) :
         val txtMessageOther = binding.txtMessageOther
         val txtMessageTimeOther = binding.txtMessageTimeOther
 
-        fun bind(msg: Message) {
+        fun bind(msg: ChatMessage) {
             txtMessageOther.text = msg.message
-            txtMessageTimeOther.text = msg.createdAt.toString()
+            txtMessageTimeOther.text = Functions.timeStampToDate(msg.timeStamp)
         }
     }
 

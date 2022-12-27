@@ -13,6 +13,12 @@ import android.widget.TextView
 import android.widget.Toast
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.URL
+import java.sql.Timestamp
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import java.util.Date
 
 object Functions {
     fun urlMaker(imageurl :String): String {
@@ -79,5 +85,13 @@ object Functions {
         ss.setSpan(clickableSpan, ss.length - 10, ss.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
         textViewLong.text = ss
         textViewLong.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    fun timeStampToDate(timestamp : String): String {
+        val date = Date(timestamp.toLong())
+        val t = Timestamp(timestamp.toLong())
+        val d = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp.toLong()), ZoneId.systemDefault())
+
+        return d.format(DateTimeFormatter.ofPattern("E, dd MMM yyyy hh:mm a"))
     }
 }

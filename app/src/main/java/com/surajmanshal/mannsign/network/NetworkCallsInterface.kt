@@ -4,10 +4,7 @@ import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
-import com.surajmanshal.mannsign.data.model.ordering.CartItem
-import com.surajmanshal.mannsign.data.model.ordering.Carts
-import com.surajmanshal.mannsign.data.model.ordering.Order
-import com.surajmanshal.mannsign.data.model.ordering.Transaction
+import com.surajmanshal.mannsign.data.model.ordering.*
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.model.product.ProductType
 import com.surajmanshal.mannsign.data.response.SimpleResponse
@@ -197,5 +194,11 @@ interface NetworkCallsInterface {
 
     @GET("cart/varientByEmail")
     fun fetchProductVariants(@Query("email") email: String,@Query("productId") productId: Int) : Call<List<Variant>>
+
+    @GET("chat/getByOrderId")
+    fun loadChats(@Query("orderId") orderId : String) : Call<List<ChatMessage>>
+
+    @POST("chat/add")
+    fun addChat(@Body msg : ChatMessage) : Call<SimpleResponse>
 
 }
