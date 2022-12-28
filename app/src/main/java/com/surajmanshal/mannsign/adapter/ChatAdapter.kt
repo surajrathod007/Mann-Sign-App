@@ -11,7 +11,7 @@ import com.surajmanshal.mannsign.databinding.ItemOtherMessageBinding
 import com.surajmanshal.mannsign.utils.Functions
 
 
-class ChatAdapter(val context: Context, val msg: List<ChatMessage>) :
+class ChatAdapter(val context: Context, val msg: List<ChatMessage>,val email : String?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -25,10 +25,14 @@ class ChatAdapter(val context: Context, val msg: List<ChatMessage>) :
 
     override fun getItemViewType(position: Int): Int {
         val msg = msg[position]
-        if (msg.emailId == "surajsinhrathod75@gmail.com") {
+        if(!email.isNullOrEmpty()){
+            if (msg.emailId == email) {
+                return VIEW_SEND_TYPE
+            } else {
+                return VIEW_RECEIVE_TYPE
+            }
+        }else{
             return VIEW_SEND_TYPE
-        } else {
-            return VIEW_RECEIVE_TYPE
         }
     }
 

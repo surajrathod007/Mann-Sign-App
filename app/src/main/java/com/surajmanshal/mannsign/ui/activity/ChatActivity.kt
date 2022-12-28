@@ -4,7 +4,11 @@ import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
+import androidx.recyclerview.widget.RecyclerView
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.ChatAdapter
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
@@ -39,7 +43,6 @@ class ChatActivity : AppCompatActivity() {
         }
 
 
-
         setupObserver()
         btnClickListners()
     }
@@ -58,6 +61,8 @@ class ChatActivity : AppCompatActivity() {
                 )
                 binding.edMessage.text = null
             }
+
+
         }
         binding.btnChatBack.setOnClickListener {
             finish()
@@ -69,7 +74,42 @@ class ChatActivity : AppCompatActivity() {
             Functions.makeToast(this@ChatActivity, it)
         }
         vm.chats.observe(this){
-            binding.rvChats.adapter = ChatAdapter(this@ChatActivity,it)
+            binding.rvChats.adapter = ChatAdapter(this@ChatActivity,it,email)
+            val pos = (binding.rvChats.adapter as ChatAdapter).itemCount-1
+            binding.rvChats.smoothScroll(pos,200){
+
+            }
         }
+    }
+
+    fun RecyclerView.smoothScroll(toPos: Int, duration: Int = 500, onFinish: () -> Unit = {}) {
+        try {
+            val smoothScroller: RecyclerView.SmoothScroller = object : LinearSmoothScroller(context) {
+                override fun getVerticalSnapPreference(): Int {
+                    return SNAP_TO_END
+                }
+
+                override fun calculateTimeForScrolling(dx: Int): Int {
+                    return duration
+                }
+
+                override fun onStop() {
+                    super.onStop()
+                    onFinish.invoke()
+                }
+            }
+            smoothScroller.targetPosition = toPos
+            layoutManager?.startSmoothScroll(smoothScroller)
+        } catch (e: Exception) {
+
+        }
+    }
+
+    fun firstVisiblePostion() : Int{
+        val manager = binding.rvChats.layoutManager
+        if(manager is LinearLayoutManager){
+            return (manager as LinearLayoutManager).findFirstVisibleItemPosition()
+        }
+        return 0
     }
 }
