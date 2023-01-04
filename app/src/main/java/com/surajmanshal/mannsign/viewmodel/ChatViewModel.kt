@@ -12,11 +12,16 @@ import retrofit2.Response
 
 class ChatViewModel : ViewModel() {
 
-    private var _chats = MutableLiveData<List<ChatMessage>>()
+    private var _chats = MutableLiveData<List<ChatMessage>>(emptyList())
     val chats : LiveData<List<ChatMessage>> get() = _chats
 
     private var _msg = MutableLiveData<String>()
     val msg: LiveData<String> get() = _msg
+
+    val msgSize = MutableLiveData<Int>(0)
+
+    var _scrollDown = MutableLiveData<Boolean>(false)
+    val scrollDown : LiveData<Boolean> get() = _scrollDown
 
     companion object{
         val db = NetworkService.networkInstance
@@ -33,19 +38,27 @@ class ChatViewModel : ViewModel() {
                 if(!response.body().isNullOrEmpty())
                 {
                     _chats.postValue(response.body())
+                    msgSize.postValue(response.body()!!.size)
                 }else{
                     _msg.postValue("Response is null")
                 }
             }
-
             override fun onFailure(call: Call<List<ChatMessage>?>, t: Throwable) {
                 _msg.postValue(t.message.toString())
             }
         })
     }
 
-    fun addChat(msg : ChatMessage){
+    fun addChat(msg : ChatMessage,done : () -> Unit = {}){
         val r = db.addChat(msg)
+//        try{
+//            val l = _chats.value?.toMutableList()
+//            l?.add(msg)
+//            _chats.postValue(l)
+//        }catch (e : Exception){
+//            _msg.postValue(e.message.toString())
+//        }
+
         r.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
                 call: Call<SimpleResponse?>,
@@ -53,7 +66,9 @@ class ChatViewModel : ViewModel() {
             ) {
                 if(response.isSuccessful){
                     if(response.body()!!.success){
-                        loadChats(msg.orderId)
+                        //loadChats(msg.orderId)
+                        _scrollDown.postValue(true)
+                        done.invoke()
                     }
                     _msg.postValue(response.body()?.message)
                 }
