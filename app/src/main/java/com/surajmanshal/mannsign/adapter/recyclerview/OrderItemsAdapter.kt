@@ -3,8 +3,6 @@ package com.surajmanshal.mannsign.adapter.recyclerview
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.ordering.OrderItem
@@ -44,8 +42,10 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
             txtOrderItemBasePrice.text = "Base Price : ₹" + o.product!!.basePrice.toString()
             txtOrderItemTotalPrice.text = "₹" + o.totalPrice.toString()
             with(o) {
-                val url = product?.images?.get(0)?.let {
-                    Functions.urlMaker(it.url)
+                val url = product?.images?.let {
+                    if(it.isNotEmpty()){
+                        Functions.urlMaker(it[0].url)
+                    }
                 }
                 Glide.with(imgProduct.context).load(url).into(imgProduct)
             }
