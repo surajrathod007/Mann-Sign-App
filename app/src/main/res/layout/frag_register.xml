@@ -9,6 +9,7 @@
 
 
     <ScrollView
+        android:animateLayoutChanges="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -21,6 +22,8 @@
         tools:context=".AuthenticationActivity">
 
         <androidx.appcompat.widget.LinearLayoutCompat
+            android:animateLayoutChanges="true"
+            android:id="@+id/llRegisterMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -75,6 +78,47 @@
                 android:textStyle="bold" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+
+            <TextView
+                android:visibility="gone"
+                android:layout_marginLeft="6dp"
+                android:layout_marginTop="6dp"
+                android:textSize="12sp"
+                android:fontFamily="@font/satoshi_medium"
+                android:id="@+id/txtOtpMessage"
+                android:text="Your OTP is sent on your email ! must check the spams ;)"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+
+            <LinearLayout
+                android:gravity="center"
+                android:visibility="gone"
+                android:layout_marginTop="6dp"
+                android:weightSum="1"
+                android:id="@+id/llVerifierLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edOtp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.7"
+                    android:padding="10dp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:hint="Enter your otp.."
+                    android:background="@drawable/edittext_bg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+                <com.surajmanshal.mannsign.customviews.MorphButton
+                    android:layout_weight="0.3"
+                    android:layout_gravity="center"
+                    android:id="@+id/btnVerifyEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
 
 
             <com.google.android.material.textfield.TextInputLayout

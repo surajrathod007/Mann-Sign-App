@@ -1,6 +1,7 @@
 package com.surajmanshal.mannsign.ui.fragments.auth
 
 
+import android.animation.LayoutTransition
 import android.app.Dialog
 import android.content.Context
 import android.content.res.ColorStateList
@@ -21,20 +22,35 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.customviews.*
 import com.surajmanshal.mannsign.data.model.auth.User
+import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragRegisterBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class RegisterFrag : Fragment() {
 
     lateinit var binding: FragRegisterBinding
     lateinit var d: LoadingScreen
     lateinit var dd: Dialog
+
+    //states , can be managed in viewmodel ;)
+    var emailVerified = false
+    var myOtp = ""
+    var otpSent = false
+    //TODO: MAke a new otp sent function on server side
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -42,6 +58,7 @@ class RegisterFrag : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.frag_register, container, false)
         binding = FragRegisterBinding.bind(view)
+        binding.llRegisterMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGE_APPEARING)
         // Loader
         d = LoadingScreen(activity as Context)
         dd = d.loadingScreen()
@@ -60,8 +77,23 @@ class RegisterFrag : Fragment() {
         phoneFocusListner()
         textWatchers()
 
+        binding.btnVerifyEmail.apply {
+            fromBgColor = getColorX(R.color.green)
+            toBgColor = getColorX(R.color.green)
+            fromTextColor = getColorX(R.color.white)
+            toTextColor = getColorX(R.color.black)
+            text = "Send Otp"
+            textSize = 16 * sp()
+            setPadding((32 * dp()).toInt(), (16 * dp()).toInt(), (32 * dp()).toInt(), (16 * dp()).toInt())
+            iconDrawable = getDrawableX(R.drawable.ic_sync).apply {
+                setTint(getColorX(R.color.white))
+            }
+        }
         binding.tvLoginHere.setOnClickListener {
             findNavController().navigate(R.id.action_registerFrag_to_loginFrag)
+        }
+        binding.btnVerifyEmail.setOnClickListener {
+            verifyEmail()
         }
         binding.btnRegister.setOnClickListener {
             try {
@@ -86,6 +118,55 @@ class RegisterFrag : Fragment() {
         }
 
         return view
+    }
+
+    private fun verifyEmail() {
+        if (!binding.edEmailContainer.helperText.isNullOrEmpty()) {
+            Snackbar.make(binding.ETEmail, "Email must be valid", 1000).show()
+        } else if (otpSent) {
+            if (!binding.edOtp.text.isNullOrEmpty()) {
+                if (binding.edOtp.text.toString() == myOtp) {
+                    emailVerified = true
+                    binding.llVerifierLayout.visibility = View.GONE
+                    binding.txtOtpMessage.text = "Your email is verified ! "
+                    binding.ETEmail.isEnabled = false
+                    Toast.makeText(requireContext(), "Email verified", Toast.LENGTH_SHORT).show()
+                } else {
+                    emailVerified = false
+                    Toast.makeText(requireContext(), "Wrong otp", Toast.LENGTH_SHORT).show()
+                }
+            } else {
+                Toast.makeText(requireContext(), "Please enter otp", Toast.LENGTH_SHORT).show()
+            }
+
+        } else {
+            binding.btnVerifyEmail.setUIState(MorphButton.UIState.Loading)
+            val r = NetworkService.networkInstance.sendOtpNew(binding.ETEmail.text?.trim().toString())
+            r.enqueue(object : Callback<SimpleResponse?> {
+                override fun onResponse(
+                    call: Call<SimpleResponse?>,
+                    response: Response<SimpleResponse?>
+                ) {
+                    //Functions.makeToast(requireContext(),"${response.body()?.message}")
+                    binding.txtOtpMessage.visibility = View.VISIBLE
+                    binding.btnVerifyEmail.apply {
+                        text = "Verify"
+                        setUIState(MorphButton.UIState.Button)
+                    }
+                    myOtp = response.body()?.message.toString()
+                    otpSent = true
+                }
+
+                override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                    Functions.makeToast(requireContext(),"${t.message}")
+                    binding.btnVerifyEmail.apply {
+                        text = "Send otp"
+                        setUIState(MorphButton.UIState.Button)
+                    }
+                }
+            })
+
+        }
     }
 
     private fun emailFocusListner() {
@@ -137,8 +218,8 @@ class RegisterFrag : Fragment() {
         if (phoneText.length != 10) {
             return "Must be 10 digit phone number"
         }
-        if(!phoneText.matches(Regex("^[6-9]([0-9]{9})"))){
-           return "Invalid phone number"
+        if (!phoneText.matches(Regex("^[6-9]([0-9]{9})"))) {
+            return "Invalid phone number"
         }
         return null
     }
@@ -203,6 +284,13 @@ class RegisterFrag : Fragment() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 binding.edEmailContainer.setHelperTextColor(ColorStateList.valueOf(Color.RED))
                 binding.edEmailContainer.helperText = validEmail()
+                if (!emailVerified) {
+                    if (!p0.isNullOrEmpty()) {
+                        binding.llVerifierLayout.visibility = View.VISIBLE
+                    } else {
+                        binding.llVerifierLayout.visibility = View.GONE
+                    }
+                }
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -254,6 +342,11 @@ class RegisterFrag : Fragment() {
 
         if (!binding.edPasswordContainer.helperText.isNullOrEmpty()) {
             Snackbar.make(binding.ETPassword, "Password must be valid", 1000).show()
+            return false
+        }
+
+        if (!emailVerified) {
+            Snackbar.make(binding.ETPassword, "Please verify email !", 1000).show()
             return false
         }
         return true
