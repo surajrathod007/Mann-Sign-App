@@ -201,4 +201,7 @@ interface NetworkCallsInterface {
     @POST("chat/add")
     fun addChat(@Body msg : ChatMessage) : Call<SimpleResponse>
 
+    @GET("user/getotp")
+    fun sendOtpNew(@Query("email") email : String) : Call<SimpleResponse>
+
 }
