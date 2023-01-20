@@ -129,6 +129,7 @@ class RegisterFrag : Fragment() {
                     emailVerified = true
                     binding.llVerifierLayout.visibility = View.GONE
                     binding.txtOtpMessage.text = "Your email is verified ! "
+                    binding.txtOtpMessage.setTextColor(requireContext().resources.getColor(R.color.normal_button_color))
                     binding.ETEmail.isEnabled = false
                     Toast.makeText(requireContext(), "Email verified", Toast.LENGTH_SHORT).show()
                 } else {
@@ -140,7 +141,10 @@ class RegisterFrag : Fragment() {
             }
 
         } else {
+
             binding.btnVerifyEmail.setUIState(MorphButton.UIState.Loading)
+            binding.btnVerifyEmail.isEnabled = false
+            Functions.makeToast(requireContext(),"Sending Otp please wait...")
             val r = NetworkService.networkInstance.sendOtpNew(binding.ETEmail.text?.trim().toString())
             r.enqueue(object : Callback<SimpleResponse?> {
                 override fun onResponse(
@@ -155,6 +159,7 @@ class RegisterFrag : Fragment() {
                     }
                     myOtp = response.body()?.message.toString()
                     otpSent = true
+                    binding.btnVerifyEmail.isEnabled = true
                 }
 
                 override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
@@ -162,6 +167,7 @@ class RegisterFrag : Fragment() {
                     binding.btnVerifyEmail.apply {
                         text = "Send otp"
                         setUIState(MorphButton.UIState.Button)
+                        binding.btnVerifyEmail.isEnabled = true
                     }
                 }
             })
