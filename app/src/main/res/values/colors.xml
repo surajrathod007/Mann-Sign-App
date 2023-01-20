@@ -11,6 +11,7 @@
 
     <color name="order_selected_bg_color">#f1fcf8</color>
     <color name="order_selected_text_color">#70d5ab</color>
+    <color name="normal_button_color">#048F55</color>
 
     <color name="bg_color">#f6f7fc</color>
     <color name="title_text_color">#213357</color>
