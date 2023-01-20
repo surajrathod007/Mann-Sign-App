@@ -24,6 +24,11 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
+    
+    <style name="satoshiTypeface" parent="Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="fontFamily">@font/satoshi_medium</item>
+        <item name="android:textColor">@color/text_normal_color</item>
+    </style>
 
 
 </resources>

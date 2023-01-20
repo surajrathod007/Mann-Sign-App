@@ -6,14 +6,62 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.activity.ProductDetailsActivity"
-        android:animateLayoutChanges="true">
+        android:animateLayoutChanges="true"
+    android:theme="@style/satoshiTypeface">
 
-    <androidx.core.widget.NestedScrollView
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:paddingHorizontal="8dp"
+            android:background="@color/white">
+
+            <ImageView
+                android:id="@+id/btnChatBack"
+                android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:padding="4dp"
+                android:layout_marginStart="8dp"
+                android:layout_gravity="center_vertical|start"
+                app:tint="@color/title_text_color" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="center_vertical"
+            android:visibility="gone">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Review"
+                android:paddingHorizontal="4dp"
+                android:textSize="20sp"
+                android:textStyle="bold"/>
+
+            <ImageView
+                android:id="@+id/ivWriteReview"
+                android:src="@drawable/ic_baseline_edit_24"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:padding="4dp"
+                app:tint="@color/title_text_color" />
+
+
+        </LinearLayout>
+
+        </FrameLayout>
+
+    <com.factor.bouncy.BouncyNestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="128dp"
+        android:layout_marginTop="56dp"
         android:animateLayoutChanges="true"
-        android:isScrollContainer="true">
+        android:isScrollContainer="true"
+        >
 
 
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -29,9 +77,12 @@
                 android:layout_width="180dp"
                 android:layout_height="240dp"
                 android:layout_gravity="center"
-                android:layout_margin="16dp"
+
                 app:shapeAppearance="@style/ShapeAppearanceOverlay.Material3.Chip"
                 android:background="@color/bg_color"
+                android:layout_marginTop="36dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
                 />
 
             <com.google.android.material.textview.MaterialTextView
@@ -106,6 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Poster Category: "
+                android:layout_marginVertical="4dp"
                 android:textStyle="bold"/>
 
             <com.google.android.material.textview.MaterialTextView
@@ -113,6 +165,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Poster SubCategory: "
+                android:layout_marginVertical="4dp"
                 android:textStyle="bold"
                 />
 
@@ -129,11 +182,13 @@
                 android:layout_height="wrap_content"
                 android:text="Base Price: ₹"
                 android:textStyle="bold"
+                android:layout_marginVertical="4dp"
                 />
 
 
 
             <FrameLayout
+                android:layout_marginVertical="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -147,13 +202,31 @@
                     android:layout_gravity="start|center_vertical"
                     />
 
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/ivFilterReviews"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    app:srcCompat="@drawable/ic_filter"
-                    android:padding="14dp"
-                    android:layout_gravity="end"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:gravity="center_vertical|end">
+
+                    <ImageView
+                        android:id="@+id/ivWriteAReview"
+                        android:src="@drawable/ic_baseline_edit_24"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:padding="8dp"
+                        app:tint="@color/title_text_color"
+                        android:visibility="gone"/>
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/ivFilterReviews"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        app:srcCompat="@drawable/ic_filter"
+                        android:padding="8dp"
+                        />
+
+
+                </LinearLayout>
 
             </FrameLayout>
 
@@ -175,7 +248,7 @@
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
-    </androidx.core.widget.NestedScrollView>
+    </com.factor.bouncy.BouncyNestedScrollView>
 
     <include
         android:id="@+id/productBuyingLayout"
