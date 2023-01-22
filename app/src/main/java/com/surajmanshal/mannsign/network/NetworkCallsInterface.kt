@@ -204,4 +204,7 @@ interface NetworkCallsInterface {
     @GET("user/getotp")
     fun sendOtpNew(@Query("email") email : String) : Call<SimpleResponse>
 
+    @GET("order/canReview")
+    fun canReview(@Query("emailId") email: String,@Query("productId") productId: Int) : Call<SimpleResponse>
+
 }

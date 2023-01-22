@@ -13,7 +13,7 @@ import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.OrientationHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
@@ -26,6 +26,7 @@ import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
+import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +64,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
             _selectedVariant.observe(owner){
                 with(binding.productBuyingLayout){
-                    tvVariantPrice.text = resources.getString(com.surajmanshal.mannsign.R.string.selected_variant_price)+it.variantPrice
+                    tvVariantPrice.text = resources.getString(R.string.selected_variant_price)+it.variantPrice
                     tvAmount.text = "${it.variantPrice?.times(evQty.text.toString().toInt())}"
                 }
                 it.productId?.let { it1 -> setupButtonAction(email!!, it1) }
@@ -96,8 +97,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
             _currentProductMaterial.observe(owner, Observer { materials->
                 mutableListOf<String>().apply {
-                    /*val materialsList = materials?.sortedBy { it.id }
-                    materialsList?*/materials.forEach {
+                    materials.forEach {
                         add(it.name)
                         if(isNotEmpty()) binding.materialSpinner.resSpinner.setText(get(0))
                         if(size== materials.size){
@@ -110,8 +110,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
             _currentProductLanguage.observe(owner, Observer { languages ->
                 mutableListOf<String>().apply {
-                    /*val languageList = languages?.sortedBy { it.id }
-                        languageList?*/languages.forEach {
+                    languages.forEach {
                         add(it.name)
                         if(isNotEmpty()) binding.languageSpinner.resSpinner.setText(get(0))
                         if(size== languages.size){
@@ -142,6 +141,12 @@ class ProductDetailsActivity : AppCompatActivity() {
                     category?.let { categoryId -> getCategoryById(categoryId) }
                     subCategory?.let { subCategoryId -> getSubCategoryById(subCategoryId) }
                     fetchProductReview(productId)
+                    // Check for review allowed or not
+                    if (email != null) {
+                        canReview(email,productId){
+                            if(it) allowReview()
+                        }
+                    }
                 }
                 with(binding){
                     if(product.images?.isNotEmpty() == true)
@@ -261,7 +266,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             currentUser = it
             setupProductReviews(emptyList())
         }
-        binding.rvProductReviews.layoutManager = LinearLayoutManager(this,OrientationHelper.HORIZONTAL,false)
+        binding.rvProductReviews.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
 
     }
 
@@ -346,6 +351,20 @@ class ProductDetailsActivity : AppCompatActivity() {
     fun setupProductReviews(reviews : List<Review>){
         currentUser?.let {
             binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,null,currentUser)
+        }
+    }
+
+    fun allowReview(){
+        val context = this@ProductDetailsActivity
+        binding.apply {
+            giveReviewLayout.apply {
+                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show() }
+                show()
+            }
+            ivWriteAReview.apply {
+                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show() }
+                show()
+            }
         }
     }
 

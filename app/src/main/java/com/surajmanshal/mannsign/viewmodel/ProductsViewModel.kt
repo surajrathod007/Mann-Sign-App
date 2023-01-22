@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.product.Product
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.repository.Repository
 import retrofit2.Call
 import retrofit2.Callback
@@ -105,6 +106,24 @@ class ProductsViewModel : ViewModel() {
             override fun onFailure(call: Call<List<Review>?>, t: Throwable) {
                 println("Failed to fetch product reviews : $t")
             }
+        })
+    }
+
+    fun canReview(emailId : String, productId : Int, reviewAllowed : (Boolean) -> Unit){
+        repository.canReview(emailId,productId).enqueue(object : Callback<SimpleResponse>{
+            override fun onResponse(
+                call: Call<SimpleResponse>,
+                response: Response<SimpleResponse>
+            ) {
+                response.body()?.let {
+                    reviewAllowed(it.success)
+                }
+            }
+
+            override fun onFailure(call: Call<SimpleResponse>, t: Throwable) {
+                println("Failed to check permission for review : $t")
+            }
+
         })
     }
 

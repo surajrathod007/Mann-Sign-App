@@ -84,6 +84,8 @@ open class Repository() {
 
     fun getReview(productId: String) = server.getReview(productId)
 
+    fun canReview(emailId : String, productId: Int) = server.canReview(emailId,productId)
+
     suspend fun addToCart(email: String, variant: Variant, qty : Int) = server.insertToCartItem(email,variant,qty)
 
     fun fetchProductVariants(email: String, productId: Int) = server.fetchProductVariants(email,productId)

@@ -26,6 +26,7 @@
                 app:tint="@color/title_text_color" />
 
         <LinearLayout
+            android:id="@+id/giveReviewLayout"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
