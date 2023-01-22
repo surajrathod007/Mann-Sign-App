@@ -1,12 +1,17 @@
 package com.surajmanshal.mannsign.adapter.recyclerview
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.ordering.OrderItem
 import com.surajmanshal.mannsign.databinding.OrderProductItemsLayoutBinding
+import com.surajmanshal.mannsign.ui.activity.ProductDetailsActivity
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 
 class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
@@ -42,12 +47,22 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
             txtOrderItemBasePrice.text = "Base Price : ₹" + o.product!!.basePrice.toString()
             txtOrderItemTotalPrice.text = "₹" + o.totalPrice.toString()
             with(o) {
-                val url = product?.images?.let {
-                    if(it.isNotEmpty()){
-                        Functions.urlMaker(it[0].url)
-                    }
+//                val url = product?.images?.let {
+//                    if(it.isNotEmpty()){
+//                        Functions.urlMaker(it[0].url)
+//                    }
+//                }
+                if (!product?.images.isNullOrEmpty()) {
+                    Glide.with(c)
+                        .load(Uri.parse(Functions.urlMaker(product?.images?.get(0)?.url.toString())))
+                        .placeholder(
+                            R.drawable.no_photo
+                        )
+                        .into(imgProduct)
+                }else{
+                    Functions.makeToast(c, "No image url !")
                 }
-                Glide.with(imgProduct.context).load(url).into(imgProduct)
+                //Glide.with(imgProduct.context).load(url).into(imgProduct)
             }
             if (o.product!!.posterDetails != null) {
                 txtOrderItemTitle.text = o.product!!.posterDetails!!.title.toString()
@@ -60,7 +75,10 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
                 txtProductType.text = "Banner"
             }
             itemView.setOnClickListener {
-                Functions.makeToast(c, "Open Product Details !")
+                //Functions.makeToast(c, "Open Product Details !")
+                c.startActivity(Intent(c, ProductDetailsActivity::class.java).apply {
+                    putExtra(Constants.PRODUCT, o.product)
+                })
             }
         }
     }

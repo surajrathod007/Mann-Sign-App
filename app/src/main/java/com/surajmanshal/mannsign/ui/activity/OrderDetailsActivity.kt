@@ -13,6 +13,7 @@ import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
 import com.surajmanshal.mannsign.databinding.ActivityOrdersBinding
 import com.surajmanshal.mannsign.utils.Constants
+import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
 
@@ -31,9 +32,9 @@ class OrderDetailsActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        if(mRunnable != null){
-            mHandler.removeCallbacks(mRunnable)
-        }
+//        if(mRunnable != null){
+//            mHandler.removeCallbacks(mRunnable)
+//        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +47,13 @@ class OrderDetailsActivity : AppCompatActivity() {
 
 
         window.statusBarColor = Color.BLACK
+        if (!id.isNullOrEmpty()) {
+            vm.getOrderById(id)
+        }else{
+            Functions.makeToast(this@OrderDetailsActivity,"Order id is null !")
+        }
         //TODO : Every 5 second new request is made
+        /*
         mHandler = Handler()
         mHandler.post(object : Runnable {
             override fun run() {
@@ -58,6 +65,8 @@ class OrderDetailsActivity : AppCompatActivity() {
                 mHandler.postDelayed(this,5000)
             }
         })
+
+         */
 
 
         setObservers()
@@ -121,6 +130,12 @@ class OrderDetailsActivity : AppCompatActivity() {
                 }
             }
         }
-
+        vm.isLoading.observe(this){
+            if(it){
+                binding.orderItemsLoading.visibility = View.VISIBLE
+            }else{
+                binding.orderItemsLoading.visibility = View.GONE
+            }
+        }
     }
 }
