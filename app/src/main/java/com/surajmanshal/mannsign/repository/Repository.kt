@@ -1,10 +1,7 @@
 package com.surajmanshal.mannsign.repository
 
 import android.content.Context
-import com.surajmanshal.mannsign.data.model.Category
-import com.surajmanshal.mannsign.data.model.DiscountCoupon
-import com.surajmanshal.mannsign.data.model.SubCategory
-import com.surajmanshal.mannsign.data.model.Variant
+import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.network.NetworkService
@@ -85,6 +82,8 @@ open class Repository() {
     fun getReview(productId: String) = server.getReview(productId)
 
     fun canReview(emailId : String, productId: Int) = server.canReview(emailId,productId)
+
+    fun addReview(review : Review) = server.addReview(review)
 
     suspend fun addToCart(email: String, variant: Variant, qty : Int) = server.insertToCartItem(email,variant,qty)
 

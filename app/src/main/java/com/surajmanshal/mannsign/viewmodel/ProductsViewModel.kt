@@ -23,6 +23,9 @@ class ProductsViewModel : ViewModel() {
     val _currentProductMaterial = MutableLiveData<MutableList<Material>>(mutableListOf())
     val _currentProductLanguage = MutableLiveData<MutableList<Language>>(mutableListOf())
     val _currentProductReviews = MutableLiveData<List<Review>>()
+
+    private val _reviewResponse = MutableLiveData<SimpleResponse>()
+    val reviewResponse : LiveData<SimpleResponse> get() = _reviewResponse        //SERVER RESPONSE
 //    val currentProduct : LiveData<Product> get() = _currentProduct
 
     fun getPosters() {
@@ -124,6 +127,23 @@ class ProductsViewModel : ViewModel() {
                 println("Failed to check permission for review : $t")
             }
 
+        })
+    }
+
+    fun addReview(review: Review){
+        repository.addReview(review)
+        .enqueue(object : Callback<SimpleResponse?> {
+            override fun onResponse(
+                call: Call<SimpleResponse?>,
+                response: Response<SimpleResponse?>
+            ) {
+                response.body()?.let {
+                    _reviewResponse.postValue(it)
+                }
+            }
+            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                println("Failed to add review : $t")
+            }
         })
     }
 
