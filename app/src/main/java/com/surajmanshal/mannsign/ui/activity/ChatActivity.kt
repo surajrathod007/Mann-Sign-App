@@ -46,6 +46,7 @@ class ChatActivity : AppCompatActivity() {
             Functions.makeToast(this, "Email or orderId is empty")
         }
 
+        /*
         mHandler = Handler()
         mHandler.post(object : Runnable {
             override fun run() {
@@ -57,6 +58,8 @@ class ChatActivity : AppCompatActivity() {
             }
         })
 
+         */
+
 
         setupObserver()
         btnClickListners()
@@ -67,6 +70,31 @@ class ChatActivity : AppCompatActivity() {
         if (mRunnable != null) {
             mHandler.removeCallbacks(mRunnable)
         }
+    }
+
+    override fun onStart() {
+        mHandler = Handler()
+        super.onStart()
+    }
+
+    override fun onResume() {
+
+        if (!id.isNullOrEmpty() && !email.isNullOrEmpty()) {
+
+            mHandler.post(object : Runnable {
+                override fun run() {
+                    mRunnable = this
+                    if (!id.isNullOrEmpty()) {
+                        vm.loadChats(id!!)
+                        //Functions.makeToast(this@ChatActivity, "Chat loading ")
+                    }
+                    mHandler.postDelayed(this, 1000)
+                }
+            })
+        } else {
+            Functions.makeToast(this, "Email or orderId is empty")
+        }
+        super.onResume()
     }
 
     override fun onBackPressed() {
@@ -107,6 +135,10 @@ class ChatActivity : AppCompatActivity() {
             if (vm.msgSize.value == 0) {
                 binding.rvChats.adapter = ChatAdapter(this@ChatActivity, it, email)
                 vm.msgSize.postValue(it.size)
+                val pos = (binding.rvChats.adapter as ChatAdapter).itemCount - 1
+                binding.rvChats.smoothScroll(pos, 200) {
+
+                }
                 //Functions.makeToast(this@ChatActivity,"In if")
             } else if (it.size > vm.msgSize.value!!) {
                 //Functions.makeToast(this@ChatActivity,"In else if")
