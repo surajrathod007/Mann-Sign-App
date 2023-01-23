@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="26dp"
     android:elevation="0dp"
-    app:cardElevation="0dp">
+    app:cardElevation="0dp"
+    android:paddingBottom="16dp">
 
     <LinearLayout
         android:layout_margin="20dp"
@@ -26,12 +27,14 @@
 
         <RatingBar
             android:id="@+id/ratingBarUpdateReview"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="10dp"
             android:numStars="5"
-            android:rating="1"
+            android:rating="5"
             android:stepSize="1.0"
+            android:layout_gravity="center_horizontal"
             />
 
         <EditText
@@ -45,9 +48,9 @@
             android:fontFamily="@font/satoshi_medium"
             android:textColor="@color/text_normal_color"
             android:textSize="14sp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="8dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <!--<androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnUpdateReviewBottomSheet"
             android:layout_margin="10dp"
             android:background="@drawable/normal_button_bg"
@@ -55,8 +58,19 @@
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"/>-->
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btnUpdateReviewBottomSheet"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/ic_tick"
+        android:layout_gravity="end"
+        android:padding="6dp"
+        />
 
 </com.google.android.material.card.MaterialCardView>

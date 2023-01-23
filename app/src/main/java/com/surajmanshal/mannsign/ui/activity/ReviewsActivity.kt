@@ -3,17 +3,16 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatButton
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
@@ -119,14 +118,12 @@ class ReviewsActivity : AppCompatActivity() {
 
     fun showBottomSheet(c : Context){
 
-        val bottomSheetDialog = BottomSheetDialog(c, R.style.BottomSheetTheme)
+        val bottomSheetDialog = BottomSheetDialog(c, R.style.BottomSheetStyle)
         val v = LayoutInflater.from(c).inflate(R.layout.update_review_bottom_sheet,null)
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBarUpdateReview)
         val edUpdate = v.findViewById<EditText>(R.id.edUpdateReview)
-        val btnUpdateReview = v.findViewById<AppCompatButton>(R.id.btnUpdateReviewBottomSheet)
+        val btnUpdateReview = v.findViewById<ImageView>(R.id.btnUpdateReviewBottomSheet)
 
-        bottomSheetDialog.behavior.skipCollapsed = true
-        bottomSheetDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
         ratingBar.rating = vm.selectedReview.value?.rating!!.toFloat()
         edUpdate.setText(vm.selectedReview.value!!.comment.toString())
         btnUpdateReview.setOnClickListener {
