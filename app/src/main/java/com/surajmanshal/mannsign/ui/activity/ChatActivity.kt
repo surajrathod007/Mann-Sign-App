@@ -1,10 +1,14 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.animation.LayoutTransition
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.SystemClock
+import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,6 +28,8 @@ class ChatActivity : AppCompatActivity() {
     var id: String? = null
     var email: String? = null
 
+    val REQUEST_CODE = 0
+
     lateinit var mHandler: Handler
     lateinit var mRunnable: Runnable
 
@@ -33,6 +39,8 @@ class ChatActivity : AppCompatActivity() {
 
         binding = ActivityChatBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(ChatViewModel::class.java)
+
+        binding.clChatLayout.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
@@ -99,6 +107,9 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        if (mRunnable != null) {
+            mHandler.removeCallbacks(mRunnable)
+        }
         finish()
     }
 
@@ -123,6 +134,14 @@ class ChatActivity : AppCompatActivity() {
         }
         binding.btnChatBack.setOnClickListener {
             finish()
+        }
+        binding.btnAddChatImage.setOnClickListener {
+            chooseImage()
+        }
+        binding.btnRemoveChatImage.setOnClickListener {
+            binding.imgChatSelected.setImageURI(null)
+            binding.imgChatSelected.visibility = View.GONE
+            binding.btnRemoveChatImage.visibility = View.GONE
         }
     }
 
@@ -185,5 +204,27 @@ class ChatActivity : AppCompatActivity() {
             return (manager as LinearLayoutManager).findFirstVisibleItemPosition()
         }
         return 0
+    }
+
+    fun chooseImage() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+            //you got the image
+            var uri = data?.data
+            if (uri != null) {
+                binding.imgChatSelected.setImageURI(uri)
+                binding.imgChatSelected.visibility = View.VISIBLE
+                binding.btnRemoveChatImage.visibility = View.VISIBLE
+            }else{
+                binding.imgChatSelected.visibility = View.GONE
+                binding.btnRemoveChatImage.visibility = View.GONE
+            }
+        }
     }
 }
