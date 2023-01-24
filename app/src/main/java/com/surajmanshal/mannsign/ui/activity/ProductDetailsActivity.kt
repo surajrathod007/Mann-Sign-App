@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -15,16 +16,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.data.model.Review
 import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.ActivityProductDetailsBinding
+import com.surajmanshal.mannsign.databinding.AddReviewBottomSheetBinding
 import com.surajmanshal.mannsign.room.UserDatabase
 import com.surajmanshal.mannsign.room.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
 import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
@@ -32,6 +36,7 @@ import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class ProductDetailsActivity : AppCompatActivity() {
 
@@ -39,6 +44,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private lateinit var vm : ProductsViewModel
     private lateinit var cartVm : CartViewModel
     private var currentUser : UserEntity? = null
+    private lateinit var addReviewBottomSheetDialog : BottomSheetDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +52,6 @@ class ProductDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
         cartVm = ViewModelProvider(this)[CartViewModel::class.java]
-
         window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
@@ -89,6 +94,13 @@ class ProductDetailsActivity : AppCompatActivity() {
         with(vm){
 
             // Observers ----------------------------------------------------------------------------------
+            reviewResponse.observe(owner){
+                if(it.success){
+                    makeToast(this@ProductDetailsActivity,it.message)
+                    addReviewBottomSheetDialog.dismiss()
+                }
+            }
+
             _currentProductCategory.observe(owner, Observer {
                 setupCategoryView(it.name)
             })
@@ -144,7 +156,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                     // Check for review allowed or not
                     if (email != null) {
                         canReview(email,productId){
-                            if(it) allowReview()
+                            if(it) allowReview(email,productId)
                         }
                     }
                 }
@@ -354,17 +366,43 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    fun allowReview(){
+    fun allowReview(email: String, productId: Int) {
         val context = this@ProductDetailsActivity
         binding.apply {
             giveReviewLayout.apply {
-                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show() }
+                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show()
+                setUpReviewBottomSheet(email,productId)}
                 show()
             }
             ivWriteAReview.apply {
-                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show() }
+                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show()
+                    setUpReviewBottomSheet(email,productId)}
                 show()
             }
+            addReviewBottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetStyle)
+        }
+    }
+
+    fun setUpReviewBottomSheet(emailId: String,productId: Int){
+
+        val sheetView = AddReviewBottomSheetBinding
+            .bind(LayoutInflater.from(this).inflate(R.layout.add_review_bottom_sheet,null))
+            .apply {
+                btnPublishReview.setOnClickListener {
+                        Review(
+                            productId = productId,
+                            rating = ratingBar.rating.toInt() ,
+                            comment = etReview.text.toString() ,
+                            emailId = emailId,
+                            reviewDate = LocalDateTime.now()
+                        ).also {
+                            vm.addReview(it)
+                        }
+                }
+            }
+        addReviewBottomSheetDialog.apply {
+            setContentView(sheetView.root)
+            show()
         }
     }
 

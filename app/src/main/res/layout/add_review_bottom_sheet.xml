@@ -5,8 +5,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="26dp"
     android:elevation="0dp"
-    app:cardElevation="0dp"
-    android:paddingBottom="16dp">
+    app:cardElevation="0dp">
+
+    <ImageView
+        android:id="@+id/btnPublishReview"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:src="@drawable/ic_tick"
+        android:layout_gravity="end"
+        android:padding="6dp"
+        />
 
     <LinearLayout
         android:layout_margin="20dp"
@@ -16,7 +26,7 @@
 
         <TextView
             android:layout_marginBottom="10dp"
-            android:text="Update Review"
+            android:text="Write a Review"
             android:gravity="center"
             android:textColor="@color/title_text_color"
             android:fontFamily="@font/satoshi_bold"
@@ -26,7 +36,7 @@
 
 
         <RatingBar
-            android:id="@+id/ratingBarUpdateReview"
+            android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -34,43 +44,33 @@
             android:numStars="5"
             android:rating="5"
             android:stepSize="1.0"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
             />
 
         <EditText
-            android:id="@+id/edUpdateReview"
-            android:padding="10dp"
-            android:gravity="top"
-            android:background="@drawable/search_bar_bg"
+            android:id="@+id/etReview"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:hint="Enter your Review..."
+            android:layout_height="156dp"
+            android:layout_marginBottom="56dp"
+            android:background="@drawable/search_bar_bg"
             android:fontFamily="@font/satoshi_medium"
+            android:gravity="top"
+            android:hint="Write your review (Optional)"
+            android:padding="10dp"
             android:textColor="@color/text_normal_color"
             android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
+            />
 
         <!--<androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnUpdateReviewBottomSheet"
+            android:id="@+id/btnPublishReview"
             android:layout_margin="10dp"
             android:background="@drawable/normal_button_bg"
-            android:text="Update Review"
+            android:text="Complete"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>-->
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/btnUpdateReviewBottomSheet"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:src="@drawable/ic_tick"
-        android:layout_gravity="end"
-        android:padding="6dp"
-        />
 
 </com.google.android.material.card.MaterialCardView>
