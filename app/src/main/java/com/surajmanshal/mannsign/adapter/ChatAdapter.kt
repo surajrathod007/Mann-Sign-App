@@ -85,7 +85,7 @@ class ChatAdapter(val context: Context, val msg: List<ChatMessage>, val email: S
             }
             if (!msg.imageUrl.isNullOrEmpty()) {
                 Glide.with(c)
-                    .load(Uri.parse(Functions.urlMaker(msg.imageUrl!!)))
+                    .load(Uri.parse(Functions.urlMakerChat(msg.imageUrl!!)))
                     .placeholder(
                         R.drawable.no_photo
                     )

@@ -144,7 +144,19 @@ class ChatActivity : AppCompatActivity() {
                             )
                         )
                     }
-                    Functions.makeToast(this@ChatActivity,"Image uri is not null")
+                    imageUri = null
+                    binding.imgChatSelected.setImageURI(null)
+                    binding.imgChatSelected.visibility = View.GONE
+                    binding.btnRemoveChatImage.visibility = View.GONE
+
+//                    vm.addImageChat(part,ChatMessage(
+//                        orderId = id!!,
+//                        emailId = email!!,
+//                        message = binding.edMessage.text.toString(),
+//                        System.currentTimeMillis().toString(),
+//                        null
+//                    ))
+                    //Functions.makeToast(this@ChatActivity,"Image uri is not null")
                 } else {
                     vm.addChat(
                         ChatMessage(

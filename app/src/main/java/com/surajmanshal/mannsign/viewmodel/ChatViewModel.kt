@@ -94,19 +94,40 @@ class ChatViewModel : ViewModel() {
             val response = db.uploadChatImage(part)
             if(response.success){
                 chat.also {
-                    it.imageUrl = Functions.urlMaker(response.data.toString())
+                    it.imageUrl = response.message
                 }
                 val j = db.addImageChat(chat)
                 _msg.postValue(j.message)
+                _isLoading.postValue(false)
             }else{
                 _msg.postValue(response.message)
+                _isLoading.postValue(false)
             }
-            _isLoading.postValue(false)
+
 
         }catch (e : Exception){
             _msg.postValue("Exception : "+e.message.toString())
             _isLoading.postValue(false)
         }
+    }
+
+    fun addImageChat(part: MultipartBody.Part,chat : ChatMessage){
+        _isLoading.postValue(true)
+        val r = db.addChatImage(part,chat)
+        r.enqueue(object : Callback<SimpleResponse?> {
+            override fun onResponse(
+                call: Call<SimpleResponse?>,
+                response: Response<SimpleResponse?>
+            ) {
+                _msg.postValue(response.body()?.message.toString())
+                _isLoading.postValue(false)
+            }
+
+            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                _msg.postValue("Exception ${t.message}")
+                _isLoading.postValue(true)
+            }
+        })
     }
 
 }

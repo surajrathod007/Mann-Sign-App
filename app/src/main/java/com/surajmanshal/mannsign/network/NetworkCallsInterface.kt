@@ -214,4 +214,8 @@ interface NetworkCallsInterface {
     @POST("chat/add")
     suspend fun addImageChat(@Body msg : ChatMessage) : SimpleResponse
 
+    //TODO : This is not working ;(
+    @POST("chat/addImageChat")
+    fun addChatImage(@Part image: MultipartBody.Part,@Body msg : ChatMessage) : Call<SimpleResponse>
+
 }
