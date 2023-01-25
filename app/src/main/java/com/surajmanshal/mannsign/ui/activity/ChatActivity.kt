@@ -148,6 +148,7 @@ class ChatActivity : AppCompatActivity() {
                     binding.imgChatSelected.setImageURI(null)
                     binding.imgChatSelected.visibility = View.GONE
                     binding.btnRemoveChatImage.visibility = View.GONE
+                    binding.btnAddChatImage.visibility = View.VISIBLE
 
 //                    vm.addImageChat(part,ChatMessage(
 //                        orderId = id!!,
@@ -185,6 +186,7 @@ class ChatActivity : AppCompatActivity() {
             binding.imgChatSelected.setImageURI(null)
             binding.imgChatSelected.visibility = View.GONE
             binding.btnRemoveChatImage.visibility = View.GONE
+            binding.btnAddChatImage.visibility = View.VISIBLE
         }
     }
 
@@ -271,9 +273,11 @@ class ChatActivity : AppCompatActivity() {
                 binding.imgChatSelected.setImageURI(uri)
                 binding.imgChatSelected.visibility = View.VISIBLE
                 binding.btnRemoveChatImage.visibility = View.VISIBLE
+                binding.btnAddChatImage.visibility = View.GONE
             } else {
                 binding.imgChatSelected.visibility = View.GONE
                 binding.btnRemoveChatImage.visibility = View.GONE
+                binding.btnAddChatImage.visibility = View.VISIBLE
             }
         }
     }
