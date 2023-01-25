@@ -4,6 +4,8 @@ import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -19,7 +21,15 @@ import com.surajmanshal.mannsign.adapter.ChatAdapter
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.databinding.ActivityChatBinding
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.viewmodel.ChatViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import java.io.File
 
 class ChatActivity : AppCompatActivity() {
 
@@ -29,6 +39,7 @@ class ChatActivity : AppCompatActivity() {
     var email: String? = null
 
     val REQUEST_CODE = 0
+    var imageUri: Uri? = null
 
     lateinit var mHandler: Handler
     lateinit var mRunnable: Runnable
@@ -37,6 +48,7 @@ class ChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        window.statusBarColor = Color.BLACK
         binding = ActivityChatBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(ChatViewModel::class.java)
 
@@ -116,16 +128,35 @@ class ChatActivity : AppCompatActivity() {
     fun btnClickListners() {
         binding.btnSendMessage.setOnClickListener {
             if (!id.isNullOrEmpty() && !email.isNullOrEmpty()) {
-                vm.addChat(
-                    ChatMessage(
-                        orderId = id!!,
-                        emailId = email!!,
-                        message = binding.edMessage.text.toString(),
-                        System.currentTimeMillis().toString(),
-                        null
-                    )
-                ){
 
+                if (imageUri != null) {
+                    val file = File(URIPathHelper().getPath(this@ChatActivity,imageUri!!))
+                    val requestBody = RequestBody.create(MediaType.parse("image/jpg"), file)
+                    val part = MultipartBody.Part.createFormData("product", file.name, requestBody)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        vm.uploadChatImage(
+                            part, ChatMessage(
+                                orderId = id!!,
+                                emailId = email!!,
+                                message = binding.edMessage.text.toString(),
+                                System.currentTimeMillis().toString(),
+                                null
+                            )
+                        )
+                    }
+                    Functions.makeToast(this@ChatActivity,"Image uri is not null")
+                } else {
+                    vm.addChat(
+                        ChatMessage(
+                            orderId = id!!,
+                            emailId = email!!,
+                            message = binding.edMessage.text.toString(),
+                            System.currentTimeMillis().toString(),
+                            null
+                        )
+                    ) {
+
+                    }
                 }
                 binding.edMessage.text = null
             }
@@ -171,7 +202,13 @@ class ChatActivity : AppCompatActivity() {
 
 
         }
-
+        vm.isLoading.observe(this){
+            if(it){
+                binding.imgLoading.visibility = View.VISIBLE
+            }else{
+                binding.imgLoading.visibility = View.GONE
+            }
+        }
     }
 
     fun RecyclerView.smoothScroll(toPos: Int, duration: Int = 500, onFinish: () -> Unit = {}) {
@@ -217,11 +254,12 @@ class ChatActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             //you got the image
             var uri = data?.data
+            imageUri = data?.data
             if (uri != null) {
                 binding.imgChatSelected.setImageURI(uri)
                 binding.imgChatSelected.visibility = View.VISIBLE
                 binding.btnRemoveChatImage.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.imgChatSelected.visibility = View.GONE
                 binding.btnRemoveChatImage.visibility = View.GONE
             }

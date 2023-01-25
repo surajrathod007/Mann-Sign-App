@@ -6,17 +6,25 @@ import androidx.lifecycle.ViewModel
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.utils.Functions
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class ChatViewModel : ViewModel() {
 
+    private var _isLoading = MutableLiveData<Boolean>(false)
+    val isLoading: LiveData<Boolean> get() = _isLoading
+
     private var _chats = MutableLiveData<List<ChatMessage>>(emptyList())
     val chats : LiveData<List<ChatMessage>> get() = _chats
 
     private var _msg = MutableLiveData<String>()
     val msg: LiveData<String> get() = _msg
+
+    private val _imageUploadResponse = MutableLiveData<SimpleResponse>()
+    val imageUploadResponse : LiveData<SimpleResponse> get() = _imageUploadResponse
 
     val msgSize = MutableLiveData<Int>(0)
 
@@ -78,6 +86,27 @@ class ChatViewModel : ViewModel() {
                 _msg.postValue(t.message.toString())
             }
         })
+    }
+
+    suspend fun uploadChatImage(part: MultipartBody.Part,chat : ChatMessage){
+        try {
+            _isLoading.postValue(true)
+            val response = db.uploadChatImage(part)
+            if(response.success){
+                chat.also {
+                    it.imageUrl = Functions.urlMaker(response.data.toString())
+                }
+                val j = db.addImageChat(chat)
+                _msg.postValue(j.message)
+            }else{
+                _msg.postValue(response.message)
+            }
+            _isLoading.postValue(false)
+
+        }catch (e : Exception){
+            _msg.postValue("Exception : "+e.message.toString())
+            _isLoading.postValue(false)
+        }
     }
 
 }

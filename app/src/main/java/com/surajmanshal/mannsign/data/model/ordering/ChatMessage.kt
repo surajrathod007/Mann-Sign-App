@@ -5,5 +5,5 @@ data class ChatMessage(
     val emailId : String,
     val message : String,
     val timeStamp : String,
-    val imageUrl : String? = null
+    var imageUrl : String? = null
 )

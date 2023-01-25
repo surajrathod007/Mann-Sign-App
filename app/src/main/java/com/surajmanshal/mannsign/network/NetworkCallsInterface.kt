@@ -207,4 +207,11 @@ interface NetworkCallsInterface {
     @GET("order/canReview")
     fun canReview(@Query("emailId") email: String,@Query("productId") productId: Int) : Call<SimpleResponse>
 
+    @Multipart
+    @POST("chat/uploadImage")
+    suspend fun uploadChatImage(@Part image: MultipartBody.Part) : SimpleResponse
+
+    @POST("chat/add")
+    suspend fun addImageChat(@Body msg : ChatMessage) : SimpleResponse
+
 }
