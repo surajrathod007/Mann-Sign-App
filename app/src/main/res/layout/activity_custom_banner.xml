@@ -121,6 +121,7 @@
                         android:fontFamily="@font/satoshi_medium"
                         android:hint="Enter width"
                         android:inputType="number"
+                        android:text="1"
                         android:textColor="@color/title_text_color" />
 
                     <EditText
@@ -131,6 +132,7 @@
                         android:fontFamily="@font/satoshi_medium"
                         android:hint="Enter height"
                         android:inputType="number"
+                        android:text="1"
                         android:textColor="@color/title_text_color" />
 
                     <androidx.appcompat.widget.AppCompatButton

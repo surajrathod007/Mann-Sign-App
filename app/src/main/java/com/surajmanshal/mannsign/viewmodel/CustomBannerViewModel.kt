@@ -2,17 +2,18 @@ package com.surajmanshal.mannsign.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.surajmanshal.mannsign.data.model.Material
 import com.surajmanshal.mannsign.data.model.product.Banner
 import com.surajmanshal.mannsign.data.model.product.Poster
 import com.surajmanshal.mannsign.data.model.product.Product
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CustomBannerViewModel : ViewModel() {
+class CustomBannerViewModel : ClientViewModel() {
 
     private var _msg = MutableLiveData<String>()
     val msg: LiveData<String> get() = _msg
@@ -22,6 +23,11 @@ class CustomBannerViewModel : ViewModel() {
 
     private var _allMaterials = MutableLiveData<List<Material>>()
     val allMaterials: LiveData<List<Material>> get() = _allMaterials
+
+    private val _imageUploadResponse = MutableLiveData<SimpleResponse>()
+    val imageUploadResponse : LiveData<SimpleResponse> get() = _imageUploadResponse     // IMAGE UPLOADING PROGRESS
+    private val _productUploadResponse = MutableLiveData<SimpleResponse>()
+    val productUploadResponse : LiveData<SimpleResponse> get() = _productUploadResponse  // PRODUCT UPLOADING PROGRESS
 
     var _currentProduct = MutableLiveData<Product>()
 
@@ -66,6 +72,26 @@ class CustomBannerViewModel : ViewModel() {
                 _msg.postValue("Failure in fetching materials ${t.message}")
             }
         })
+    }
+
+    suspend fun sendImage(part: MultipartBody.Part, languageId: Int){
+        try {
+            val response = repository.uploadProductImage(part,languageId)
+            _serverResponse.postValue(response)
+            _imageUploadResponse.postValue(response)
+        }catch (e : Exception){
+            println("$e ${serverResponse.value?.message}")
+        }
+    }
+
+    suspend fun addProduct(product: Product) {
+        try {
+            val response = repository.sendProduct(product)
+            _serverResponse.postValue(response)
+            _productUploadResponse.postValue(response)
+        }catch (e : Exception){
+            println("$e")
+        }
     }
 
 }

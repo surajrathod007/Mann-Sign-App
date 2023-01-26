@@ -144,14 +144,12 @@ class ProfileEdit : AppCompatActivity() {
                         CoroutineScope(Dispatchers.IO).launch {
                             imageUploading.imageUri?.let {
                                 if(requestCode == Constants.CHOOSE_PROFILE_IMAGE)
-                                imageUploading.apply {
-                                    withContext(Dispatchers.Main){
-                                        dd.show()
+                                    imageUploading.apply {
+                                        withContext(Dispatchers.Main){
+                                            dd.show()
+                                        }
+                                        sendProfileImage(createImageMultipart())
                                     }
-                                    sendProfileImage(createImageMultipart())
-                                }
-                                if(requestCode == Constants.CHOOSE_PRODUCT_IMAGE)
-                                    print("TODO : ")
                             }
                         }
                     }catch(e : java.lang.Exception){
