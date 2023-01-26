@@ -26,6 +26,13 @@ object Functions {
         return URL.IMAGE_PATH+ fileName
     }
 
+    //http://localhost:8700/chat/images/image1674652908599.jpg
+    fun urlMakerChat(imageurl :String): String {
+        val fileName = imageurl.substringAfter("http://localhost:8700/chat/images/")
+        return URL.CHAT_IMAGE_PATH+ fileName
+    }
+
+
     fun setTypeNumber(editText: EditText){
         editText.inputType = InputType.TYPE_CLASS_NUMBER
     }
