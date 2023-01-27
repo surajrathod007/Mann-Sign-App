@@ -63,7 +63,7 @@ class CustomBannerActivity : AppCompatActivity() {
         vm = ViewModelProvider(this).get(CustomBannerViewModel::class.java)
         imageUploading = ImageUploading(this)
         d = LoadingScreen(this)
-        dd = d.loadingScreen()
+        dd = d.loadingScreen("Creating product")
 
         window.statusBarColor = Color.BLACK
 
@@ -140,7 +140,7 @@ class CustomBannerActivity : AppCompatActivity() {
                     )
                 )
                 setOnItemClickListener { adapterView, view, index, l ->
-                    Toast.makeText(this@CustomBannerActivity, "$index", Toast.LENGTH_SHORT).show()
+                    vm.setMaterialId(index)
                 }
             }
         }
@@ -154,16 +154,28 @@ class CustomBannerActivity : AppCompatActivity() {
                      Toast.makeText(owner, it.message, Toast.LENGTH_SHORT).show()
                      val data = it.data as LinkedTreeMap<String,Any>
 
-                     /* Todo : Product Creation and uploading
-                     createCustomProduct(Image(id = data["id"].toString().toDouble().toInt(), url = data["url"].toString(),
-                         description = data["description"].toString(),
-                         data["languageId"].toString().toFloat().toInt()
-                     ))*/
+                     CoroutineScope(Dispatchers.IO).launch {
+                         vm.addProduct(
+                             createCustomProduct(Image(id = data["id"].toString().toDouble().toInt(), url = data["url"].toString(),
+                                 description = data["description"].toString(),
+                                 data["languageId"].toString().toFloat().toInt()
+                             ))
+                         )
+                     }
+
                  }
                  else Log.d("Custom Order Image",it.message)
              }
              productUploadResponse.observe(owner){
-                 if(it.success) Toast.makeText(owner, it.message, Toast.LENGTH_SHORT).show()
+                 if(it.success)
+                    try {
+                        it.message.toInt()
+                        Toast.makeText(owner, "Product created", Toast.LENGTH_SHORT).show()
+                        // Todo : Hide loading dialog and proceed to ordering process
+                    }catch (e : java.lang.Exception){
+                        Toast.makeText(owner, "id not received", Toast.LENGTH_SHORT).show()
+                        Log.d("Custom Order Product",e.toString())
+                    }
                  else Log.d("Custom Order Product",it.message)
              }
          }
@@ -352,6 +364,7 @@ class CustomBannerActivity : AppCompatActivity() {
     
     fun createCustomProduct(image: Image) = Product(0).apply {
         with(binding) {
+            typeId = Constants.TYPE_BANNER
             images = listOf(image)
             sizes = listOf(
                 Size(
@@ -360,9 +373,14 @@ class CustomBannerActivity : AppCompatActivity() {
                     edHeight.text.toString().toInt()
                 )
             )
-            materials = listOf()
+            materials = listOf(vm._currentMaterial.value?.id ?: vm.allMaterials.value?.get(0)?.id!!)
+
+            // Todo : below are dummy details replace them with user inputs
+            languages = listOf(1)
+            bannerDetails = Banner(
+                "Banner",1
+            )
         }
-        Toast.makeText(this@CustomBannerActivity, "Created", Toast.LENGTH_SHORT).show()
     }
 
 }

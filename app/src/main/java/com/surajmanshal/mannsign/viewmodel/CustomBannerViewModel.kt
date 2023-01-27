@@ -30,6 +30,7 @@ class CustomBannerViewModel : ClientViewModel() {
     val productUploadResponse : LiveData<SimpleResponse> get() = _productUploadResponse  // PRODUCT UPLOADING PROGRESS
 
     var _currentProduct = MutableLiveData<Product>()
+    val _currentMaterial = MutableLiveData<Material>()
 
     companion object {
         val db = NetworkService.networkInstance
@@ -92,6 +93,12 @@ class CustomBannerViewModel : ClientViewModel() {
         }catch (e : Exception){
             println("$e")
         }
+    }
+
+    fun setMaterialId(index: Int) {
+        _currentMaterial.postValue(
+            _allMaterials.value?.get(index)
+        )
     }
 
 }
