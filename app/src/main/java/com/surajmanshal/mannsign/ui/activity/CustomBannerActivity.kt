@@ -26,6 +26,7 @@ import com.google.gson.internal.LinkedTreeMap
 import com.surajmanshal.mannsign.ImageUploading
 import com.surajmanshal.mannsign.data.model.Image
 import com.surajmanshal.mannsign.data.model.Size
+import com.surajmanshal.mannsign.data.model.product.ACPBoard
 import com.surajmanshal.mannsign.data.model.product.Banner
 import com.surajmanshal.mannsign.data.model.product.Poster
 import com.surajmanshal.mannsign.data.model.product.Product
@@ -120,6 +121,15 @@ class CustomBannerActivity : AppCompatActivity() {
                     binding.llBanner.visibility = View.VISIBLE
                 }
             }
+            with(Constants){
+                vm._currentProductTypeId.value =
+                    when (index) {
+                        0 ->  TYPE_POSTER
+                        1 ->  TYPE_BANNER
+                        2 -> TYPE_ACP_BOARD
+                        else -> TYPE_POSTER
+                    }
+            }
         }
     }
 
@@ -167,16 +177,20 @@ class CustomBannerActivity : AppCompatActivity() {
                  else Log.d("Custom Order Image",it.message)
              }
              productUploadResponse.observe(owner){
-                 if(it.success)
+                 val variantId = it.variantId
+                 val productId = it.productId
+                 Toast.makeText(owner, "Product created pid$productId variantId$variantId", Toast.LENGTH_SHORT).show()
+                 // Todo : Hide loading dialog and proceed to ordering process
+                 /*if(it.success)
                     try {
                         it.message.toInt()
                         Toast.makeText(owner, "Product created", Toast.LENGTH_SHORT).show()
-                        // Todo : Hide loading dialog and proceed to ordering process
+
                     }catch (e : java.lang.Exception){
                         Toast.makeText(owner, "id not received", Toast.LENGTH_SHORT).show()
                         Log.d("Custom Order Product",e.toString())
                     }
-                 else Log.d("Custom Order Product",it.message)
+                 else Log.d("Custom Order Product",it.message)*/
              }
          }
     }
@@ -353,34 +367,71 @@ class CustomBannerActivity : AppCompatActivity() {
     fun setupSpinner() {
         //type spinner
         binding.spCustomPosterType.resSpinner.hint = "Select type"
-        binding.spCustomPosterType.resSpinner.setAdapter(
-            ArrayAdapter(
-                this,
-                R.layout.support_simple_spinner_dropdown_item,
-                arrProductType
-            )
-        )
-    }
-    
-    fun createCustomProduct(image: Image) = Product(0).apply {
-        with(binding) {
-            typeId = Constants.TYPE_BANNER
-            images = listOf(image)
-            sizes = listOf(
-                Size(
-                    0,
-                    edWidth.text.toString().toInt(),
-                    edHeight.text.toString().toInt()
+        binding.spCustomPosterType.resSpinner.apply {
+            setAdapter(
+                ArrayAdapter(
+                    this@CustomBannerActivity,
+                    R.layout.support_simple_spinner_dropdown_item,
+                    arrProductType
                 )
             )
-            materials = listOf(vm._currentMaterial.value?.id ?: vm.allMaterials.value?.get(0)?.id!!)
+        }
+    }
+
+    fun createCustomProduct(image: Image): Product {
+        val size = createSize()
+        val materialId : Int = createMaterialId()
+        val customProductSuffix =
+            " of ${vm._currentMaterial.value?.name}(${size.width}x${size.height})"
+        val languageId = 1
+        val fontId = 1
+        // Todo : Pricing details remaining (Product :BasePrice and Variant : variantPrice )
+        return Product(0).apply {
+
+            // Setting up product
+            typeId = vm._currentProductTypeId.value
+            images = listOf(image)
+            sizes = listOf(size)
+            materials = listOf(materialId)
+            category = Constants.CATEGORY_CUSTOM_PRODUCT
 
             // Todo : below are dummy details replace them with user inputs
-            languages = listOf(1)
-            bannerDetails = Banner(
-                "Banner",1
-            )
+            languages = listOf(languageId)
+
+            when(typeId){
+                Constants.TYPE_POSTER -> {
+                    posterDetails = Poster(
+                        binding.edPosterTitle.text.toString(),
+                        binding.edPosterDescription.text.toString(), null
+                    )
+                    subCategory = Constants.CATEGORY_CUSTOM_POSTER
+                }
+                Constants.TYPE_BANNER -> {
+                    bannerDetails = Banner(
+                        "My Banner$customProductSuffix", fontId
+                    )
+                    subCategory = Constants.CATEGORY_CUSTOM_BANNER
+                }
+                Constants.TYPE_ACP_BOARD -> {
+                    boardDetails = ACPBoard(
+                        "My Board$customProductSuffix",
+                        0.5f,
+                        "250-10-5",
+                        fontId
+                    )
+                    subCategory = Constants.CATEGORY_CUSTOM_BOARD
+                }
+            }
         }
+    }
+
+    private fun createSize() = Size(
+        0,
+        binding.edWidth.text.toString().toInt(),
+        binding.edHeight.text.toString().toInt()
+    )
+    private fun createMaterialId(): Int {
+        return vm._currentMaterial.value?.id ?: vm.allMaterials.value?.get(0)?.id!!
     }
 
 }

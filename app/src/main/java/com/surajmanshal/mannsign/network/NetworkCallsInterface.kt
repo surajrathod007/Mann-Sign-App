@@ -54,7 +54,7 @@ interface NetworkCallsInterface {
 
     @Headers("Content-Type: application/json")
     @POST("product/insert")
-    suspend fun sendProduct(@Body product: Product) : SimpleResponse
+    suspend fun sendProduct(@Body product: Product) : Variant
 
     @GET("product/posters")
     fun fetchAllPosters() : Call<List<Product>>

@@ -3,11 +3,13 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.surajmanshal.mannsign.data.model.Material
+import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.product.Banner
 import com.surajmanshal.mannsign.data.model.product.Poster
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.utils.Constants
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -26,11 +28,12 @@ class CustomBannerViewModel : ClientViewModel() {
 
     private val _imageUploadResponse = MutableLiveData<SimpleResponse>()
     val imageUploadResponse : LiveData<SimpleResponse> get() = _imageUploadResponse     // IMAGE UPLOADING PROGRESS
-    private val _productUploadResponse = MutableLiveData<SimpleResponse>()
-    val productUploadResponse : LiveData<SimpleResponse> get() = _productUploadResponse  // PRODUCT UPLOADING PROGRESS
+    private val _productUploadResponse = MutableLiveData<Variant>()
+    val productUploadResponse : LiveData<Variant> get() = _productUploadResponse  // PRODUCT UPLOADING PROGRESS
 
     var _currentProduct = MutableLiveData<Product>()
     val _currentMaterial = MutableLiveData<Material>()
+    val _currentProductTypeId = MutableLiveData(Constants.TYPE_POSTER)
 
     companion object {
         val db = NetworkService.networkInstance
@@ -88,7 +91,6 @@ class CustomBannerViewModel : ClientViewModel() {
     suspend fun addProduct(product: Product) {
         try {
             val response = repository.sendProduct(product)
-            _serverResponse.postValue(response)
             _productUploadResponse.postValue(response)
         }catch (e : Exception){
             println("$e")

@@ -25,6 +25,12 @@ object Constants {
     const val READ_EXTERNAL_STORAGE = 102
 
 
+    const val CATEGORY_CUSTOM_PRODUCT = 100
+    const val CATEGORY_CUSTOM_POSTER = 101
+    const val CATEGORY_CUSTOM_BANNER = 102
+    const val CATEGORY_CUSTOM_BOARD = 103
+
+
     // Intent Extras
     const val PRODUCT = "product"
 }
