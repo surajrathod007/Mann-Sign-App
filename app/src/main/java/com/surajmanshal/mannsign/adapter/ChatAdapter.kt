@@ -113,7 +113,7 @@ class ChatAdapter(val context: Context, val msg: List<ChatMessage>, val email: S
                         R.drawable.no_photo
                     )
                     .into(imgReceive)
-                Functions.makeToast(c, "${msg.imageUrl}")
+                //Functions.makeToast(c, "${msg.imageUrl}")
             }
             txtTimeStamp.text = Functions.timeStampToDate(msg.timeStamp)
         }
