@@ -26,6 +26,8 @@ class CustomBannerViewModel : ClientViewModel() {
     private var _allMaterials = MutableLiveData<List<Material>>()
     val allMaterials: LiveData<List<Material>> get() = _allMaterials
 
+
+    var orderPlaced = MutableLiveData<Boolean>(false)
     private val _imageUploadResponse = MutableLiveData<SimpleResponse>()
     val imageUploadResponse : LiveData<SimpleResponse> get() = _imageUploadResponse     // IMAGE UPLOADING PROGRESS
     private val _productUploadResponse = MutableLiveData<Variant>()
@@ -101,6 +103,27 @@ class CustomBannerViewModel : ClientViewModel() {
         _currentMaterial.postValue(
             _allMaterials.value?.get(index)
         )
+    }
+
+    fun addCustomOrder(variant: Variant,delivery : Float,email : String){
+        try {
+            val r = db.addCustomOrder(variant,delivery,email)
+            r.enqueue(object : Callback<SimpleResponse?> {
+                override fun onResponse(
+                    call: Call<SimpleResponse?>,
+                    response: Response<SimpleResponse?>
+                ) {
+                    _msg.postValue("${response.body()?.message}")
+                    orderPlaced.value = true
+                }
+
+                override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                    _msg.postValue("Failure : ${t.message}")
+                }
+            })
+        }catch (e : Exception){
+            _msg.postValue("Exception : $e")
+        }
     }
 
 }

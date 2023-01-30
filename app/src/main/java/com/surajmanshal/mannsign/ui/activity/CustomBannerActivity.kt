@@ -56,10 +56,15 @@ class CustomBannerActivity : AppCompatActivity() {
     lateinit var dd : Dialog
 
     lateinit var binding: ActivityCustomBannerBinding
+
+    var email : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityCustomBannerBinding.inflate(layoutInflater)
+
+        val sharedPreference =  getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        email = sharedPreference.getString("email","No email")
 
         vm = ViewModelProvider(this).get(CustomBannerViewModel::class.java)
         imageUploading = ImageUploading(this)
@@ -151,6 +156,7 @@ class CustomBannerActivity : AppCompatActivity() {
                 )
                 setOnItemClickListener { adapterView, view, index, l ->
                     vm.setMaterialId(index)
+                    binding.txtCustomOrderTotalPrice.text = "Total amount to pay : ${getVariantPrice()}"
                 }
             }
         }
@@ -181,6 +187,17 @@ class CustomBannerActivity : AppCompatActivity() {
                  val productId = it.productId
                  Toast.makeText(owner, "Product created pid$productId variantId$variantId", Toast.LENGTH_SHORT).show()
                  // Todo : Hide loading dialog and proceed to ordering process
+                 val v = it
+                 v.also {
+                     it.variantPrice = getVariantPrice()
+                 }
+                 if(vm.orderPlaced!!.value!!){
+                     Functions.makeToast(this@CustomBannerActivity,"Order already placed")
+                 }else{
+                     vm.addCustomOrder(variant = v, delivery = 0f, email = email!!)
+                 }
+
+                 dd.hide()
                  /*if(it.success)
                     try {
                         it.message.toInt()
@@ -193,6 +210,15 @@ class CustomBannerActivity : AppCompatActivity() {
                  else Log.d("Custom Order Product",it.message)*/
              }
          }
+    }
+
+    private fun getVariantPrice(): Float? {
+        val s = createSize()
+        if(vm._currentMaterial.value != null){
+            return (s.width*s.width)* vm._currentMaterial.value!!.price
+        }else{
+            return 0f
+        }
     }
 
     fun editTextWatchers() {

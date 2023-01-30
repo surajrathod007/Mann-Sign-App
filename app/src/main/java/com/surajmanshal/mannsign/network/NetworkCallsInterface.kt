@@ -218,4 +218,7 @@ interface NetworkCallsInterface {
     @POST("chat/addImageChat")
     fun addChatImage(@Part image: MultipartBody.Part,@Body msg : ChatMessage) : Call<SimpleResponse>
 
+    @POST("order/addCustomOrder")
+    fun addCustomOrder(@Body variant: Variant,@Query("delivery") deliveryCharge : Float,@Query("email") email : String) : Call<SimpleResponse>
+
 }
