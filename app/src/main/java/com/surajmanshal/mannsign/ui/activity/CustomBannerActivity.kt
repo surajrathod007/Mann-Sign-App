@@ -167,7 +167,7 @@ class CustomBannerActivity : AppCompatActivity() {
              }
              imageUploading.imageUploadResponse.observe(owner){
                  if(it.success) {
-                     Toast.makeText(owner, it.message, Toast.LENGTH_SHORT).show()
+//                     Toast.makeText(owner, it.message, Toast.LENGTH_SHORT).show()
                      val data = it.data as LinkedTreeMap<String,Any>
 
                      CoroutineScope(Dispatchers.IO).launch {
@@ -183,9 +183,9 @@ class CustomBannerActivity : AppCompatActivity() {
                  else Log.d("Custom Order Image",it.message)
              }
              productUploadResponse.observe(owner){
-                 val variantId = it.variantId
-                 val productId = it.productId
-                 Toast.makeText(owner, "Product created pid$productId variantId$variantId", Toast.LENGTH_SHORT).show()
+//                 val variantId = it.variantId
+//                 val productId = it.productId
+//                 Toast.makeText(owner, "Product created pid$productId variantId$variantId", Toast.LENGTH_SHORT).show()
                  // Todo : Hide loading dialog and proceed to ordering process
                  val v = it
                  v.also {
