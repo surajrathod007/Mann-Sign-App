@@ -54,7 +54,7 @@
                             android:layout_weight="0.6"
                             android:fontFamily="@font/satoshi_bold"
                             android:gravity="center"
-                            android:text="Custom poster"
+                            android:text="Custom product"
                             android:textColor="@color/title_text_color"
                             android:textSize="22sp" />
 
@@ -87,7 +87,7 @@
                 android:background="#DDDDDD"
                 android:clickable="true"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_launcher_background" />
+                android:src="@drawable/choose_image_final" />
 
 
 
