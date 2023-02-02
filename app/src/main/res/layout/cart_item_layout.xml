@@ -130,7 +130,7 @@
                     android:background="@drawable/round_button_bg"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:padding="4dp"/>
+                    android:padding="6dp"/>
 
                 <TextView
                     android:textSize="18sp"

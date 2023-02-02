@@ -162,7 +162,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                 }
                 with(binding){
                     if(product.images?.isNotEmpty() == true)
-                    Glide.with(this@ProductDetailsActivity)
+                        Glide.with(this@ProductDetailsActivity)
                         .load(urlMaker(product.images!![0].url)).into(ivProduct)
                     mutableListOf<String>().apply {
                         product.sizes?.forEach {
@@ -193,6 +193,9 @@ class ProductDetailsActivity : AppCompatActivity() {
                     tvBasePrice.text = "${tvBasePrice.text} ${product.basePrice}"
 
                     // Click Listeners ----------------------------------------------------------------------------------
+                    btnChatBack.setOnClickListener {
+                        onBackPressed()
+                    }
                     productBuyingLayout.apply {
                         btnAddVariantToCart.setOnClickListener {
                             addVariantToCart(email!!,product.productId)
