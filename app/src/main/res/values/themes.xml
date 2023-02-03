@@ -25,10 +25,12 @@
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
     
-    <style name="satoshiTypeface" parent="Theme.MaterialComponents.Light.NoActionBar" >
+    <style name="satoshiTypeface" parent="appColorsScheme" >
         <item name="fontFamily">@font/satoshi_medium</item>
-        <item name="android:textColor">@color/text_normal_color</item>
     </style>
 
+    <style name="appColorsScheme" parent="Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="android:textColor">@color/text_normal_color</item>
+    </style>
 
 </resources>
