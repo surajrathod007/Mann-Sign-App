@@ -128,8 +128,9 @@
                     android:id="@+id/btnMinusCart"
                     android:src="@drawable/ic_baseline_horizontal_rule_24"
                     android:background="@drawable/round_button_bg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:padding="6dp"/>
 
                 <TextView
                     android:textSize="18sp"
@@ -149,8 +150,9 @@
                     android:id="@+id/btnPlusCart"
                     android:src="@drawable/ic_baseline_add_24"
                     android:background="@drawable/round_button_bg"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:padding="4dp"/>
 
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
