@@ -103,6 +103,17 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     />
 
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnDownloadInvoice"
+                    android:visibility="gone"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:textColor="@color/white"
+                    android:text="Download Invoice"
+                    android:textAllCaps="false"
+                    android:background="@drawable/normal_button_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
 
                 <GridLayout
                     android:padding="12dp"

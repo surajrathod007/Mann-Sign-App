@@ -50,6 +50,9 @@ class OrdersAdapter(val context: Context, val list: List<Order>) :
                 Constants.ORDER_READY -> {
                     holder.txtOrderStatus.text = "Ready"
                 }
+                Constants.ORDER_OUT_FOR_DELIVERY -> {
+                    holder.txtOrderStatus.text = "Out for delivery"
+                }
                 Constants.ORDER_DELIVERED -> {
                     holder.txtOrderStatus.text = "Delivered"
                 }

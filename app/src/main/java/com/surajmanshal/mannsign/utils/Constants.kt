@@ -9,8 +9,9 @@ object Constants {
     const val ORDER_CONFIRMED = 1
     const val ORDER_PROCCESSING = 2
     const val ORDER_READY = 3
-    const val ORDER_DELIVERED = 4
-    const val ORDER_CANCELED = 5
+    const val ORDER_OUT_FOR_DELIVERY = 4
+    const val ORDER_DELIVERED = 5
+    const val ORDER_CANCELED = 6
 
     const val PAYMENT_PENDING = 0
     const val PAYMENT_DONE = 1
