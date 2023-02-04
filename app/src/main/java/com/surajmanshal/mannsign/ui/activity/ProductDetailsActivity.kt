@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.adapter.CountryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.data.model.Review
 import com.surajmanshal.mannsign.data.model.Variant
@@ -113,7 +114,8 @@ class ProductDetailsActivity : AppCompatActivity() {
                         add(it.name)
                         if(isNotEmpty()) binding.materialSpinner.resSpinner.setText(get(0))
                         if(size== materials.size){
-                            setupSpinner(binding.materialSpinner.resSpinner,this)
+//                            setupSpinner(binding.materialSpinner.resSpinner,this)
+                            binding.materialSpinner.resSpinner.setAdapter(CountryAdapter(this@ProductDetailsActivity,materials))
                             cartVm._selectedMaterial.value = materials[0]
                         }
                     }
