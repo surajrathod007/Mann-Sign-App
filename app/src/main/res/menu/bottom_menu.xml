@@ -11,7 +11,7 @@
         android:id="@+id/customOrderItem"
         android:title="Custom Order"/>
     <item
-        android:icon="@drawable/ic_baseline_home_24"
+        android:icon="@drawable/user_icon"
         android:id="@+id/profileItem"
         android:title="Profile"/>
 </menu>

@@ -1,32 +1,19 @@
 package com.surajmanshal.mannsign
 
 
-import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.ActionBar
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.tabs.TabLayout
-import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.adapter.MainViewPagerAdapter
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
-import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.ui.fragments.CustomOrderFragment
 import com.surajmanshal.mannsign.ui.fragments.HomeFragment
 import com.surajmanshal.mannsign.ui.fragments.UserProfileFragment
-import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.DataStore
-import com.surajmanshal.mannsign.viewmodel.CartViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class MainActivity : AppCompatActivity() {
 
@@ -62,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager(){
-        val flist = listOf(HomeFragment(token),CustomOrderFragment(),UserProfileFragment())
+        val flist = listOf(HomeFragment(token),CustomOrderFragment(),UserProfileFragment(token))
         binding.viewPager.adapter = MainViewPagerAdapter(flist,this@MainActivity)
         binding.bottomNavigationView.setupWithViewPager2(binding.viewPager)
     }
