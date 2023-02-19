@@ -30,12 +30,14 @@ import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class UserProfileFragment(val token: String?) : Fragment() {
+//TODO : Remove static text values in xml file for firstname etc.
+class UserProfileFragment(var token: String?) : Fragment() {
 
     lateinit var binding : FragmentUserProfileBinding
     lateinit var userDatabase : UserDao
@@ -56,11 +58,19 @@ class UserProfileFragment(val token: String?) : Fragment() {
 
         val sharedPreferences = activity?.getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreferences?.getString("email", "")
+
+        if(token.isNullOrEmpty()){
+            CoroutineScope(Dispatchers.IO).launch {
+                token = getToken(DataStore.JWT_TOKEN)
+            }
+        }
         if(!email.isNullOrEmpty()){
             userDatabase = UserDatabase.getDatabase(requireContext()).userDao()
             val user = userDatabase.getUser(email!!)
             setupUserDetails(user)
         }else{
+            binding.btnLogoutFrag.setTextColor(R.color.order_selected_text_color)
+            binding.btnLogoutFrag.text = "Login/Register"
             makeToast(requireContext(),"Please Login")
         }
 
@@ -89,7 +99,7 @@ class UserProfileFragment(val token: String?) : Fragment() {
                     d.setPositiveButton("Yes"){v,m ->
                         try{
                             if(!token.isNullOrEmpty()){
-                                logout(email!!, token)
+                                logout(email!!, token!!)
                             }else{
                                 makeToast(requireContext(),"JWT token is empty : You never logged in")
                             }
@@ -111,12 +121,7 @@ class UserProfileFragment(val token: String?) : Fragment() {
 
     private fun setupUserDetails(u: LiveData<UserEntity>){
         u.observe(viewLifecycleOwner){
-            if(!email.isNullOrEmpty()){
-                binding.btnLogoutFrag.text = "Logout"
-            }else{
-                binding.btnLogoutFrag.setTextColor(R.color.order_selected_text_color)
-                binding.btnLogoutFrag.text = "Login/Register"
-            }
+
             with(binding){
                 if(!it.firstName.isNullOrEmpty() && !it.lastName.isNullOrEmpty()){
                     txtUserNameFrag.text = it.firstName + " " + it.lastName
@@ -155,6 +160,7 @@ class UserProfileFragment(val token: String?) : Fragment() {
                     val r = response.body()!!
                     if(r.success){
                         makeToast(requireContext(),"Logged Out")
+                        logout()
                         Handler().postDelayed({
                             requireActivity().finish()
                         },2000)
@@ -180,5 +186,10 @@ class UserProfileFragment(val token: String?) : Fragment() {
                 it[stringPreferencesKey(DataStore.JWT_TOKEN)] = ""
             }
         }
+    }
+
+    suspend fun getToken(key : String) : String? {
+        val data = requireActivity().preferenceDataStoreAuth.data.first()
+        return data[stringPreferencesKey(key)]
     }
 }
