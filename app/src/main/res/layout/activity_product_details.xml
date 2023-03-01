@@ -142,7 +142,10 @@
 
             <include
                 android:id="@+id/sizeSpinner"
-                layout="@layout/modern_spinner_layout"/>
+                layout="@layout/custom_spinner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"/>
 
             <include
                 android:id="@+id/materialSpinner"
@@ -150,7 +153,10 @@
 
             <include
                 android:id="@+id/languageSpinner"
-                layout="@layout/modern_spinner_layout"/>
+                layout="@layout/custom_spinner_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_medium"/>
 
 
             <com.google.android.material.textview.MaterialTextView

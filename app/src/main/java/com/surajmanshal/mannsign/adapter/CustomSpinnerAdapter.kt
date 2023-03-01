@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import com.surajmanshal.mannsign.R
-import com.surajmanshal.mannsign.data.model.Material
 import com.surajmanshal.mannsign.databinding.ItemDoubleTextSpinnerBinding
-import com.surajmanshal.mannsign.utils.hide
 
-class CountryAdapter(
+class CustomSpinnerAdapter(
     context: Context,
-    materials : List<Material>
-) : ArrayAdapter<Material>(context, 0, materials) {
+    materials : List<String>
+) : ArrayAdapter<String>(context, 0, materials) {
     val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -35,18 +33,14 @@ class CountryAdapter(
 
     private fun setItemForCountry(view: View, position: Int,selected : Boolean=false): View {
 
-        val material = getItem(position)
+        val item = getItem(position)
             ?:
         return view
 
         ItemDoubleTextSpinnerBinding.bind(view).apply {
-            tvPrimaryText.text = material.name
+            tvPrimaryText.text = item
             ivDropDown.isVisible = selected
-            if(selected){
-                tvSecondaryText.hide()
-            }else{
-                tvSecondaryText.text = "₹ ${material.price}/Inch \u00B2"
-            }
+            tvSecondaryText.isVisible = selected
             return root
         }
     }

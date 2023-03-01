@@ -7,8 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -20,7 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
-import com.surajmanshal.mannsign.adapter.CountryAdapter
+import com.surajmanshal.mannsign.adapter.CustomSpinnerAdapter
+import com.surajmanshal.mannsign.adapter.MaterialSpinnerAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.data.model.Review
 import com.surajmanshal.mannsign.data.model.Variant
@@ -116,13 +116,12 @@ class ProductDetailsActivity : AppCompatActivity() {
                         add(it.name)
                         if(isNotEmpty()) binding.materialSpinner.spinner.setSelection(0)
                         if(size== materials.size){
-//                            setupSpinner(binding.materialSpinner.resSpinner,this)
                             binding.materialSpinner.spinner.adapter =
-                                CountryAdapter(this@ProductDetailsActivity,materials)
+                                MaterialSpinnerAdapter(this@ProductDetailsActivity,materials)
                             cartVm._selectedMaterial.value = materials[0]
                         }
                     }
-//                    binding.materialSpinner.resSpinnerContainer.hint = "Material"
+//                    binding.materialSpinner.spinnerContainer.hint = "Material"
                     binding.materialSpinner.tvSpinnerName.text = "Material"
                 }
             })
@@ -130,13 +129,13 @@ class ProductDetailsActivity : AppCompatActivity() {
                 mutableListOf<String>().apply {
                     languages.forEach {
                         add(it.name)
-                        if(isNotEmpty()) binding.languageSpinner.resSpinner.setText(get(0))
+                        if(isNotEmpty()) binding.languageSpinner.spinner.setSelection(0)
                         if(size== languages.size){
                             cartVm._selectedLanguage.value = languages[0]
-                            setupSpinner(binding.languageSpinner.resSpinner,this)
+                            setupSpinner(binding.languageSpinner.spinner,this)
                         }
                     }
-                    binding.languageSpinner.resSpinnerContainer.hint = "Language"
+                    binding.languageSpinner.tvSpinnerName.text = "Language"
                 }
             })
             _currentProductReviews.observe(owner){
@@ -175,13 +174,13 @@ class ProductDetailsActivity : AppCompatActivity() {
                     mutableListOf<String>().apply {
                         product.sizes?.forEach {
                             add("${it.width} x ${it.height}")
-                            if(isNotEmpty()) sizeSpinner.resSpinner.setText(get(0))
+                            if(isNotEmpty()) sizeSpinner.spinner.setSelection(0)
                             if(size== product.sizes!!.size){
                                 cartVm._selectedSize.value = product.sizes!![0]
-                                setupSpinner(sizeSpinner.resSpinner,this)
+                                setupSpinner(sizeSpinner.spinner,this)
                             }
                         }
-                        sizeSpinner.resSpinnerContainer.hint = "Size"
+                        sizeSpinner.tvSpinnerName.text= "Size"
                     }
 
                     product.posterDetails?.let {
@@ -209,18 +208,32 @@ class ProductDetailsActivity : AppCompatActivity() {
                             addVariantToCart(email!!,product.productId)
                         }
                     }
-                    sizeSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
-                        with(cartVm){
-                            _selectedVariant.value?.apply {
-                            _currentProduct.value?.let {
-                                sizeId = it.sizes?.get(index)?.sid
-                                setVariantSize(it.sizes?.get(index))
-                            }
-                        }}
+                    sizeSpinner.spinner.onItemSelectedListener = object  :
+                        AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            index: Int,
+                            p3: Long
+                        ) {
+                            with(cartVm){
+                                _selectedVariant.value?.apply {
+                                    _currentProduct.value?.let {
+                                        sizeId = it.sizes?.get(index)?.sid
+                                        setVariantSize(it.sizes?.get(index))
+                                    }
+                                }}
+                        }
+
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+//                            TODO("Not yet implemented")
+                        }
+
                     }
+
                     /*
                     Todo :
-                    materialSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+                    materialSpinner.spinner.setOnItemClickListener { adapterView, view, index, l ->
                         with(cartVm) {
                             _selectedVariant.value?.apply {
                                 _currentProduct.value?.let {
@@ -255,36 +268,63 @@ class ProductDetailsActivity : AppCompatActivity() {
                         }
 
                     }
-                    languageSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
-                        with(cartVm){
-                            _selectedVariant.value?.apply {
-                                _currentProduct.value?.let {
-                                    val languageId = it.languages?.get(index)
-                                    val imgUrl = it.images?.find { it.languageId == languageId }
-                                        ?.let { it1 -> urlMaker(it1.url) }
-
-                                    Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
-                                    cartVm.setVariantLanguage(languageId)
-                                    _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
-                                }
-                            }
-                        }
-                    }
-                    languageSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
-                        with(cartVm){
-                            _selectedVariant.value?.apply {
-                                _currentProduct.value?.let {
-                                    val languageId = it.languages?.get(index)
-                                    val imgUrl = it.images?.find { it.languageId == languageId }
+                    languageSpinner.spinner.onItemSelectedListener = object  :
+                        AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            index: Int,
+                            p3: Long
+                        ) {
+                            with(cartVm){
+                                _selectedVariant.value?.apply {
+                                    _currentProduct.value?.let {
+                                        val languageId = it.languages?.get(index)
+                                        val imgUrl = it.images?.find { it.languageId == languageId }
                                             ?.let { it1 -> urlMaker(it1.url) }
 
-                                    Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
-                                    cartVm.setVariantLanguage(languageId)
-                                    _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
+                                        Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
+                                        cartVm.setVariantLanguage(languageId)
+                                        _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
+                                    }
                                 }
                             }
                         }
+
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+//                            TODO("Not yet implemented")
+                        }
+
                     }
+
+                    languageSpinner.spinner.onItemSelectedListener = object  :
+                        AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            index: Int,
+                            p3: Long
+                        ) {
+                            with(cartVm){
+                                _selectedVariant.value?.apply {
+                                    _currentProduct.value?.let {
+                                        val languageId = it.languages?.get(index)
+                                        val imgUrl = it.images?.find { it.languageId == languageId }
+                                            ?.let { it1 -> urlMaker(it1.url) }
+
+                                        Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
+                                        cartVm.setVariantLanguage(languageId)
+                                        _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+//                            TODO("Not yet implemented")
+                        }
+                    }
+
                     // Text changed Listeners ----------------------------------------------------------------------------------
                     with(productBuyingLayout){
                         evQty.setText("1")
@@ -393,8 +433,8 @@ class ProductDetailsActivity : AppCompatActivity() {
         binding.tvSubCategory.text = binding.tvSubCategory.text.toString() + name
     }
 
-    fun setupSpinner(spinner: AutoCompleteTextView, dataList: List<String>){
-        spinner.setAdapter(ArrayAdapter(this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,dataList))
+    fun setupSpinner(spinner: Spinner, dataList: List<String>){
+        spinner.adapter = CustomSpinnerAdapter(this,dataList)
     }
 
     fun setupProductReviews(reviews : List<Review>){
