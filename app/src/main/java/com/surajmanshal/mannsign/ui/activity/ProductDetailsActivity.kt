@@ -150,8 +150,10 @@ class ProductDetailsActivity : AppCompatActivity() {
                         languageId = languages?.get(0)
                         cartVm.refreshVariant()
                     }
-                    materials?.forEach { materialId -> getMaterialById(materialId) }
-                    languages?.forEach { languageId -> getLanguageById(languageId) }
+                    /*materials?.forEach { materialId -> getMaterialById(materialId) }
+                    languages?.forEach { languageId -> getLanguageById(languageId) }*/
+                    materials?.let { getMaterialsByIds(it) }
+                    languages?.let { getLanguagesByIds(it) }
                     category?.let { categoryId -> getCategoryById(categoryId) }
                     subCategory?.let { subCategoryId -> getSubCategoryById(subCategoryId) }
                     fetchProductReview(productId)

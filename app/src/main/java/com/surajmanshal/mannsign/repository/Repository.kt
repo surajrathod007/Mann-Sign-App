@@ -88,5 +88,7 @@ open class Repository() {
     suspend fun addToCart(email: String, variant: Variant, qty : Int) = server.insertToCartItem(email,variant,qty)
 
     fun fetchProductVariants(email: String, productId: Int) = server.fetchProductVariants(email,productId)
+    fun getMaterialsByIds(ids: List<Int>) = server.fetchMaterialsByIds(ids)
+    fun getLanguagesByIds(ids: List<Int>) = server.fetchLanguagesByIds(ids)
 
 }

@@ -220,5 +220,9 @@ interface NetworkCallsInterface {
 
     @POST("order/addCustomOrder")
     fun addCustomOrder(@Body variant: Variant,@Query("delivery") deliveryCharge : Float,@Query("email") email : String) : Call<SimpleResponse>
+    @POST("materials")
+    fun fetchMaterialsByIds(@Body ids: List<Int>): Call<List<Material>>
+    @POST("languages")
+    fun fetchLanguagesByIds(@Body ids: List<Int>): Call<List<Language>>
 
 }

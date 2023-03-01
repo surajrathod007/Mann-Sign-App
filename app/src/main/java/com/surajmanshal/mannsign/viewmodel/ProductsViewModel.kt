@@ -99,6 +99,43 @@ class ProductsViewModel : ViewModel() {
             }
         })
     }
+    fun getLanguagesByIds(ids : List<Int>){
+        val response = repository.getLanguagesByIds(ids)
+        response.enqueue(object : Callback<List<Language>>{
+            override fun onResponse(
+                call: Call<List<Language>>,
+                response: Response<List<Language>>
+            ) {
+                response.body()?.let {
+                    _currentProductLanguage.postValue(it as MutableList<Language>?)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Language>>, t: Throwable) {
+                //TODO("Not yet implemented")
+            }
+
+        })
+    }
+    fun getMaterialsByIds(ids : List<Int>){
+        val response = repository.getMaterialsByIds(ids)
+        response.enqueue(object : Callback<List<Material>>{
+
+            override fun onResponse(
+                call: Call<List<Material>>,
+                response: Response<List<Material>>
+            ) {
+                response.body()?.let {
+                    _currentProductMaterial.postValue(it as MutableList<Material>?)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Material>>, t: Throwable) {
+//                TODO("Not yet implemented")
+            }
+
+        })
+    }
 
     fun fetchProductReview(productId : Int){
         val response = repository.getReview(productId.toString())

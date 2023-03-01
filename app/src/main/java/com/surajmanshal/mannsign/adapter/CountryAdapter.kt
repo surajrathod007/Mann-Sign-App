@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.TextView
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.Material
+import com.surajmanshal.mannsign.databinding.ItemDoubleTextSpinnerBinding
+import com.surajmanshal.mannsign.utils.hide
 
 class CountryAdapter(
     context: Context,
@@ -16,22 +17,36 @@ class CountryAdapter(
     val layoutInflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val view: View =
-            convertView ?: layoutInflater.inflate(R.layout.item_double_text_spinner, parent, false)
+        val view: View = layoutInflater.inflate(R.layout.item_double_text_spinner, null, false)
+        return setItemForCountry(view,position,true)
+    }
 
-        getItem(position)?.let { country ->
-            setItemForCountry(view, country)
-        }
-        return view
+    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
+        return setItemForCountry(
+            convertView ?:
+            layoutInflater.inflate(
+                R.layout.item_double_text_spinner, parent, false
+            ), position
+        )
     }
 
 
-    private fun setItemForCountry(view: View, country: Material) {
-            val tvCountry = view.findViewById<TextView>(R.id.tvPrimaryText)
-            val tvPrice = view.findViewById<TextView>(R.id.tvSecondaryText)
 
-            tvCountry.text = country.name
-            tvPrice.text = "${country.price}/inch"
+    private fun setItemForCountry(view: View, position: Int,selected : Boolean=false): View {
+
+        val material = getItem(position)
+            ?:
+        return view
+
+        ItemDoubleTextSpinnerBinding.bind(view).apply {
+            tvPrimaryText.text = material.name
+            if(selected){
+                tvSecondaryText.hide()
+            }else{
+                tvSecondaryText.text = "${material.price}/inch"
+            }
+            return root
+        }
     }
 
 }
