@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.isVisible
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.Material
 import com.surajmanshal.mannsign.databinding.ItemDoubleTextSpinnerBinding
@@ -40,10 +41,11 @@ class CountryAdapter(
 
         ItemDoubleTextSpinnerBinding.bind(view).apply {
             tvPrimaryText.text = material.name
+            ivDropDown.isVisible = selected
             if(selected){
                 tvSecondaryText.hide()
             }else{
-                tvSecondaryText.text = "${material.price}/inch"
+                tvSecondaryText.text = "₹ ${material.price}/Inch \u00B2"
             }
             return root
         }

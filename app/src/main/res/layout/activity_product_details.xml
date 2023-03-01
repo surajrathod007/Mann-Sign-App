@@ -146,7 +146,7 @@
 
             <include
                 android:id="@+id/materialSpinner"
-                layout="@layout/modern_spinner_layout"/>
+                layout="@layout/custom_spinner_layout"/>
 
             <include
                 android:id="@+id/languageSpinner"

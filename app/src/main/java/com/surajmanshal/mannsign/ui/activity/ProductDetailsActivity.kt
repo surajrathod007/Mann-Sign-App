@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
@@ -112,14 +114,16 @@ class ProductDetailsActivity : AppCompatActivity() {
                 mutableListOf<String>().apply {
                     materials.forEach {
                         add(it.name)
-                        if(isNotEmpty()) binding.materialSpinner.resSpinner.setText(get(0))
+                        if(isNotEmpty()) binding.materialSpinner.spinner.setSelection(0)
                         if(size== materials.size){
 //                            setupSpinner(binding.materialSpinner.resSpinner,this)
-                            binding.materialSpinner.resSpinner.setAdapter(CountryAdapter(this@ProductDetailsActivity,materials))
+                            binding.materialSpinner.spinner.adapter =
+                                CountryAdapter(this@ProductDetailsActivity,materials)
                             cartVm._selectedMaterial.value = materials[0]
                         }
                     }
-                    binding.materialSpinner.resSpinnerContainer.hint = "Material"
+//                    binding.materialSpinner.resSpinnerContainer.hint = "Material"
+                    binding.materialSpinner.tvSpinnerName.text = "Material"
                 }
             })
             _currentProductLanguage.observe(owner, Observer { languages ->
@@ -214,6 +218,8 @@ class ProductDetailsActivity : AppCompatActivity() {
                             }
                         }}
                     }
+                    /*
+                    Todo :
                     materialSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
                         with(cartVm) {
                             _selectedVariant.value?.apply {
@@ -224,6 +230,30 @@ class ProductDetailsActivity : AppCompatActivity() {
                                 }
                             }
                         }
+                    }*/
+                    materialSpinner.spinner.onItemSelectedListener = object  :
+                        AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(
+                            p0: AdapterView<*>?,
+                            p1: View?,
+                            index: Int,
+                            p3: Long
+                        ) {
+                            with(cartVm) {
+                                _selectedVariant.value?.apply {
+                                    _currentProduct.value?.let {
+                                        val materialId= it.materials?.get(index)
+                                        cartVm.setVariantMaterial(materialId)
+                                        _selectedMaterial.value = vm._currentProductMaterial.value?.get(index)
+                                    }
+                                }
+                            }
+                        }
+
+                        override fun onNothingSelected(p0: AdapterView<*>?) {
+//                            TODO("Not yet implemented")
+                        }
+
                     }
                     languageSpinner.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
                         with(cartVm){

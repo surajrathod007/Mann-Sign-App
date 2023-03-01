@@ -19,8 +19,15 @@
         android:id="@+id/tvSecondaryText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="14sp"
         android:layout_gravity="end|center_vertical"
         />
+
+    <androidx.constraintlayout.utils.widget.ImageFilterView
+        android:id="@+id/ivDropDown"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="end|center_vertical"
+        android:src="@drawable/ic_closed_dropdown"/>
 
 </FrameLayout>
