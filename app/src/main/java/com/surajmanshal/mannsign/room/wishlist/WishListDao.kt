@@ -19,4 +19,7 @@ interface WishListDao {
     @Query("Select * from wishListTable")
     fun getWishList() : LiveData<WishListItem>
 
+    @Query("Select Count(productId) from wishListTable where productId = :productId")
+    fun exist(productId : Int) : LiveData<Int>
+
 }
