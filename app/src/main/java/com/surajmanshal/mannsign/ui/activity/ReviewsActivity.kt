@@ -18,8 +18,8 @@ import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.databinding.ActivityReviewsBinding
-import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.room.LocalDatabase
+import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 
 class ReviewsActivity : AppCompatActivity() {
@@ -41,7 +41,7 @@ class ReviewsActivity : AppCompatActivity() {
         if (!email.isNullOrEmpty())
             loadUserReviews(email!!)
 
-        val db = UserDatabase.getDatabase(this).userDao()
+        val db = LocalDatabase.getDatabase(this).userDao()
 
         val user = db.getUser(email!!)
         user.observe(this){

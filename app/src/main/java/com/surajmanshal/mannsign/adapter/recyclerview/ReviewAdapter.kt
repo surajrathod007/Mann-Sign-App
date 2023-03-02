@@ -8,7 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.surajmanshal.mannsign.data.model.Review
 import com.surajmanshal.mannsign.databinding.ItemReviewLayoutBinding
-import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import java.time.format.DateTimeFormatter

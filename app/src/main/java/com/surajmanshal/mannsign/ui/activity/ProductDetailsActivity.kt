@@ -27,8 +27,8 @@ import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.ActivityProductDetailsBinding
 import com.surajmanshal.mannsign.databinding.AddReviewBottomSheetBinding
-import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.room.LocalDatabase
+import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
@@ -349,7 +349,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             }
         }
 
-        val db = UserDatabase.getDatabase(this).userDao()
+        val db = LocalDatabase.getDatabase(this).userDao()
         val user = db.getUser(email!!)
         user.observe(this){
             currentUser = it

@@ -13,7 +13,7 @@ import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileBinding
 import com.surajmanshal.mannsign.repository.Repository
-import com.surajmanshal.mannsign.room.UserDatabase
+import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.utils.loadRoundedImageWithUrl
@@ -81,7 +81,7 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        val db = UserDatabase.getDatabase(this).userDao()
+        val db = LocalDatabase.getDatabase(this).userDao()
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val e = sharedPreferences.getString("email","no email")
         val user = db.getUser(e!!)

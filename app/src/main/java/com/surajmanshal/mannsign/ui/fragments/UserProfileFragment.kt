@@ -5,12 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.ProfileEdit
@@ -19,9 +19,9 @@ import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentUserProfileBinding
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.room.UserDao
-import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.room.LocalDatabase
+import com.surajmanshal.mannsign.room.user.UserDao
+import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
 import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.utils.Functions
@@ -65,7 +65,7 @@ class UserProfileFragment(var token: String?) : Fragment() {
             }
         }
         if(!email.isNullOrEmpty()){
-            userDatabase = UserDatabase.getDatabase(requireContext()).userDao()
+            userDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
             val user = userDatabase.getUser(email!!)
             setupUserDetails(user)
         }else{

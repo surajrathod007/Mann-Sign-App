@@ -1,4 +1,4 @@
-package com.surajmanshal.mannsign.room
+package com.surajmanshal.mannsign.room.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
