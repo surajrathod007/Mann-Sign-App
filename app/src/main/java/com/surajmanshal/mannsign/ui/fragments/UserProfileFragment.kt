@@ -24,6 +24,7 @@ import com.surajmanshal.mannsign.room.user.UserDao
 import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
 import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
+import com.surajmanshal.mannsign.ui.activity.WishListActivity
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore
@@ -115,6 +116,10 @@ class UserProfileFragment(var token: String?) : Fragment() {
                     startActivity(Intent(requireActivity(), AuthenticationActivity::class.java))
                     requireActivity().finish()
                 }
+            }
+
+            btnMyWishListFrag.setOnClickListener {
+                startActivity(Intent(requireContext(), WishListActivity::class.java))
             }
         }
     }
