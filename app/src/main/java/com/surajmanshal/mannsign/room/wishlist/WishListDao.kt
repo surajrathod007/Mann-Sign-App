@@ -17,7 +17,7 @@ interface WishListDao {
     fun removeFromWishlist(productId : Int)
 
     @Query("Select * from wishListTable")
-    fun getWishList() : LiveData<WishListItem>
+    fun getWishList() : LiveData<List<WishListItem>>
 
     @Query("Select Count(productId) from wishListTable where productId = :productId")
     fun exist(productId : Int) : LiveData<Int>

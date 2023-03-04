@@ -2,29 +2,50 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.surajmanshal.mannsign.adapter.recyclerview.WishlistAdapter
 import com.surajmanshal.mannsign.databinding.ActivityWishListBinding
 import com.surajmanshal.mannsign.room.wishlist.WishListDao
 import com.surajmanshal.mannsign.utils.hide
+import com.surajmanshal.mannsign.viewmodel.WishListViewModel
 
 class WishListActivity : AppCompatActivity() {
+
+    lateinit var vm : WishListViewModel
     lateinit var wishListDao : WishListDao
     val binding by lazy { ActivityWishListBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        wishListDao.getWishList().observe(this){
-            binding.apply {
-                setContentView(root)
-                rvWishlist.apply {
-                    layoutManager = GridLayoutManager(this@WishListActivity,2)
+
+        vm = ViewModelProvider(this)[WishListViewModel::class.java]
+
+        // Observers ------------------------------------------------------------------
+        wishListDao.getWishList().observe(this){ it ->
+            vm.getMyWishList(it.map { it.productId })
+        }
+
+        binding.rvWishlist.apply {
+            layoutManager = GridLayoutManager(this@WishListActivity,2)
+            vm.wishListedProducts.observe(this@WishListActivity){
+                adapter =
+                    WishlistAdapter(this@WishListActivity,
+                        it,
+                        this@WishListActivity,
+                        wishListDao
+                    )
+            }
+        }
+        // Views Initialization -----------------------------------------------------------
+        binding.apply {
+            setContentView(root)
+            toolbar.apply {
+                tvToolbarTitle.text = "My Wishlist"
+                ivBackButton.setOnClickListener {
+                    onBackPressed()
                 }
-                toolbar.apply {
-                    tvToolbarTitle.text = "My Wishlist"
-                    ivBackButton.setOnClickListener {
-                        onBackPressed()
-                    }
-                    ivOptions.hide()
-                }
+                ivOptions.hide()
             }
         }
     }

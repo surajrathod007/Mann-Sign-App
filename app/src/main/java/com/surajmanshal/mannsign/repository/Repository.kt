@@ -90,5 +90,6 @@ open class Repository() {
     fun fetchProductVariants(email: String, productId: Int) = server.fetchProductVariants(email,productId)
     fun getMaterialsByIds(ids: List<Int>) = server.fetchMaterialsByIds(ids)
     fun getLanguagesByIds(ids: List<Int>) = server.fetchLanguagesByIds(ids)
+    fun getProductsByIds(ids : List<Int>) = server.fetchProductsByIds(ids)
 
 }
