@@ -225,6 +225,6 @@ interface NetworkCallsInterface {
     @POST("languages")
     fun fetchLanguagesByIds(@Body ids: List<Int>): Call<List<Language>>
     @POST("products")
-    fun fetchProductsByIds(ids: List<Int>): Call<List<Product>>
+    fun fetchProductsByIds(@Body ids: List<Int>): Call<List<Product>>
 
 }

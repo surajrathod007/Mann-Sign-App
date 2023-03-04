@@ -185,6 +185,13 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
             }
         }
 
+        with(sheetView){
+            findViewById<View>(R.id.menuItemWishlist).setOnClickListener {
+                startActivity(Intent(requireContext(),WishListActivity::class.java))
+                bottomMenu.dismiss()
+            }
+        }
+
         bottomMenu.setContentView(sheetView)
 
         bottomMenu.show()

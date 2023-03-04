@@ -12,7 +12,8 @@
         android:id="@+id/toolbar"
         layout="@layout/toolbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="56dp"/>
+        android:layout_height="56dp"
+        android:layout_marginVertical="8dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvWishlist"

@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.surajmanshal.mannsign.adapter.recyclerview.WishlistAdapter
 import com.surajmanshal.mannsign.databinding.ActivityWishListBinding
+import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.wishlist.WishListDao
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.WishListViewModel
@@ -20,6 +21,7 @@ class WishListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         vm = ViewModelProvider(this)[WishListViewModel::class.java]
+        wishListDao = LocalDatabase.getDatabase(this).wishListDao()
 
         // Observers ------------------------------------------------------------------
         wishListDao.getWishList().observe(this){ it ->
