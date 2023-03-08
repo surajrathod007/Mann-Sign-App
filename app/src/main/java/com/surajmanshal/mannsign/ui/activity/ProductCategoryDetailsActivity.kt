@@ -1,12 +1,12 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
@@ -54,7 +54,11 @@ class ProductCategoryDetailsActivity : AppCompatActivity() {
     fun setupObserver(){
         vm.filteredProducts.observe(this){
             binding.rvProductCatDetails.layoutManager = GridLayoutManager(this,2)
-            binding.rvProductCatDetails.adapter = ProductAdapter(this@ProductCategoryDetailsActivity,it)
+            binding.rvProductCatDetails.adapter = ProductAdapter(
+                this@ProductCategoryDetailsActivity,
+                it,
+                viewLifecycleOwner = this
+            )
         }
         vm.isLoading.observe(this){
             if(it){

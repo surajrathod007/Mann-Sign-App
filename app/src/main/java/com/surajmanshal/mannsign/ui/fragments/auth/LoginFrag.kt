@@ -24,8 +24,8 @@ import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.FragLoginBinding
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.room.LocalDatabase
+import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
@@ -110,7 +110,7 @@ class LoginFrag : Fragment() {
             emailId = user.emailId,
 //            token = user.token
         )
-        val db = UserDatabase.getDatabase(this.requireContext())
+        val db = LocalDatabase.getDatabase(this.requireContext())
         lifecycleScope.launch(Dispatchers.IO) {
             db.userDao().insertUser(u)
         }

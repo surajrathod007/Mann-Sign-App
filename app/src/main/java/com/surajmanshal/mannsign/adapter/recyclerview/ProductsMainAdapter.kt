@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.surajmanshal.mannsign.data.model.product.MainPoster
 import com.surajmanshal.mannsign.databinding.ItemProductsMainLayoutBinding
 import com.surajmanshal.mannsign.ui.activity.ProductCategoryDetailsActivity
-import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 
 class ProductsMainAdapter(
@@ -41,12 +40,12 @@ class ProductsMainAdapter(
     override fun onBindViewHolder(holder: ProductMainViewHolder, position: Int) {
         val d = l[position]
 
-            vm.getSubCategoryById(d.subCategory.toInt()){
-                holder.txtCat.text = it
-            }
+        vm.getSubCategoryById(d.subCategory.toInt()){
+            holder.txtCat.text = it
+        }
 
         with(holder){
-            rvChild.adapter = ProductAdapter(c,d.posters,vm)
+            rvChild.adapter = ProductAdapter(c,d.posters,vm,viewLifecycleOwner)
             btnMore.setOnClickListener {
                 val i = Intent(c,ProductCategoryDetailsActivity::class.java)
                 i.putExtra("sub",d.subCategory.toInt())

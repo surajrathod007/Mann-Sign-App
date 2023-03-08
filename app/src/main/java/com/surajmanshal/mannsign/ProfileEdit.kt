@@ -15,9 +15,9 @@ import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileEditBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.repository.Repository
-import com.surajmanshal.mannsign.room.UserDao
-import com.surajmanshal.mannsign.room.UserDatabase
-import com.surajmanshal.mannsign.room.UserEntity
+import com.surajmanshal.mannsign.room.LocalDatabase
+import com.surajmanshal.mannsign.room.user.UserDao
+import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
@@ -47,7 +47,7 @@ class ProfileEdit : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val e = sharedPreferences.getString("email", "no email")
 
-        userDatabase = UserDatabase.getDatabase(this).userDao()
+        userDatabase = LocalDatabase.getDatabase(this).userDao()
 
         val user = userDatabase.getUser(e!!)
         user.observe(this){

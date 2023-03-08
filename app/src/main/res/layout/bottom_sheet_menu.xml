@@ -64,6 +64,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/menuItemWishlist"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
             android:orientation="horizontal"

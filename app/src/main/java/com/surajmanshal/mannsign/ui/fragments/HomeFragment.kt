@@ -26,7 +26,7 @@ import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.room.UserDatabase
+import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.ui.activity.*
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
@@ -111,9 +111,9 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         }
 
-        val userDatabase = UserDatabase.getDatabase(requireContext()).userDao()
+        val localDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
 
-        val user = email?.let { userDatabase.getUser(it) }
+        val user = email?.let { localDatabase.getUser(it) }
         user?.observe(viewLifecycleOwner){
             isMinProfileSetupDone = it.firstName!=null
         }
@@ -182,6 +182,13 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
             }else{
                 startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
                 requireActivity().finish()
+            }
+        }
+
+        with(sheetView){
+            findViewById<View>(R.id.menuItemWishlist).setOnClickListener {
+                startActivity(Intent(requireContext(),WishListActivity::class.java))
+                bottomMenu.dismiss()
             }
         }
 

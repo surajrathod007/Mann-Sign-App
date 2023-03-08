@@ -5,16 +5,16 @@ import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.room.UserDatabase
+import com.surajmanshal.mannsign.room.LocalDatabase
 import okhttp3.MultipartBody
 
 open class Repository() {
 
     private val server = NetworkService.networkInstance // Remote
-    private lateinit var room : UserDatabase // Local
+    private lateinit var room : LocalDatabase // Local
 
     fun setupDataSources(context: Context){
-        room = UserDatabase.getDatabase(context)
+        room = LocalDatabase.getDatabase(context)
     }
 
    /* fun getUserByEmailId(email : String,activity: Activity) : User {
@@ -90,5 +90,6 @@ open class Repository() {
     fun fetchProductVariants(email: String, productId: Int) = server.fetchProductVariants(email,productId)
     fun getMaterialsByIds(ids: List<Int>) = server.fetchMaterialsByIds(ids)
     fun getLanguagesByIds(ids: List<Int>) = server.fetchLanguagesByIds(ids)
+    fun getProductsByIds(ids : List<Int>) = server.fetchProductsByIds(ids)
 
 }

@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,13 +10,15 @@ import com.surajmanshal.mannsign.data.model.product.MainPoster
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.room.LocalDatabase
+import com.surajmanshal.mannsign.room.wishlist.WishListDao
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class HomeViewModel : ViewModel() {
 
-
+    var wishListDao : WishListDao? = null
     var catname = "Default category"
     private var _msg = MutableLiveData<String>()
     val msg: LiveData<String> get() = _msg
@@ -155,5 +158,12 @@ class HomeViewModel : ViewModel() {
             _msg.postValue(e.message.toString())
         }
 
+    }
+
+    fun setUpWishlistSource(context : Context): WishListDao {
+        LocalDatabase.getDatabase(context).wishListDao().apply {
+            wishListDao = this
+            return this
+        }
     }
 }
