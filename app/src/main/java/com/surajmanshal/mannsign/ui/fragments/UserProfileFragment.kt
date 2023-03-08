@@ -68,8 +68,12 @@ class UserProfileFragment(var token: String?) : Fragment() {
         if(!email.isNullOrEmpty()){
             userDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
             val user = userDatabase.getUser(email!!)
+            binding.llUserContent.visibility = View.VISIBLE
+            binding.userLogin.visibility = View.GONE
             setupUserDetails(user)
         }else{
+            binding.llUserContent.visibility = View.GONE
+            binding.userLogin.visibility = View.VISIBLE
             binding.btnLogoutFrag.setTextColor(R.color.order_selected_text_color)
             binding.btnLogoutFrag.text = "Login/Register"
             makeToast(requireContext(),"Please Login")
@@ -117,9 +121,12 @@ class UserProfileFragment(var token: String?) : Fragment() {
                     requireActivity().finish()
                 }
             }
-
             btnMyWishListFrag.setOnClickListener {
                 startActivity(Intent(requireContext(), WishListActivity::class.java))
+            }
+            btnLoginRegisterUserProfile.setOnClickListener {
+                startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
+                requireActivity().finish()
             }
         }
     }

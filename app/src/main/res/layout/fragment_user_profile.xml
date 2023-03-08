@@ -12,301 +12,342 @@
         android:layout_height="match_parent"
         tools:context=".ui.fragments.UserProfileFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:orientation="vertical"
-        >
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnEditProfileFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_gravity="end"
-            android:layout_margin="8dp"
-            android:background="@drawable/profile_image_bg"
-            android:backgroundTint="@color/title_text_color"
-            android:fontFamily="@font/satoshi_medium"
-            android:paddingHorizontal="16dp"
-            android:text="Edit Profile"
-            android:textAllCaps="false"
-            android:textColor="@color/white" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/imgProfilePicFrag"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_gravity="center"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/profile_image_bg"
-            android:padding="8dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/ic_user" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtUserNameFrag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="6dp"
-            android:fontFamily="@font/satoshi_bold"
-            android:gravity="center"
-            android:text="SurajSinh Rathod"
-            android:textColor="@color/title_text_color"
-            android:textSize="22sp"
-            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gridview_bg"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="Email "
-                android:textColor="@color/black"
-                android:textSize="12sp" />
 
-            <TextView
-                android:id="@+id/txtUserEmailFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="surajsinhrathod75@gmail.com "
-                android:textColor="@color/title_text_color"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gridview_bg"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="Phone Number "
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/txtUserPhoneFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="+91 9512865416 "
-                android:textColor="@color/title_text_color"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gridview_bg"
-            android:clickable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="Address "
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/txtUserAddressFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/userLogin"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:gravity="center"
-                android:text="857, Indiranagar-2, Shradha chowk , Lambha ahmedabad"
-                android:textColor="@color/title_text_color"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/gridview_bg"
-            android:clickable="true"
-            android:focusable="true"
-            android:foreground="?attr/selectableItemBackground"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="Pincode "
-                android:textColor="@color/black"
-                android:textSize="12sp" />
-
-            <TextView
-                android:id="@+id/txtUserPincodeFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:fontFamily="@font/satoshi_medium"
-                android:text="382405"
-                android:textColor="@color/title_text_color"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/btnMyOrdersFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gridview_bg"
-                android:backgroundTint="@color/title_text_color"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/order_icon"
-                    app:tint="@color/white" />
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
                     android:fontFamily="@font/satoshi_medium"
-                    android:text="My Orders"
-                    android:textColor="@color/white" />
+                    android:textSize="24sp"
+                    android:gravity="center"
+                    android:text="Please Login To Perform Further Actions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnLoginRegisterUserProfile"
+                    android:text="Login/Register"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginLeft="16dp"
+                    android:background="@drawable/normal_button_bg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginLeft="6dp"
-                android:id="@+id/btnMyTransactionsFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gridview_bg"
-                android:backgroundTint="@color/title_text_color"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:padding="16dp">
+                android:id="@+id/llUserContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btnEditProfileFrag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:background="@drawable/profile_image_bg"
+                    android:backgroundTint="@color/title_text_color"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:paddingHorizontal="16dp"
+                    android:text="Edit Profile"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/imgProfilePicFrag"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
                     android:layout_gravity="center"
-                    android:src="@drawable/transaction_icon"
-                    app:tint="@color/white" />
+                    android:layout_marginStart="4dp"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/profile_image_bg"
+                    android:padding="8dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_user" />
 
-                <TextView
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/txtUserNameFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
-                    android:fontFamily="@font/satoshi_medium"
-                    android:text="Transactions"
-                    android:textColor="@color/white" />
-            </LinearLayout>
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/satoshi_bold"
+                    android:gravity="center"
+                    android:text="SurajSinh Rathod"
+                    android:textColor="@color/title_text_color"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_marginLeft="6dp"
-                android:id="@+id/btnMyWishListFrag"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/gridview_bg"
-                android:backgroundTint="@color/title_text_color"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackground"
-                android:orientation="vertical"
-                android:padding="16dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/gridview_bg"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Email "
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtUserEmailFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="surajsinhrathod75@gmail.com "
+                        android:textColor="@color/title_text_color"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/gridview_bg"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Phone Number "
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtUserPhoneFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="+91 9512865416 "
+                        android:textColor="@color/title_text_color"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/gridview_bg"
+                    android:clickable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Address "
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtUserAddressFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:gravity="center"
+                        android:text="857, Indiranagar-2, Shradha chowk , Lambha ahmedabad"
+                        android:textColor="@color/title_text_color"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="8dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/gridview_bg"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="Pincode "
+                        android:textColor="@color/black"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txtUserPincodeFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:fontFamily="@font/satoshi_medium"
+                        android:text="382405"
+                        android:textColor="@color/title_text_color"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:src="@drawable/wishlist_icon"
-                    app:tint="@color/white" />
+                    android:layout_marginTop="12dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/btnMyOrdersFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/gridview_bg"
+                        android:backgroundTint="@color/title_text_color"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/order_icon"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/satoshi_medium"
+                            android:text="My Orders"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnMyTransactionsFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:background="@drawable/gridview_bg"
+                        android:backgroundTint="@color/title_text_color"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/transaction_icon"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/satoshi_medium"
+                            android:text="Transactions"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/btnMyWishListFrag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:background="@drawable/gridview_bg"
+                        android:backgroundTint="@color/title_text_color"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?attr/selectableItemBackground"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/wishlist_icon"
+                            app:tint="@color/white" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/satoshi_medium"
+                            android:text="My Wishlist"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
 
                 <TextView
+                    android:id="@+id/btnLogoutFrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:fontFamily="@font/satoshi_medium"
-                    android:text="My Wishlist"
-                    android:textColor="@color/white" />
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="Logout"
+                    android:textColor="@color/error"
+                    android:textSize="18sp" />
             </LinearLayout>
-
 
         </LinearLayout>
-
-        <TextView
-            android:foreground="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:id="@+id/btnLogoutFrag"
-            android:layout_marginTop="12dp"
-            android:textSize="18sp"
-            android:text="Logout"
-            android:layout_gravity="center"
-            android:fontFamily="@font/satoshi_medium"
-            android:textColor="@color/error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
-    </LinearLayout>
 
     </ScrollView>
 </layout>
