@@ -45,8 +45,12 @@ class ProductAdapter(
                     R.drawable.no_photo)
                     .into(imgProduct)
 
+                if(data.subCategory!=null){
+                    vm.getSubCategoryById(data.subCategory!!){
+                        txtProductCategory.text = it.toString()
+                    }
+                }
                 txtProductName.text = data.posterDetails!!.title
-                txtProductCategory.text = data.subCategory.toString()
                 txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + data.basePrice.toString()
                 productCard.setOnClickListener {
                     context.startActivity(Intent(context,ProductDetailsActivity::class.java).apply {
