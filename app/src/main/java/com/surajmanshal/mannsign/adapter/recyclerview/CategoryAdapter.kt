@@ -16,7 +16,7 @@ class CategoryAdapter(val c: Context, val list: List<SubCategory>) :
     class CategoryViewHolder(val binding: CategoryItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         val txtCategoryName = binding.txtCategoryName
-        val imgCategory = binding.imgCategory
+        val cardCategory = binding.cardCategory
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryViewHolder {
         return CategoryViewHolder(
@@ -32,8 +32,7 @@ class CategoryAdapter(val c: Context, val list: List<SubCategory>) :
         val data = list[position]
         with(holder){
             txtCategoryName.text = data.name
-            //TODO : Loading Image....
-            imgCategory.setOnClickListener {
+            cardCategory.setOnClickListener {
                 val i = Intent(c, ProductCategoryDetailsActivity::class.java)
                 i.putExtra("sub",data.id)
                 c.startActivity(i)
