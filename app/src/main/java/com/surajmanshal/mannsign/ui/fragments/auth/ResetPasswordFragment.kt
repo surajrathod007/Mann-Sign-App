@@ -1,26 +1,23 @@
 package com.surajmanshal.mannsign.ui.fragments.auth
 
 import android.app.Dialog
-import android.content.ContentValues.TAG
 import android.content.Context
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
-import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentResetPasswordBinding
-
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.GenericTextWatcher
@@ -55,15 +52,15 @@ class ResetPasswordFragment : Fragment() {
         d = LoadingScreen(activity as Context)
         dd = d.loadingScreen()
 
-           with(view){
-               otp_textbox_one = findViewById(R.id.etOtp1)
-               otp_textbox_two = findViewById(R.id.etOtp2)
-               otp_textbox_three = findViewById(R.id.etOtp3)
-               otp_textbox_four = findViewById(R.id.etOtp4)
-               verify_otp = findViewById(R.id.btnReset)
-               password = findViewById(R.id.etPassword)
-               confirmPassword = findViewById(R.id.etConfirmPassword)
-           }
+        with(view){
+            otp_textbox_one = findViewById(R.id.etOtp1)
+            otp_textbox_two = findViewById(R.id.etOtp2)
+            otp_textbox_three = findViewById(R.id.etOtp3)
+            otp_textbox_four = findViewById(R.id.etOtp4)
+            verify_otp = findViewById(R.id.btnReset)
+            password = findViewById(R.id.etPassword)
+            confirmPassword = findViewById(R.id.etConfirmPassword)
+        }
 
 
          edit =
@@ -74,15 +71,35 @@ class ResetPasswordFragment : Fragment() {
         otp_textbox_three.addTextChangedListener(GenericTextWatcher(otp_textbox_three, edit))
         otp_textbox_four.addTextChangedListener(GenericTextWatcher(otp_textbox_four, edit))
 
+        password.apply {
+
+            fun setUpHelper(){
+                binding.etPasswordContainer.setHelperTextColor(ColorStateList.valueOf(Color.RED))
+                binding.etPasswordContainer.helperText = validPassword()
+            }
+            setOnFocusChangeListener { _, focused ->
+                if (!focused) setUpHelper()
+            }
+            doOnTextChanged { _, _, _, _ ->
+                setUpHelper()
+            }
+        }
+
 
         verify_otp.setOnClickListener {
-            if(!isDataFillled(password))else if(!isDataFillled(confirmPassword))else{
-                Log.d(TAG, "${password.text},${confirmPassword.text}")
-                if(password.text.toString()!=confirmPassword.text.toString()){
-                    ExceptionHandler.catchOnContext(activity!!,"Recheck Both Password")
-                    return@setOnClickListener
-                }
+            if(!isDataFillled(password)) {
+                ExceptionHandler.catchOnContext(requireContext(),"Fill the missing fields")
+                return@setOnClickListener
             }
+            if (!binding.etPasswordContainer.helperText.isNullOrEmpty()) {
+                ExceptionHandler.catchOnContext(requireContext(),"Password must be valid")
+                return@setOnClickListener
+            }
+            if(password.text.toString()!=confirmPassword.text.toString()){
+                ExceptionHandler.catchOnContext(requireContext(),"Recheck Both Password")
+                return@setOnClickListener
+            }
+
             if(isEnteredOtp()){
                 email = arguments?.get("email") as String?
                 if(otp != arguments?.get("otp")as String?){
@@ -92,17 +109,35 @@ class ResetPasswordFragment : Fragment() {
                 d.toggleDialog(dd)
                 verifyAndResetPassword()
             }else{
-                Snackbar.make(view, "Please Enter OTP", 1000).show()
+                ExceptionHandler.catchOnContext(requireContext(),"Please enter OTP")
             }
         }
         return view
     }
-    fun isDataFillled(view: TextView) : Boolean{
-        if (TextUtils.isEmpty(view.text.toString().trim() { it <= ' ' })) {
+    fun isDataFillled(view: EditText) : Boolean{
+        /*if (TextUtils.isEmpty(view.text.toString().trim() { it <= ' ' })) {
             Snackbar.make(view, "Fields are empty", 1000).show()
             return false
         }
-        return true
+        return true*/
+        return view.text.isNotBlank()
+    }
+
+    private fun validPassword(): String? {
+        val passwordText = binding.etPassword.text.toString()
+        if (passwordText.length < 8) {
+            return "Minimum 8 character required for password"
+        }
+        if (!passwordText.matches(".*[A-Z].*".toRegex())) {
+            return "Must contain 1 Upper-case character"
+        }
+        if (!passwordText.matches(".*[a-z].*".toRegex())) {
+            return "Must contain 1 Lower-case character"
+        }
+        if (!passwordText.matches(".*[@#\$%^&+=].*".toRegex())) {
+            return "Must contain 1 Special character (@#\$%^&+=)"
+        }
+        return null
     }
     fun isEnteredOtp() : Boolean{
         if(otp_textbox_one.text.isEmpty()) return false
