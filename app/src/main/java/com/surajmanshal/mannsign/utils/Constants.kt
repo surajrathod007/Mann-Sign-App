@@ -36,4 +36,5 @@ object Constants {
 
     // Intent Extras
     const val PRODUCT = "product"
+    const val NO_EMAIL = "no email"
 }

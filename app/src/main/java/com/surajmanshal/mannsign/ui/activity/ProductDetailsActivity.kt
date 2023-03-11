@@ -58,7 +58,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email","no email")
+        val email = sharedPreferences.getString("email",Constants.NO_EMAIL)
         vm._currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
 
         with(cartVm){
@@ -203,11 +203,11 @@ class ProductDetailsActivity : AppCompatActivity() {
                     btnChatBack.setOnClickListener {
                         onBackPressed()
                     }
-                    productBuyingLayout.apply {
+                    /*productBuyingLayout.apply {
                         btnAddVariantToCart.setOnClickListener {
                             addVariantToCart(email!!,product.productId)
                         }
-                    }
+                    }*/
                     sizeSpinner.spinner.onItemSelectedListener = object  :
                         AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
@@ -406,7 +406,12 @@ class ProductDetailsActivity : AppCompatActivity() {
             btnAddVariantToCart.apply {
                 backgroundTintList = resources.getColorStateList(R.color.order_selected_text_color)
                 text = context.getString(R.string.add_to_cart)
-                setOnClickListener { addVariantToCart(email, productId) }
+                setOnClickListener {
+                    if(email==Constants.NO_EMAIL)
+                        startActivity(Intent(this@ProductDetailsActivity,CartActivity::class.java))
+                    else
+                        addVariantToCart(email, productId)
+                }
             }
         }
     }
