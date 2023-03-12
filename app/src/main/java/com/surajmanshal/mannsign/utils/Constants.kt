@@ -5,7 +5,7 @@ object Constants {
     const val TYPE_POSTER = 1
     const val TYPE_BANNER = 2
     const val TYPE_ACP_BOARD = 3
-
+    val TYPE_ALL = listOf(TYPE_POSTER, TYPE_BANNER, TYPE_ACP_BOARD)
 
     const val ORDER_PENDING = 0
     const val ORDER_CONFIRMED = 1

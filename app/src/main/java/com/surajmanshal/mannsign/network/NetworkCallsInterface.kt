@@ -37,8 +37,10 @@ interface NetworkCallsInterface {
     @POST("user/update")
     suspend fun updateUser(@Body user : User) : SimpleResponse
 
-    @GET("materials")
-    fun fetchMaterials() : Call<List<Material>>
+    /*@GET("materials")
+    fun fetchMaterials() : Call<List<Material>>*/
+    @POST("materials")
+    fun fetchMaterials(@Body productTypeId: List<Int>): Call<List<Material>>
 
     @GET("languages")
     fun fetchLanguages() : Call<List<Language>>

@@ -60,8 +60,8 @@ class CustomBannerViewModel : ClientViewModel() {
         }
     }
 
-    fun getAllMaterials() {
-        val r = db.fetchMaterials()
+    fun getAllMaterials(productTypeIds : List<Int>) {
+        val r = repository.fetchMaterials(productTypeIds)
         r.enqueue(object : Callback<List<Material>?> {
             override fun onResponse(
                 call: Call<List<Material>?>,

@@ -91,7 +91,7 @@ class CustomBannerActivity : AppCompatActivity() {
             uploadProductImage()
         }
 
-        vm.getAllMaterials()
+        vm.getAllMaterials(Constants.TYPE_ALL)
 
         setupSpinner()
 //        editTextWatchers() // No longer required
@@ -111,6 +111,21 @@ class CustomBannerActivity : AppCompatActivity() {
 
     fun selectTypeListners() {
         binding.spCustomPosterType.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+
+            fun setUpProductMaterials(productTypeId : Int){
+                binding.spCustomMaterial.resSpinner.
+                setAdapter(
+                    vm.allMaterials.value?.filter { it.productTypeId == productTypeId }
+                        ?.let {
+                            ArrayAdapter(
+                                this@CustomBannerActivity,
+                                R.layout.support_simple_spinner_dropdown_item,
+                                it
+                                    .map { it.name }
+                            )
+                        }
+                )
+            }
             vm.setProductType(
                 index,
                 Poster(title = "hii", "", null),
@@ -129,10 +144,19 @@ class CustomBannerActivity : AppCompatActivity() {
             with(Constants){
                 vm._currentProductTypeId.value =
                     when (index) {
-                        0 ->  TYPE_POSTER
-                        1 ->  TYPE_BANNER
+                        0 -> {
+                            setUpProductMaterials(TYPE_POSTER)
+                            TYPE_POSTER
+                        }
+                        1 -> {
+                            setUpProductMaterials(TYPE_BANNER)
+                            TYPE_BANNER
+                        }
                         2 -> TYPE_ACP_BOARD
-                        else -> TYPE_POSTER
+                        else -> {
+                            setUpProductMaterials(TYPE_POSTER)
+                            TYPE_POSTER
+                        }
                     }
             }
         }
@@ -149,9 +173,7 @@ class CustomBannerActivity : AppCompatActivity() {
                     ArrayAdapter(
                         this@CustomBannerActivity,
                         R.layout.support_simple_spinner_dropdown_item,
-                        it.map {
-                            it.name
-                        }
+                        it.filter { it.productTypeId == Constants.TYPE_POSTER }.map { it.name }
                     )
                 )
                 setOnItemClickListener { adapterView, view, index, l ->
