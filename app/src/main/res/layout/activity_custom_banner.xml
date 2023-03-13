@@ -74,7 +74,8 @@
                 android:animateLayoutChanges="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:theme="@style/satoshiTypeface">
 
             <ImageView
                 android:id="@+id/customPosterImage"
@@ -168,19 +169,19 @@
                     android:textColor="@color/text_normal_color" />
 
                 <include
-                    android:id="@+id/spCustomMaterial"
-                    layout="@layout/modern_spinner_layout"
+                    android:id="@+id/spCustomPosterType"
+                    layout="@layout/custom_spinner_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp" />
+                    android:layout_marginTop="8dp"
+                    android:layout_marginHorizontal="12dp" />
 
                 <include
-                    android:id="@+id/spCustomPosterType"
-                    layout="@layout/modern_spinner_layout"
+                    android:id="@+id/spCustomMaterial"
+                    layout="@layout/custom_spinner_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp" />
-
+                    android:layout_marginHorizontal="12dp" />
 
                 <LinearLayout
                     android:id="@+id/llBanner"

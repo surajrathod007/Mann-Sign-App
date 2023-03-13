@@ -10,7 +10,6 @@ import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.Constants
-import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,10 +25,8 @@ class CustomBannerViewModel : ClientViewModel() {
     private var _allMaterials = MutableLiveData<List<Material>>()
     val allMaterials: LiveData<List<Material>> get() = _allMaterials
 
-
     var orderPlaced = MutableLiveData<Boolean>(false)
-    private val _imageUploadResponse = MutableLiveData<SimpleResponse>()
-    val imageUploadResponse : LiveData<SimpleResponse> get() = _imageUploadResponse     // IMAGE UPLOADING PROGRESS
+
     private val _productUploadResponse = MutableLiveData<Variant>()
     val productUploadResponse : LiveData<Variant> get() = _productUploadResponse  // PRODUCT UPLOADING PROGRESS
 
@@ -80,16 +77,6 @@ class CustomBannerViewModel : ClientViewModel() {
         })
     }
 
-    suspend fun sendImage(part: MultipartBody.Part, languageId: Int){
-        try {
-            val response = repository.uploadProductImage(part,languageId)
-            _serverResponse.postValue(response)
-            _imageUploadResponse.postValue(response)
-        }catch (e : Exception){
-            println("$e ${serverResponse.value?.message}")
-        }
-    }
-
     suspend fun addProduct(product: Product) {
         try {
             val response = repository.sendProduct(product)
@@ -99,9 +86,9 @@ class CustomBannerViewModel : ClientViewModel() {
         }
     }
 
-    fun setMaterialId(index: Int) {
+    fun setMaterialId(material : Material) {
         _currentMaterial.postValue(
-            _allMaterials.value?.get(index)
+            material
         )
     }
 

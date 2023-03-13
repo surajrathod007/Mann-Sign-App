@@ -17,14 +17,16 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.WindowManager
-import android.widget.ArrayAdapter
+import android.widget.AdapterView
 import android.widget.Toast
-import androidx.appcompat.R
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.internal.LinkedTreeMap
 import com.surajmanshal.mannsign.ImageUploading
+import com.surajmanshal.mannsign.adapter.CustomSpinnerAdapter
+import com.surajmanshal.mannsign.adapter.MaterialSpinnerAdapter
 import com.surajmanshal.mannsign.data.model.Image
+import com.surajmanshal.mannsign.data.model.Material
 import com.surajmanshal.mannsign.data.model.Size
 import com.surajmanshal.mannsign.data.model.product.ACPBoard
 import com.surajmanshal.mannsign.data.model.product.Banner
@@ -66,7 +68,7 @@ class CustomBannerActivity : AppCompatActivity() {
         val sharedPreference =  getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email","No email")
 
-        vm = ViewModelProvider(this).get(CustomBannerViewModel::class.java)
+        vm = ViewModelProvider(this)[CustomBannerViewModel::class.java]
         imageUploading = ImageUploading(this)
         d = LoadingScreen(this)
         dd = d.loadingScreen("Creating product")
@@ -110,55 +112,78 @@ class CustomBannerActivity : AppCompatActivity() {
     }
 
     fun selectTypeListners() {
-        binding.spCustomPosterType.resSpinner.setOnItemClickListener { adapterView, view, index, l ->
+        binding.spCustomPosterType.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             fun setUpProductMaterials(productTypeId : Int){
-                binding.spCustomMaterial.resSpinner.
-                setAdapter(
-                    vm.allMaterials.value?.filter { it.productTypeId == productTypeId }
-                        ?.let {
-                            ArrayAdapter(
-                                this@CustomBannerActivity,
-                                R.layout.support_simple_spinner_dropdown_item,
-                                it
-                                    .map { it.name }
-                            )
-                        }
+                val productMaterials = vm.allMaterials.value?.filter { it.productTypeId == productTypeId }
+                if (productMaterials != null) {
+                    setupMaterialSpinner(productMaterials)
+                }
+            }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
+                vm.setProductType(
+                    index,
+                    Poster(title = "hii", "", null),
+                    Banner(text = "Hello", font = 2)
                 )
-            }
-            vm.setProductType(
-                index,
-                Poster(title = "hii", "", null),
-                Banner(text = "Hello", font = 2)
-            )
-            when (index) {
-                0 -> {
-                    binding.llPoster.visibility = View.VISIBLE
-                    binding.llBanner.visibility = View.GONE
-                }
-                1 -> {
-                    binding.llPoster.visibility = View.GONE
-                    binding.llBanner.visibility = View.VISIBLE
-                }
-            }
-            with(Constants){
-                vm._currentProductTypeId.value =
-                    when (index) {
-                        0 -> {
-                            setUpProductMaterials(TYPE_POSTER)
-                            TYPE_POSTER
-                        }
-                        1 -> {
-                            setUpProductMaterials(TYPE_BANNER)
-                            TYPE_BANNER
-                        }
-                        2 -> TYPE_ACP_BOARD
-                        else -> {
-                            setUpProductMaterials(TYPE_POSTER)
-                            TYPE_POSTER
-                        }
+                when (index) {
+                    0 -> {
+                        binding.llPoster.visibility = View.VISIBLE
+                        binding.llBanner.visibility = View.GONE
                     }
+                    1 -> {
+                        binding.llPoster.visibility = View.GONE
+                        binding.llBanner.visibility = View.VISIBLE
+                    }
+                }
+                with(Constants){
+                    vm._currentProductTypeId.value =
+                        when (index) {
+                            0 -> {
+                                setUpProductMaterials(TYPE_POSTER)
+                                TYPE_POSTER
+                            }
+                            1 -> {
+                                setUpProductMaterials(TYPE_BANNER)
+                                TYPE_BANNER
+                            }
+                            2 -> TYPE_ACP_BOARD
+                            else -> {
+                                setUpProductMaterials(TYPE_POSTER)
+                                TYPE_POSTER
+                            }
+                        }
+                }
             }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+//                TODO("Not yet implemented")
+            }
+        }
+    }
+
+    fun setupMaterialSpinner(productMaterials : List<Material>){
+        binding.spCustomMaterial.spinner.apply {
+            setAdapter(
+                MaterialSpinnerAdapter(this@CustomBannerActivity,productMaterials)
+                /*ArrayAdapter(
+                    this@CustomBannerActivity,
+                    R.layout.support_simple_spinner_dropdown_item,
+                    productMaterials.map { it.name }
+                )*/
+            )
+            onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, index: Int, p3: Long) {
+                    vm.setMaterialId(productMaterials[index])
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+//                    TODO("Not yet implemented")
+                }
+
+            }
+            setSelection(0)
         }
     }
 
@@ -167,20 +192,9 @@ class CustomBannerActivity : AppCompatActivity() {
             Functions.makeToast(this, it.toString())
         }
         vm.allMaterials.observe(this){
-            binding.spCustomMaterial.resSpinner.hint = "Select material"
-            binding.spCustomMaterial.resSpinner.apply {
-                setAdapter(
-                    ArrayAdapter(
-                        this@CustomBannerActivity,
-                        R.layout.support_simple_spinner_dropdown_item,
-                        it.filter { it.productTypeId == Constants.TYPE_POSTER }.map { it.name }
-                    )
-                )
-                setOnItemClickListener { adapterView, view, index, l ->
-                    vm.setMaterialId(index)
-                    binding.txtCustomOrderTotalPrice.text = "Total amount to pay : ${getVariantPrice()}"
-                }
-            }
+            binding.spCustomMaterial.tvSpinnerName.text = "Material"
+            val posterMaterials = it.filter { it.productTypeId == Constants.TYPE_POSTER }
+            setupMaterialSpinner(posterMaterials)
         }
          with(vm){
              val owner = this@CustomBannerActivity
@@ -231,15 +245,18 @@ class CustomBannerActivity : AppCompatActivity() {
                     }
                  else Log.d("Custom Order Product",it.message)*/
              }
+             _currentMaterial.observe(this@CustomBannerActivity){
+                 binding.txtCustomOrderTotalPrice.text = "Your Product Price : ${getVariantPrice()}"
+             }
          }
     }
 
-    private fun getVariantPrice(): Float? {
+    private fun getVariantPrice(): Float {
         val s = createSize()
-        if(vm._currentMaterial.value != null){
-            return (s.width*s.width)* vm._currentMaterial.value!!.price
+        return if(vm._currentMaterial.value != null){
+            (s.width*s.width)* vm._currentMaterial.value!!.price
         }else{
-            return 0f
+            0f
         }
     }
 
@@ -414,14 +431,15 @@ class CustomBannerActivity : AppCompatActivity() {
 
     fun setupSpinner() {
         //type spinner
-        binding.spCustomPosterType.resSpinner.hint = "Select type"
-        binding.spCustomPosterType.resSpinner.apply {
+        binding.spCustomPosterType.tvSpinnerName.text = "Product"
+        binding.spCustomPosterType.spinner.apply {
             setAdapter(
-                ArrayAdapter(
+                CustomSpinnerAdapter(this@CustomBannerActivity,arrProductType)
+                /*ArrayAdapter(
                     this@CustomBannerActivity,
                     R.layout.support_simple_spinner_dropdown_item,
                     arrProductType
-                )
+                )*/
             )
         }
     }
