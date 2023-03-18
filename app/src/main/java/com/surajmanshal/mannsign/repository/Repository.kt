@@ -27,7 +27,7 @@ open class Repository() {
          }
     }*/
 
-    fun fetchMaterials(productTypeIds: List<Int>) = server.fetchMaterials(productTypeIds)
+    fun fetchMaterials(productTypeIds: List<Int>) = server.fetchMaterialsForProductType(productTypeIds)
 
     fun fetchLanguages() = server.fetchLanguages()
 

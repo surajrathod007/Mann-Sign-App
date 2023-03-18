@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
+import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
@@ -19,9 +19,7 @@ import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentUserProfileBinding
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.user.UserDao
-import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
 import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.ui.activity.WishListActivity
