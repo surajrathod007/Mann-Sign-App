@@ -12,6 +12,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
+import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
@@ -157,6 +158,11 @@ class UserProfileFragment(var token: String?) : Fragment() {
                 }else{
                     txtUserPincodeFrag.text = "-"
                 }
+                Glide.with(requireContext()).load(it.profileImage?.let { it1 ->
+                    Functions.urlMaker(
+                        it1
+                    )
+                }).circleCrop().into(binding.imgProfilePicFrag)
             }
         }
     }
