@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.ui.activity
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -25,12 +26,16 @@ import com.itextpdf.layout.element.Table
 import com.itextpdf.layout.properties.HorizontalAlignment
 import com.itextpdf.layout.properties.TextAlignment
 import com.itextpdf.layout.properties.VerticalAlignment
+import com.paytm.pgsdk.PaytmOrder
+import com.paytm.pgsdk.PaytmPaymentTransactionCallback
+import com.paytm.pgsdk.TransactionManager
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
 import com.surajmanshal.mannsign.databinding.ActivityOrdersBinding
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
 import java.io.ByteArrayOutputStream
@@ -39,8 +44,10 @@ import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+
 class OrderDetailsActivity : AppCompatActivity() {
 
+    private val requestCode: Int = 123
     lateinit var binding: ActivityOrderDetailsBinding
     lateinit var vm: OrdersViewModel
 
@@ -105,10 +112,79 @@ class OrderDetailsActivity : AppCompatActivity() {
         binding.btnDownloadInvoice.setOnClickListener {
             makeInvoice()
         }
-
+        binding.btnMakePayment.setOnClickListener {
+            val d = AlertDialog.Builder(this)
+            d.setTitle("Want to make payment ?")
+            d.setMessage("You can make payment through paytm app or in browser !")
+            d.setPositiveButton("Yes"){d,w ->
+                makePayment()
+            }
+            d.setNegativeButton("No"){d,w ->
+                makeToast(this,"Payment canceled")
+                d.dismiss()
+            }
+            d.show()
+        }
 
     }
 
+    private fun makePayment() {
+
+        var callBackUrl = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${vm.order.value?.orderId}"
+        var orderId = vm.order.value?.orderId.toString()
+        val amount = vm.order.value?.total.toString()
+
+        val txnToken = vm.getTransactionToken(orderId,vm.order.value!!.emailId,amount)
+        if(txnToken != null){
+            val paytmOrder = PaytmOrder(orderId,Constants.MERCHENT_ID,txnToken,amount,callBackUrl)
+            val transaction = TransactionManager(paytmOrder,object : PaytmPaymentTransactionCallback {
+
+                override fun onTransactionResponse(inResponse: Bundle?) {
+                    Toast.makeText(applicationContext, "Payment Transaction response " + inResponse.toString(), Toast.LENGTH_LONG).show();
+
+                }
+
+                override fun networkNotAvailable() {
+                    makeToast(this@OrderDetailsActivity,"Network not available")
+                }
+
+                override fun onErrorProceed(p0: String?) {
+                    makeToast(this@OrderDetailsActivity,"onErrorProceed $p0")
+                }
+
+                override fun clientAuthenticationFailed(p0: String?) {
+                    makeToast(this@OrderDetailsActivity,"clientAuthenticationFailed $p0")
+                }
+
+                override fun someUIErrorOccurred(p0: String?) {
+                    makeToast(this@OrderDetailsActivity,"someUIErrorOccurred $p0")
+                }
+
+                override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
+                    makeToast(this@OrderDetailsActivity,"onErrorLoadingWebPage $p0 - $p1 - $p2")
+                }
+
+                override fun onBackPressedCancelTransaction() {
+                    makeToast(this@OrderDetailsActivity,"onBackPressedCancelTransaction ")
+                }
+
+                override fun onTransactionCancel(p0: String?, p1: Bundle?) {
+                    makeToast(this@OrderDetailsActivity,"onTransactionCancel $p0 - ${p1.toString()} ")
+                }
+            })
+            transaction.setAppInvokeEnabled(true)
+            transaction.setShowPaymentUrl("https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage")
+            transaction.startTransaction(this, requestCode);
+        }
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == resultCode && data != null){
+            Toast.makeText(this, data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"), Toast.LENGTH_SHORT).show()
+        }
+    }
     private fun setObservers() {
         vm.order.observe(this) {
             binding.rvOrderItems.adapter = OrderItemsAdapter(this, it.orderItems!!)

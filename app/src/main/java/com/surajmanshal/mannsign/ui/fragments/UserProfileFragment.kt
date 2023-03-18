@@ -12,7 +12,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
-import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
@@ -41,10 +40,10 @@ import retrofit2.Response
 //TODO : Remove static text values in xml file for firstname etc.
 class UserProfileFragment(var token: String?) : Fragment() {
 
-    lateinit var binding : FragmentUserProfileBinding
-    lateinit var userDatabase : UserDao
-    var mUser : User = User()
-    var email : String? = null
+    lateinit var binding: FragmentUserProfileBinding
+    lateinit var userDatabase: UserDao
+    var mUser: User = User()
+    var email: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -61,31 +60,62 @@ class UserProfileFragment(var token: String?) : Fragment() {
         val sharedPreferences = activity?.getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreferences?.getString("email", "")
 
-        if(token.isNullOrEmpty()){
+        if (token.isNullOrEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 token = getToken(DataStore.JWT_TOKEN)
             }
         }
-        if(!email.isNullOrEmpty()){
-            userDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
-            val user = userDatabase.getUser(email!!)
-            binding.llUserContent.visibility = View.VISIBLE
-            binding.userLogin.visibility = View.GONE
-            setupUserDetails(user)
-        }else{
+
+        if (!email.isNullOrEmpty()) {
+//            userDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
+//            val user = userDatabase.getUser(email!!)
+//            binding.llUserContent.visibility = View.VISIBLE
+//            binding.userLogin.visibility = View.GONE
+            val r = NetworkService.networkInstance.fetchUserByEmail(email!!)
+            r.enqueue(object : Callback<User?> {
+                override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                    if (response.body() != null)
+                        setupUserDetails(response.body()!!)
+                    else makeToast(requireContext(), "User is nulll")
+                }
+
+                override fun onFailure(call: Call<User?>, t: Throwable) {
+                    makeToast(requireContext(), t.localizedMessage.toString())
+                }
+            })
+
+        } else {
             binding.llUserContent.visibility = View.GONE
             binding.userLogin.visibility = View.VISIBLE
             binding.btnLogoutFrag.setTextColor(R.color.order_selected_text_color)
             binding.btnLogoutFrag.text = "Login/Register"
-            makeToast(requireContext(),"Please Login")
+            makeToast(requireContext(), "Please Login")
         }
 
         setupClickListeners()
         return binding.root
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (!email.isNullOrEmpty()) {
+            val r = NetworkService.networkInstance.fetchUserByEmail(email!!)
+            r.enqueue(object : Callback<User?> {
+                override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                    if (response.body() != null)
+                        setupUserDetails(response.body()!!)
+                    else makeToast(requireContext(), "User is nulll")
+                }
+
+                override fun onFailure(call: Call<User?>, t: Throwable) {
+                    makeToast(requireContext(), t.localizedMessage.toString())
+                }
+            })
+        }
+    }
+
     private fun setupClickListeners() {
-        with(binding){
+        with(binding) {
             btnMyOrdersFrag.setOnClickListener {
                 startActivity(Intent(requireActivity(), OrdersActivity::class.java))
             }
@@ -96,28 +126,30 @@ class UserProfileFragment(var token: String?) : Fragment() {
                 startActivity(Intent(requireActivity(), ProfileEdit::class.java))
             }
             btnLogoutFrag.setOnClickListener {
-                if(!email.isNullOrEmpty())
-                {
+                if (!email.isNullOrEmpty()) {
                     //bottomMenu.dismiss()
                     val d = AlertDialog.Builder(requireContext())
                     d.setTitle("Do you want to logout ?")
                     d.setMessage("You can login anytime ;)")
-                    d.setPositiveButton("Yes"){v,m ->
-                        try{
-                            if(!token.isNullOrEmpty()){
+                    d.setPositiveButton("Yes") { v, m ->
+                        try {
+                            if (!token.isNullOrEmpty()) {
                                 logout(email!!, token!!)
-                            }else{
-                                makeToast(requireContext(),"JWT token is empty : You never logged in")
+                            } else {
+                                makeToast(
+                                    requireContext(),
+                                    "JWT token is empty : You never logged in"
+                                )
                             }
-                        }catch (e : Exception){
-                            Functions.makeToast(requireContext(),e.message.toString())
+                        } catch (e: Exception) {
+                            Functions.makeToast(requireContext(), e.message.toString())
                         }
                     }
-                    d.setNegativeButton("No"){v,m->
+                    d.setNegativeButton("No") { v, m ->
                         v.dismiss()
                     }
                     d.show()
-                }else{
+                } else {
                     startActivity(Intent(requireActivity(), AuthenticationActivity::class.java))
                     requireActivity().finish()
                 }
@@ -126,87 +158,87 @@ class UserProfileFragment(var token: String?) : Fragment() {
                 startActivity(Intent(requireContext(), WishListActivity::class.java))
             }
             btnLoginRegisterUserProfile.setOnClickListener {
-                startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
+                startActivity(Intent(requireActivity(), AuthenticationActivity::class.java))
                 requireActivity().finish()
             }
         }
     }
 
-    private fun setupUserDetails(u: LiveData<UserEntity>){
-        u.observe(viewLifecycleOwner){
-
-            with(binding){
-                if(!it.firstName.isNullOrEmpty() && !it.lastName.isNullOrEmpty()){
+    private fun setupUserDetails(u: User) {
+        u.let {
+            with(binding) {
+                if (!it.firstName.isNullOrEmpty() && !it.lastName.isNullOrEmpty()) {
                     txtUserNameFrag.text = it.firstName + " " + it.lastName
-                }else{
+                } else {
                     txtUserNameFrag.text = "-----"
                 }
                 txtUserEmailFrag.text = it.emailId
 
-                if(!it.address.isNullOrEmpty()){
+                if (!it.address.isNullOrEmpty()) {
                     txtUserAddressFrag.text = it.address
-                }else{
+                } else {
                     txtUserAddressFrag.text = "-"
                 }
-                if(it.phoneNumber.isNotEmpty()){
+                if (it.phoneNumber.isNotEmpty()) {
                     txtUserPhoneFrag.text = it.phoneNumber
-                }else{
+                } else {
                     txtUserPhoneFrag.text = "-"
                 }
-                if(it.pinCode != null){
+                if (it.pinCode != null) {
                     txtUserPincodeFrag.text = it.pinCode.toString()
-                }else{
+                } else {
                     txtUserPincodeFrag.text = "-"
                 }
-                Glide.with(requireContext()).load(it.profileImage?.let { it1 ->
-                    Functions.urlMaker(
-                        it1
-                    )
-                }).circleCrop().into(binding.imgProfilePicFrag)
+                if (it.profileImage != null) {
+                    Glide.with(requireActivity()).load(it.profileImage?.let { it1 -> Functions.urlMaker(it1) })
+                        .error(R.drawable.person_user).circleCrop().into(binding.imgProfilePicFrag)
+                }
             }
         }
     }
 
-    fun logout(email : String,token : String){
-        try{
-            val r = NetworkService.networkInstance.logout(email,token)
+    fun logout(email: String, token: String) {
+        try {
+            val r = NetworkService.networkInstance.logout(email, token)
             r.enqueue(object : Callback<SimpleResponse?> {
                 override fun onResponse(
                     call: Call<SimpleResponse?>,
                     response: Response<SimpleResponse?>
                 ) {
                     val r = response.body()!!
-                    if(r.success){
-                        makeToast(requireContext(),"Logged Out")
+                    if (r.success) {
+                        makeToast(requireContext(), "Logged Out")
                         logout()
                         Handler().postDelayed({
                             requireActivity().finish()
-                        },2000)
+                        }, 2000)
                     }
                 }
+
                 override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
 
                 }
             })
-        }catch (e : Exception){
+        } catch (e: Exception) {
 
         }
 
     }
 
     private fun logout() {
-        val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        val sharedPreference =
+            requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
         val ed = sharedPreference.edit()
-        ed.putString("email",null)
+        ed.putString("email", null)
         ed.commit()
-        CoroutineScope(Dispatchers.IO).launch{
+        CoroutineScope(Dispatchers.IO).launch {
             requireActivity().preferenceDataStoreAuth.edit {
                 it[stringPreferencesKey(DataStore.JWT_TOKEN)] = ""
             }
         }
     }
 
-    suspend fun getToken(key : String) : String? {
+    suspend fun getToken(key: String): String? {
         val data = requireActivity().preferenceDataStoreAuth.data.first()
         return data[stringPreferencesKey(key)]
     }

@@ -233,4 +233,9 @@ class OrdersViewModel : ViewModel() {
         })
     }
 
+    fun getTransactionToken(orderId : String,email : String, amount : String) : String?{
+        val r = db.getTransactionToken(orderId,email,amount)
+        return r.message
+    }
+
 }

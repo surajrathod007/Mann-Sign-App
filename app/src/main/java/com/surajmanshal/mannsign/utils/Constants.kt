@@ -37,4 +37,9 @@ object Constants {
     // Intent Extras
     const val PRODUCT = "product"
     const val NO_EMAIL = "no email"
+
+    //Payment
+    const val MERCHENT_ID = "GEHAnc22595306265338"
+    const val MERCHENT_KEY = "Df52XjAjwekpgUHM"
+
 }

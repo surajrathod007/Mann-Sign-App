@@ -133,4 +133,8 @@ dependencies {
     //facebook shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
 
+    //paytm integration
+    //implementation 'com.paytm.appinvokesdk:appinvokesdk:1.6.0'
+    implementation(name:'paytmsdk', ext:'aar')
+
 }

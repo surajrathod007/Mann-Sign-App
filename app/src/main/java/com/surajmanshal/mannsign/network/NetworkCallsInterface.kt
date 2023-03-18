@@ -229,4 +229,7 @@ interface NetworkCallsInterface {
     @POST("products")
     fun fetchProductsByIds(@Body ids: List<Int>): Call<List<Product>>
 
+    //payment
+    @GET("payment/getToken")
+    fun getTransactionToken(@Query("orderId") orderId : String,@Query("email") email : String,@Query("amt") amount : String) : SimpleResponse
 }
