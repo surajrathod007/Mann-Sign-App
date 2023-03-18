@@ -65,20 +65,19 @@
                     android:layout_marginRight="22dp"
                     android:layout_marginTop="34dp"
                     android:orientation="horizontal"
-                    android:weightSum="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <EditText
                         android:id="@+id/editProductCategorySearch"
-                        android:layout_weight="0.8"
                         android:background="@drawable/edittext_bg"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:hint="Search product..."
                         android:paddingLeft="10dp"
                         android:fontFamily="@font/satoshi_medium"
                         android:layout_height="46dp"/>
 
+                    <!--
                     <ImageView
                         android:clickable="true"
                         android:id="@+id/btnFilterProduct"
@@ -87,6 +86,7 @@
                         android:layout_gravity="center"
                         android:layout_weight="0.3"
                         android:src="@drawable/filter_icon"/>
+                        -->
 
                 </LinearLayout>
 
