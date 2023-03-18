@@ -42,6 +42,7 @@ import com.surajmanshal.mannsign.ui.activity.CustomAcpBoardActivity
 import com.surajmanshal.mannsign.ui.activity.CustomBannerActivity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.viewmodel.CustomBannerViewModel
@@ -263,7 +264,7 @@ class CustomOrderFragment : Fragment() {
                 else Log.d("Custom Order Product",it.message)*/
             }
             _currentMaterial.observe(viewLifecycleOwner){
-                binding.txtCustomOrderTotalPrice.text = "Your Product Price : ${getVariantPrice()}"
+                binding.txtCustomOrderTotalPrice.text = "Your Product Price : ₹${getVariantPrice()}"
             }
         }
     }
@@ -271,7 +272,7 @@ class CustomOrderFragment : Fragment() {
     private fun getVariantPrice(): Float {
         val s = createSize()
         return if(vm._currentMaterial.value != null){
-            (s.width*s.width)* vm._currentMaterial.value!!.price
+           (s.width*s.height)* vm._currentMaterial.value!!.price
         }else{
             0f
         }
@@ -353,6 +354,9 @@ class CustomOrderFragment : Fragment() {
         params.width = requireContext().pxToDp(newWidth)
 
         binding.customPosterImage.layoutParams = params
+        //makeToast(requireContext(),"${createSize()}")
+        //re calculate price
+        binding.txtCustomOrderTotalPrice.text = "Your Product Price : ₹${getVariantPrice()}"
 
     }
 

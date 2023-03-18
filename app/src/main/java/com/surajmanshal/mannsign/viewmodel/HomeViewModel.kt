@@ -84,7 +84,7 @@ class HomeViewModel : ViewModel() {
                     val subCats = data.map {
                         it.subCategory
                     }.distinct().toMutableList()
-
+                    subCats.reverse()
                     subCats.forEach {
                         val l = data.filter { p ->
                             p.subCategory == it
