@@ -39,6 +39,7 @@ import java.io.FileOutputStream
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+
 class OrderDetailsActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityOrderDetailsBinding
@@ -105,7 +106,13 @@ class OrderDetailsActivity : AppCompatActivity() {
         binding.btnDownloadInvoice.setOnClickListener {
             makeInvoice()
         }
+        binding.btnMakePayment.setOnClickListener {
+            makePayment()
+        }
 
+    }
+
+    private fun makePayment() {
 
     }
 
