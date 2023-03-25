@@ -11,4 +11,5 @@ class ProductViewHolder(val binding: ProductItemLayoutBinding) :
     val txtProductCategory = binding.txtProductCategory
     val btnAddToWishList = binding.btnAddToWishlist
     val productCard = binding.productCard
+    val viewMoreCard = binding.cardViewMore
 }
