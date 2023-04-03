@@ -25,7 +25,7 @@
         <ImageView
             android:id="@+id/imgProfilePicFrag"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             tools:background="@color/green"
             android:layout_weight="4"
             android:transitionName="fullImage"

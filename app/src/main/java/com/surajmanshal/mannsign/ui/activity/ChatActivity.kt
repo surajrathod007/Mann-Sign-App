@@ -6,17 +6,15 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.os.SystemClock
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.ChatAdapter
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.databinding.ActivityChatBinding
@@ -30,6 +28,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.FileOutputStream
 
 class ChatActivity : AppCompatActivity() {
 
@@ -130,7 +129,16 @@ class ChatActivity : AppCompatActivity() {
             if (!id.isNullOrEmpty() && !email.isNullOrEmpty()) {
 
                 if (imageUri != null) {
-                    val file = File(URIPathHelper().getPath(this@ChatActivity,imageUri!!))
+                    val file = if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q)
+                        File(URIPathHelper().getPath(this@ChatActivity,imageUri!!))
+                    else
+                        File(applicationContext.filesDir, "image.jpg").apply {
+                            val outputStream = FileOutputStream(this)
+                            contentResolver.openInputStream(imageUri!!)?.let {
+                                it.copyTo(outputStream)
+                                it.close()
+                            }
+                        }
                     val requestBody = RequestBody.create(MediaType.parse("image/jpg"), file)
                     val part = MultipartBody.Part.createFormData("product", file.name, requestBody)
                     CoroutineScope(Dispatchers.IO).launch {
