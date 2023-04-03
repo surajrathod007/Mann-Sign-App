@@ -27,6 +27,7 @@ import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
+import com.surajmanshal.mannsign.utils.viewFullScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
@@ -188,8 +189,21 @@ class UserProfileFragment(var token: String?) : Fragment() {
                     txtUserPincodeFrag.text = "-"
                 }
                 if (it.profileImage != null) {
-                    Glide.with(requireActivity()).load(it.profileImage?.let { it1 -> Functions.urlMaker(it1) })
+                    val imgUrl = it.profileImage?.let { it1 -> Functions.urlMaker(it1) }
+                    Glide.with(requireActivity()).load(imgUrl)
                         .error(R.drawable.person_user).circleCrop().into(binding.imgProfilePicFrag)
+
+                    binding.imgProfilePicFrag.apply {
+                        setOnClickListener { it ->
+                            if (imgUrl != null) {
+                                viewFullScreen(requireActivity(),imgUrl)
+                            }
+                            /*requireActivity().supportFragmentManager.beginTransaction()
+                                .add(R.id.viewPager,ViewProfilePicFragment().newInstance(imgUrl))
+                                .addSharedElement(binding.imgProfilePicFrag,"userProfile")
+                                .commit()*/
+                        }
+                    }
                 }
             }
         }

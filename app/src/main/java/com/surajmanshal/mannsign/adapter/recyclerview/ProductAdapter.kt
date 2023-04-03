@@ -12,6 +12,8 @@ import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.ProductItemLayoutBinding
 import com.surajmanshal.mannsign.ui.activity.ProductCategoryDetailsActivity
+import com.surajmanshal.mannsign.ui.activity.ProductDetailsActivity
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
@@ -67,7 +69,9 @@ class ProductAdapter(
                     txtProductName.text = data.posterDetails!!.title
                     txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + data.basePrice.toString()
                     productCard.setOnClickListener {
-
+                        context.startActivity(Intent(context, ProductDetailsActivity::class.java).apply {
+                            putExtra(Constants.PRODUCT,data)
+                        })
                     }
                     wishListDao?.let { wishList ->
                         btnAddToWishList.apply {

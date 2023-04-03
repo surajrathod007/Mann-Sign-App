@@ -34,6 +34,7 @@ import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
 import com.surajmanshal.mannsign.utils.show
+import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -312,7 +313,14 @@ class ProductDetailsActivity : AppCompatActivity() {
                                         val imgUrl = it.images?.find { it.languageId == languageId }
                                             ?.let { it1 -> urlMaker(it1.url) }
 
-                                        Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
+                                        ivProduct.apply {
+                                            Glide.with(this@ProductDetailsActivity).load(imgUrl).into(this)
+                                            if (imgUrl != null) {
+                                                setOnClickListener {
+                                                    viewFullScreen(this@ProductDetailsActivity,imgUrl)
+                                                }
+                                            }
+                                        }
                                         cartVm.setVariantLanguage(languageId)
                                         _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
                                     }
