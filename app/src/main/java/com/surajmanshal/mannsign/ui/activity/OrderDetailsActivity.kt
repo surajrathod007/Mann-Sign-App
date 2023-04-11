@@ -204,7 +204,6 @@ class OrderDetailsActivity : AppCompatActivity() {
             else
                 binding.txtYouHaveToPay.text = "You paid : "
 
-
             if (it.orderStatus == Constants.ORDER_CONFIRMED)
                 binding.btnMakePayment.visibility = View.VISIBLE
             else
@@ -276,13 +275,9 @@ class OrderDetailsActivity : AppCompatActivity() {
             val img = ImageDataFactory.create(bitmapdata)
             val myheader = Image(img)
             document.add(myheader)
-
-
             //first table
             val c: FloatArray = floatArrayOf(220F, 220F, 200F, 180F)
             val table1 = Table(c)
-
-
             // row 1
             table1.addCell(Cell().add(Paragraph("Bill to Party ").setFontSize(10.0f)).setBold())
             table1.addCell(Cell().add(Paragraph("Ship to Party ").setFontSize(10.0f)).setBold())
@@ -292,7 +287,6 @@ class OrderDetailsActivity : AppCompatActivity() {
                     Paragraph(LocalDate.now().toString()).setFontSize(10.0f).setBold()
                 )
             )
-
             //row 2     //TODO : Fetch user address
             table1.addCell(Cell(4, 0).add(Paragraph("").setFontSize(8.0f)))
             table1.addCell(Cell(4, 0).add(Paragraph("").setFontSize(8.0f)))
