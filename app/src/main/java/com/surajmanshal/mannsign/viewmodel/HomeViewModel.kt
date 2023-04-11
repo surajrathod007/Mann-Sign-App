@@ -86,8 +86,11 @@ class HomeViewModel : ViewModel() {
                     }.distinct().toMutableList()
                     subCats.reverse()
                     subCats.forEach {
-                        val l = data.filter { p ->
-                            p.subCategory == it
+                        val l = mutableListOf<Product>().apply{
+                            addAll(data.filter { p ->
+                                p.subCategory == it
+                            })
+                            add(Product(-1).apply { subCategory = it })
                         }
                         mylist.add(MainPoster(subCategory = it.toString(), posters = l))
                     }

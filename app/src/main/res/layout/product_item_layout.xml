@@ -5,17 +5,23 @@
 
     </data>
 
-    <LinearLayout
-        android:id="@+id/productCard"
+    <FrameLayout
+        android:layout_width="146dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/product_bg"
         android:clickable="true"
         android:foreground="?attr/selectableItemBackground"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="10dp"
+        android:theme="@style/satoshiTypeface">
+
+    <LinearLayout
+        android:id="@+id/productCard"
         android:orientation="vertical"
-        android:layout_width="146dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/product_bg">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
 
 
         <ImageView
@@ -52,14 +58,14 @@
             android:layout_weight="1"
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            >
 
             <TextView
                 android:layout_weight="0.7"
                 android:layout_marginTop="4dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="10dp"
-                android:textStyle="bold"
                 android:id="@+id/txtProductPrice"
                 android:text="$20.00"
                 android:fontFamily="@font/satoshi_bold"
@@ -78,4 +84,12 @@
 
 
     </LinearLayout>
+
+        <include layout="@layout/item_view_more_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/cardViewMore"
+            android:visibility="gone"/>
+
+    </FrameLayout>
 </layout>

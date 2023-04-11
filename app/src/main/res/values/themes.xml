@@ -1,6 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Theme.MannSignApp" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowActivityTransitions">true</item>
+        <item name="android:fragmentSharedElementEnterTransition">@transition/image_transition</item>
+        <item name="android:fragmentSharedElementReturnTransition">@transition/image_transition</item>
+        <item name="android:windowSharedElementEnterTransition">@transition/image_transition</item>
+        <item name="android:windowSharedElementExitTransition">@transition/image_transition</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>

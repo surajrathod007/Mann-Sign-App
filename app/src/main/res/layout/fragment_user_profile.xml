@@ -82,7 +82,8 @@
                     android:background="@drawable/profile_image_bg"
                     android:padding="8dp"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/ic_user" />
+                    android:src="@drawable/ic_user"
+                    android:transitionName="fullImage"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/txtUserNameFrag"

@@ -60,6 +60,10 @@
             android:exported="false" />
         <activity
             android:screenOrientation="portrait"
+            android:name=".ui.activity.ImageViewingActivity"
+            android:exported="false" />
+        <activity
+            android:screenOrientation="portrait"
             android:name=".ui.activity.OrderDetailsActivity"
             android:exported="false" />
         <activity

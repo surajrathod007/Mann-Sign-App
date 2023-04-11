@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.adapter
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.view.LayoutInflater
@@ -8,12 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
-import com.surajmanshal.mannsign.data.model.ordering.Message
 import com.surajmanshal.mannsign.databinding.ItemChatImageViewReceiveBinding
 import com.surajmanshal.mannsign.databinding.ItemChatImageViewSentBinding
 import com.surajmanshal.mannsign.databinding.ItemMeMessageBinding
 import com.surajmanshal.mannsign.databinding.ItemOtherMessageBinding
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.viewFullScreen
 
 
 class ChatAdapter(val context: Context, val msg: List<ChatMessage>, val email: String?) :
@@ -84,12 +85,18 @@ class ChatAdapter(val context: Context, val msg: List<ChatMessage>, val email: S
                 txtImageText.text = msg.message
             }
             if (!msg.imageUrl.isNullOrEmpty()) {
+                val imgUrl = Functions.urlMakerChat(msg.imageUrl!!)
                 Glide.with(c)
-                    .load(Uri.parse(Functions.urlMakerChat(msg.imageUrl!!)))
+                    .load(Uri.parse(imgUrl))
                     .placeholder(
                         R.drawable.no_photo
                     )
                     .into(imgSent)
+                imgSent.apply {
+                    setOnClickListener {
+                        viewFullScreen(binding.root.context as Activity,imgUrl)
+                    }
+                }
             }
             txtTimeStamp.text = Functions.timeStampToDate(msg.timeStamp)
         }
@@ -107,12 +114,18 @@ class ChatAdapter(val context: Context, val msg: List<ChatMessage>, val email: S
                 txtImageText.text = msg.message
             }
             if (!msg.imageUrl.isNullOrEmpty()) {
+                val imgUrl = Functions.urlMakerChat(msg.imageUrl!!)
                 Glide.with(c)
-                    .load(Uri.parse(Functions.urlMakerChat(msg.imageUrl!!)))
+                    .load(Uri.parse(imgUrl))
                     .placeholder(
                         R.drawable.no_photo
                     )
                     .into(imgReceive)
+                imgReceive.apply {
+                    setOnClickListener {
+                        viewFullScreen(binding.root.context as Activity , imgUrl)
+                    }
+                }
                 //Functions.makeToast(c, "${msg.imageUrl}")
             }
             txtTimeStamp.text = Functions.timeStampToDate(msg.timeStamp)

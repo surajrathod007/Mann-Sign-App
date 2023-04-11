@@ -31,7 +31,8 @@
                     android:layout_height="240dp"
                     android:layout_gravity="center"
                     android:padding="6dp"
-                    android:scaleType="fitCenter" />
+                    android:scaleType="fitCenter"
+                    android:transitionName="fullImage"/>
 
                 <TextView
                     android:layout_marginLeft="10dp"
