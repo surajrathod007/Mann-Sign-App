@@ -122,7 +122,9 @@ class UserProfileFragment(var token: String?) : Fragment() {
                 startActivity(Intent(requireActivity(), TransactionsActivity::class.java))
             }
             btnEditProfileFrag.setOnClickListener {
-                startActivity(Intent(requireActivity(), ProfileEdit::class.java))
+                startActivity(Intent(requireActivity(), ProfileEdit::class.java).apply{
+                    putExtra("user",mUser)
+                })
             }
             btnLogoutFrag.setOnClickListener {
                 if (!email.isNullOrEmpty()) {
@@ -165,6 +167,7 @@ class UserProfileFragment(var token: String?) : Fragment() {
 
     private fun setupUserDetails(u: User) {
         u.let {
+            mUser = it
             with(binding) {
                 if (!it.firstName.isNullOrEmpty() && !it.lastName.isNullOrEmpty()) {
                     txtUserNameFrag.text = it.firstName + " " + it.lastName
