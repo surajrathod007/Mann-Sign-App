@@ -55,6 +55,7 @@ class ReviewsViewModel : ViewModel() {
                 response: Response<SimpleResponse?>
             ) {
                 with(response.body()!!) {
+                    println(this)
                     if(this.success){
                         getReviewByEmailId(emailId)
                     }
@@ -63,6 +64,7 @@ class ReviewsViewModel : ViewModel() {
             }
 
             override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                println("Occred: $t")
                 _msg.postValue(t.message.toString())
             }
         })
@@ -117,7 +119,7 @@ class ReviewsViewModel : ViewModel() {
                 with(response.body()!!) {
                     if (this.success)
                         _msg.postValue("Review updated successfulyy")
-                        getReviewByEmailId(r.emailId)
+                    getReviewByEmailId(r.emailId)
                 }
             }
             override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {

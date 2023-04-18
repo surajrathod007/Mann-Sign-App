@@ -69,7 +69,7 @@ class ReviewAdapter(val c: Context, val list: List<Review>, val vm: ReviewsViewM
                 }
                 setOnClickListener {
                     vm?.selectReview(review)
-                    //showBottomSheet(c,vm)
+//                    showBottomSheet(c,vm)
                 }
             }
         }

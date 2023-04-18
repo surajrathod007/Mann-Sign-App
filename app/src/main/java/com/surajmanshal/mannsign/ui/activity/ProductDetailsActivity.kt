@@ -6,9 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -37,6 +35,7 @@ import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
+import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -361,7 +360,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         val user = db.getUser(email!!)
         user.observe(this){
             currentUser = it
-            setupProductReviews(emptyList())
+//            setupProductReviews(emptyList())
         }
         binding.rvProductReviews.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
 
@@ -452,7 +451,22 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     fun setupProductReviews(reviews : List<Review>){
         currentUser?.let {
-            binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,null,currentUser)
+
+            var bottomSheet : BottomSheetDialog? = null
+            val reviewViewModel = ViewModelProvider(this)[ReviewsViewModel::class.java]
+            reviewViewModel.msg.observe(this) {
+                Toast.makeText(this@ProductDetailsActivity, it.toString(), Toast.LENGTH_SHORT).show()
+            }
+            reviewViewModel.selectedReview.observe(this) {
+                if (bottomSheet == null){
+                    bottomSheet = showReviewUpdateBottomSheet(this, reviewViewModel)
+                    bottomSheet!!.show()
+                } else {
+                    bottomSheet!!.dismiss()
+                    bottomSheet = null
+                }
+            }
+            binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,reviewViewModel,currentUser)
         }
     }
 
@@ -496,4 +510,22 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
+    fun showReviewUpdateBottomSheet(c : Context,vm: ReviewsViewModel): BottomSheetDialog {
+
+        val bottomSheetDialog = BottomSheetDialog(c, R.style.BottomSheetStyle)
+        val v = LayoutInflater.from(c).inflate(R.layout.update_review_bottom_sheet,null)
+        val ratingBar = v.findViewById<RatingBar>(R.id.ratingBarUpdateReview)
+        val edUpdate = v.findViewById<EditText>(R.id.edUpdateReview)
+        val btnUpdateReview = v.findViewById<ImageView>(R.id.btnUpdateReviewBottomSheet)
+
+        ratingBar.rating = vm.selectedReview.value?.rating!!.toFloat()
+        edUpdate.setText(vm.selectedReview.value!!.comment.toString())
+        btnUpdateReview.setOnClickListener {
+            vm.updateReview(ratingBar.rating,edUpdate.text.toString())
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(v)
+        return bottomSheetDialog
+    }
 }

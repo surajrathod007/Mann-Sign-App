@@ -156,6 +156,7 @@ class ProductsViewModel : ViewModel() {
                 response: Response<SimpleResponse>
             ) {
                 response.body()?.let {
+                    println(it.message)
                     reviewAllowed(it.success)
                 }
             }
