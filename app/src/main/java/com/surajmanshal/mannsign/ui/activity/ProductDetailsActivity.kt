@@ -46,6 +46,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private lateinit var binding : ActivityProductDetailsBinding
     private lateinit var vm : ProductsViewModel
     private lateinit var cartVm : CartViewModel
+    private lateinit var reviewViewModel : ReviewsViewModel
     private var currentUser : UserEntity? = null
     private lateinit var addReviewBottomSheetDialog : BottomSheetDialog
 
@@ -55,6 +56,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
         cartVm = ViewModelProvider(this)[CartViewModel::class.java]
+        reviewViewModel = ViewModelProvider(this)[ReviewsViewModel::class.java]
         window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
@@ -100,6 +102,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             reviewResponse.observe(owner){
                 if(it.success){
                     makeToast(this@ProductDetailsActivity,it.message)
+                    _currentProduct.value?.let { it1 -> fetchProductReview(it1.productId) }
                     addReviewBottomSheetDialog.dismiss()
                 }
             }
@@ -138,9 +141,16 @@ class ProductDetailsActivity : AppCompatActivity() {
                     binding.languageSpinner.tvSpinnerName.text = "Language"
                 }
             })
+
+            reviewViewModel.msg.observe(this@ProductDetailsActivity) {
+                Toast.makeText(this@ProductDetailsActivity, it.toString(), Toast.LENGTH_SHORT).show()
+                _currentProduct.value?.let { it1 -> fetchProductReview(it1.productId) }
+            }
+            reviewViewModel.selectedReview.observe(this@ProductDetailsActivity) {
+                showReviewUpdateBottomSheet(this@ProductDetailsActivity, reviewViewModel).show()
+            }
+
             _currentProductReviews.observe(owner){
-                binding.tvNoReviews.isVisible = it.isEmpty()
-                binding.rvProductReviews.isVisible = it.isNotEmpty()
                 setupProductReviews(it)
             }
 
@@ -451,21 +461,8 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     fun setupProductReviews(reviews : List<Review>){
         currentUser?.let {
-
-            var bottomSheet : BottomSheetDialog? = null
-            val reviewViewModel = ViewModelProvider(this)[ReviewsViewModel::class.java]
-            reviewViewModel.msg.observe(this) {
-                Toast.makeText(this@ProductDetailsActivity, it.toString(), Toast.LENGTH_SHORT).show()
-            }
-            reviewViewModel.selectedReview.observe(this) {
-                if (bottomSheet == null){
-                    bottomSheet = showReviewUpdateBottomSheet(this, reviewViewModel)
-                    bottomSheet!!.show()
-                } else {
-                    bottomSheet!!.dismiss()
-                    bottomSheet = null
-                }
-            }
+            binding.tvNoReviews.isVisible = reviews.isEmpty()
+            binding.rvProductReviews.isVisible = reviews.isNotEmpty()
             binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,reviewViewModel,currentUser)
         }
     }
