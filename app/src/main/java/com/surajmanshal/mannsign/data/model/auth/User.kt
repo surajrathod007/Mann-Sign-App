@@ -12,4 +12,4 @@ data class User(
     var token : String = "",
     var deviceId : String? = null,
     var profilePic : String? = null
-)
+) : java.io.Serializable

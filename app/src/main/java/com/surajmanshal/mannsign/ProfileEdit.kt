@@ -2,30 +2,25 @@ package com.surajmanshal.mannsign
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.databinding.ActivityProfileEditBinding
 import com.surajmanshal.mannsign.network.NetworkService
-import com.surajmanshal.mannsign.repository.Repository
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.user.UserDao
 import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.utils.Constants
-import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.utils.loadRoundedImageWithUrl
-import kotlinx.coroutines.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ProfileEdit : AppCompatActivity() {
 
@@ -43,65 +38,15 @@ class ProfileEdit : AppCompatActivity() {
         imageUploading = ImageUploading(this)
         d = LoadingScreen(this)
         dd = d.loadingScreen()
-
-        val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val e = sharedPreferences.getString("email", "no email")
+        mUser = intent.extras?.get("user") as User
 
         userDatabase = LocalDatabase.getDatabase(this).userDao()
 
-        val user = userDatabase.getUser(e!!)
-        user.observe(this){
-            if(it.firstName==null){
-                // fetch from server
-                val user = MutableLiveData<User>().apply {
-                    observe(this@ProfileEdit){
-                        with(binding){
-                            editEmailName.setText(it.emailId)
-                            editFirstName.setText(it.firstName)
-                            editLastName.setText(it.lastName)
-                            editPhone.setText(it.phoneNumber)
-                            editAddress.setText(it.address)
-//                            it.pinCode?.let { it1 -> etPinCode.setText(it1) }
-                            Glide.with(this@ProfileEdit).load(it.profileImage?.let { it1 ->
-                                Functions.urlMaker(
-                                    it1
-                                )
-                            }).circleCrop().into(binding.ivProfilePic)
-                        }
-                    }
-                }
-                CoroutineScope(Dispatchers.IO).launch {
-                        Repository().fetchUserByEmail(it.emailId).enqueue(object :
-                            Callback<User?> {
-                            override fun onResponse(call: Call<User?>, response: Response<User?>) {
-                                response.body()?.let { user.postValue(it) }
-                            }
-
-                            override fun onFailure(call: Call<User?>, t: Throwable) {
-                                println("Failed to fetch user : $t")
-                            }
-
-                        })
-                    }
-                    return@observe
-                }
-
-            Glide.with(this).load(it.profileImage?.let { it1 -> Functions.urlMaker(it1) })
-                .error(R.drawable.person_user).circleCrop().into(binding.ivProfilePic)
-            mUser.profileImage = it.profileImage
-            binding.editFirstName.setText(it.firstName)
-            binding.editLastName.setText(it.lastName)
-            binding.editAddress.setText(it.address)
-            binding.editPhone.setText(it.phoneNumber)
-            binding.editEmailName.setText(it.emailId)
-            it.pinCode?.let { it1 -> binding.etPinCode.setText(it1.toString()) }
-        }
-
-
+        // Profile Image Uploading
         imageUploading.imageUploadResponse.observe(this){ response ->
             if(response.success){
                 val data = response.message as String /*as LinkedTreeMap<String, Any>*/
-                binding.ivProfilePic.loadRoundedImageWithUrl(data)
+//                binding.ivProfilePic.loadRoundedImageWithUrl(data)
                 CoroutineScope(Dispatchers.IO).launch {
                     val res = NetworkService.networkInstance.updateUserProfilePic(
                         binding.editEmailName.text.toString(),
@@ -113,20 +58,33 @@ class ProfileEdit : AppCompatActivity() {
                         Toast.makeText(this@ProfileEdit, "Profile Picture Updated", Toast.LENGTH_SHORT).show()
                     }
                 }
-            }else Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                println(response.message)
+            }
         }
 
         with(binding) {
 
-            ivProfilePic.setOnClickListener { imageUploading.chooseProfileImageFromGallary() }
+            mUser.let {
+                editFirstName.setText(it.firstName)
+                editLastName.setText(it.lastName)
+                editAddress.setText(it.address)
+                editPhone.setText(it.phoneNumber)
+                editEmailName.setText(it.emailId)
+                it.pinCode?.let { it1 -> binding.etPinCode.setText(it1.toString()) }
+            }
+
+            ivProfilePic.apply {
+                mUser.profileImage?.let { loadRoundedImageWithUrl(it) }
+                setOnClickListener { imageUploading.chooseProfileImageFromGallary() }
+            }
 
             btnUpdateProfile.setOnClickListener {
                 onBackPressed()
             }
-
-
         }
-        fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
     }
 
     override fun onBackPressed() {
@@ -178,7 +136,7 @@ class ProfileEdit : AppCompatActivity() {
 
             try {
 
-                GlobalScope.launch(Dispatchers.IO) {
+                CoroutineScope(Dispatchers.IO).launch {
                     val res = NetworkService.networkInstance.updateUser(
                         User(
                             emailId = editEmailName.text.toString(),

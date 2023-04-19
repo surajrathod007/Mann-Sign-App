@@ -6,9 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -37,6 +35,7 @@ import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
+import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +46,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private lateinit var binding : ActivityProductDetailsBinding
     private lateinit var vm : ProductsViewModel
     private lateinit var cartVm : CartViewModel
+    private lateinit var reviewViewModel : ReviewsViewModel
     private var currentUser : UserEntity? = null
     private lateinit var addReviewBottomSheetDialog : BottomSheetDialog
 
@@ -56,6 +56,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
         cartVm = ViewModelProvider(this)[CartViewModel::class.java]
+        reviewViewModel = ViewModelProvider(this)[ReviewsViewModel::class.java]
         window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
@@ -101,6 +102,7 @@ class ProductDetailsActivity : AppCompatActivity() {
             reviewResponse.observe(owner){
                 if(it.success){
                     makeToast(this@ProductDetailsActivity,it.message)
+                    _currentProduct.value?.let { it1 -> fetchProductReview(it1.productId) }
                     addReviewBottomSheetDialog.dismiss()
                 }
             }
@@ -139,9 +141,16 @@ class ProductDetailsActivity : AppCompatActivity() {
                     binding.languageSpinner.tvSpinnerName.text = "Language"
                 }
             })
+
+            reviewViewModel.msg.observe(this@ProductDetailsActivity) {
+                Toast.makeText(this@ProductDetailsActivity, it.toString(), Toast.LENGTH_SHORT).show()
+                _currentProduct.value?.let { it1 -> fetchProductReview(it1.productId) }
+            }
+            reviewViewModel.selectedReview.observe(this@ProductDetailsActivity) {
+                showReviewUpdateBottomSheet(this@ProductDetailsActivity, reviewViewModel).show()
+            }
+
             _currentProductReviews.observe(owner){
-                binding.tvNoReviews.isVisible = it.isEmpty()
-                binding.rvProductReviews.isVisible = it.isNotEmpty()
                 setupProductReviews(it)
             }
 
@@ -361,7 +370,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         val user = db.getUser(email!!)
         user.observe(this){
             currentUser = it
-            setupProductReviews(emptyList())
+//            setupProductReviews(emptyList())
         }
         binding.rvProductReviews.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
 
@@ -452,7 +461,9 @@ class ProductDetailsActivity : AppCompatActivity() {
 
     fun setupProductReviews(reviews : List<Review>){
         currentUser?.let {
-            binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,null,currentUser)
+            binding.tvNoReviews.isVisible = reviews.isEmpty()
+            binding.rvProductReviews.isVisible = reviews.isNotEmpty()
+            binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,reviewViewModel,currentUser)
         }
     }
 
@@ -496,4 +507,22 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
+    fun showReviewUpdateBottomSheet(c : Context,vm: ReviewsViewModel): BottomSheetDialog {
+
+        val bottomSheetDialog = BottomSheetDialog(c, R.style.BottomSheetStyle)
+        val v = LayoutInflater.from(c).inflate(R.layout.update_review_bottom_sheet,null)
+        val ratingBar = v.findViewById<RatingBar>(R.id.ratingBarUpdateReview)
+        val edUpdate = v.findViewById<EditText>(R.id.edUpdateReview)
+        val btnUpdateReview = v.findViewById<ImageView>(R.id.btnUpdateReviewBottomSheet)
+
+        ratingBar.rating = vm.selectedReview.value?.rating!!.toFloat()
+        edUpdate.setText(vm.selectedReview.value!!.comment.toString())
+        btnUpdateReview.setOnClickListener {
+            vm.updateReview(ratingBar.rating,edUpdate.text.toString())
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.setContentView(v)
+        return bottomSheetDialog
+    }
 }
