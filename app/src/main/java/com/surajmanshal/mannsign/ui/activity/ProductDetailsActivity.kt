@@ -49,6 +49,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private lateinit var reviewViewModel : ReviewsViewModel
     private var currentUser : UserEntity? = null
     private lateinit var addReviewBottomSheetDialog : BottomSheetDialog
+    var email : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,16 +61,11 @@ class ProductDetailsActivity : AppCompatActivity() {
         window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val email = sharedPreferences.getString("email",Constants.NO_EMAIL)
+        email = sharedPreferences.getString("email",Constants.NO_EMAIL)
         vm._currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
 
         with(cartVm){
 
-            vm._currentProduct.value?.let {
-                if (email != null) {
-                    cartVm.getMyCartVariants(email, it.productId)
-                }
-            }
             // Observers ----------------------------------------------------------------------------------
 
             _selectedVariant.observe(owner){
@@ -171,11 +167,13 @@ class ProductDetailsActivity : AppCompatActivity() {
                     subCategory?.let { subCategoryId -> getSubCategoryById(subCategoryId) }
                     fetchProductReview(productId)
                     // Check for review allowed or not
-                    if (email != null) {
-                        canReview(email,productId){
-                            if(it) allowReview(email,productId)
+
+                    email?.let { mail ->
+                        canReview(mail,productId){
+                            if(it) allowReview(mail,productId)
                         }
                     }
+
                 }
                 with(binding){
                     if(product.images?.isNotEmpty() == true)
@@ -374,6 +372,14 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
         binding.rvProductReviews.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        vm._currentProduct.value?.let {
+            email?.let { it1 -> cartVm.getMyCartVariants(it1, it.productId) }
+            cartVm.refreshVariant()
+        }
     }
 
     override fun onBackPressed() {
