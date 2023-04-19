@@ -271,10 +271,10 @@ class CustomOrderFragment : Fragment() {
 
     private fun getVariantPrice(): Float {
         val s = createSize()
-        return if(vm._currentMaterial.value != null){
+        return if(s.width!=1 || s.height != 1){
            (s.width*s.height)* vm._currentMaterial.value!!.price
         }else{
-            0f
+            0.0f
         }
     }
 

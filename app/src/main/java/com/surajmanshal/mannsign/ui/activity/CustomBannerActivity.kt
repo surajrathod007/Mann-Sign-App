@@ -246,7 +246,7 @@ class CustomBannerActivity : AppCompatActivity() {
                  else Log.d("Custom Order Product",it.message)*/
              }
              _currentMaterial.observe(this@CustomBannerActivity){
-                 binding.txtCustomOrderTotalPrice.text = "Your Product Price : ${getVariantPrice()}"
+                 binding.txtCustomOrderTotalPrice.text = "Your Product Price is : ${getVariantPrice()}"
              }
          }
     }
@@ -256,7 +256,7 @@ class CustomBannerActivity : AppCompatActivity() {
         return if(vm._currentMaterial.value != null){
             (s.width*s.width)* vm._currentMaterial.value!!.price
         }else{
-            0f
+            0.0f
         }
     }
 
