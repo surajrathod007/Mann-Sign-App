@@ -111,26 +111,30 @@
                 android:layout_width="match_parent"
                 android:layout_height="240dp"/>
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_marginVertical="10dp"
-                android:weightSum="1"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="66dp">
 
                 <EditText
+                    app:layout_constraintEnd_toStartOf="@id/btnAddChatImage"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     android:background="@drawable/gridview_bg"
                     android:fontFamily="@font/satoshi_medium"
                     android:textColor="@color/title_text_color"
                     android:layout_gravity="center"
-                    android:layout_weight="0.8"
                     android:id="@+id/edMessage"
                     android:textSize="16sp"
                     android:hint="Enter your message..."
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"/>
 
                 <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/btnSendMessage"
                     android:id="@+id/btnAddChatImage"
                     android:clickable="true"
                     android:foreground="?attr/selectableItemBackground"
@@ -140,6 +144,8 @@
                     android:layout_height="40dp"/>
 
                 <ImageView
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     android:layout_gravity="center"
                     android:clickable="true"
                     android:layout_weight="0.2"
@@ -147,14 +153,14 @@
                     android:src="@drawable/ic_baseline_send_24"
                     android:background="@drawable/round_send_button_bg"
                     android:textAllCaps="false"
-                    android:layout_width="24dp"
-                    android:padding="16dp"
-                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
                     android:layout_marginVertical="4dp"/>
 
 
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
 

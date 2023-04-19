@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.CartItem
 import com.surajmanshal.mannsign.data.model.ordering.Carts
 import com.surajmanshal.mannsign.data.response.SimpleResponse
@@ -181,12 +182,32 @@ class CartViewModel : ViewModel() {
         })
     }
 
+    fun getUser(email : String,user : (User?)-> Unit){
+        val r = db.fetchUserByEmail(email)
+        r.enqueue(object : Callback<User?> {
+            override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                if(response.body()!=null){
+                    user(response.body()!!)
+                }else{
+                    user(null)
+                    _msg.postValue("Error while fetching user")
+                }
+            }
+
+            override fun onFailure(call: Call<User?>, t: Throwable) {
+                _msg.postValue("Failure while fetching user ${t.message}")
+                user(null)
+            }
+        })
+    }
+
     fun getArea(){
         val r = db.fetchAreas()
         r.enqueue(object : Callback<List<Area>?> {
             override fun onResponse(call: Call<List<Area>?>, response: Response<List<Area>?>) {
                 if(response.body()!=null){
                     _areas.postValue(response.body()!!)
+
                     _delivery.postValue(response.body()!!.random().minCharge)       //TODO : Get for the user address
                 }
             }
