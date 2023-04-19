@@ -25,6 +25,7 @@ import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.google.gson.internal.LinkedTreeMap
 import com.surajmanshal.mannsign.ImageUploading
 import com.surajmanshal.mannsign.R
@@ -40,6 +41,7 @@ import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.FragmentCustomOrderBinding
 import com.surajmanshal.mannsign.ui.activity.CustomAcpBoardActivity
 import com.surajmanshal.mannsign.ui.activity.CustomBannerActivity
+import com.surajmanshal.mannsign.ui.activity.OrderPlacedActivity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
@@ -266,6 +268,27 @@ class CustomOrderFragment : Fragment() {
             _currentMaterial.observe(viewLifecycleOwner){
                 binding.txtCustomOrderTotalPrice.text = "Your Product Price : ₹${getVariantPrice()}"
             }
+            orderPlaced.observe(viewLifecycleOwner){
+                if(it){
+                    clearValues()
+                    startActivity(Intent(requireContext(),OrderPlacedActivity::class.java))
+                    vm.orderPlaced.postValue(false)
+                }
+            }
+        }
+    }
+
+    private fun clearValues() {
+        with(binding){
+            Glide.with(requireContext()).load(R.drawable.choose_image_final).into(customPosterImage)
+            edWidth.setText("1")
+            edHeight.setText("1")
+            edPosterTitle.setText(null)
+            edPosterDescription.setText(null)
+            txtAspectRatio.text = "Aspect ratio : 1:1"
+            txtAspectRatioHint.text = ""
+            txtCustomOrderTotalPrice.text = "Amount to pay : 0.0"
+
         }
     }
 

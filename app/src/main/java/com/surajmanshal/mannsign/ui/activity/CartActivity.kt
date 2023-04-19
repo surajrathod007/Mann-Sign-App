@@ -142,10 +142,11 @@ class CartActivity : AppCompatActivity() {
                 loadCarts(email!!)
                 vm.clearValues()
                 vm.setScrollVisibility(false)
-                val b = AlertDialog.Builder(this)
-                b.setTitle("Your order is placed !")
-                b.setMessage("Thanks you for ordering from mann sign ;)")
-                b.show()
+//                val b = AlertDialog.Builder(this)
+//                b.setTitle("Your order is placed !")
+//                b.setMessage("Thanks you for ordering from mann sign ;)")
+//                b.show()
+                startActivity(Intent(this@CartActivity,OrderPlacedActivity::class.java))
             }
         }
         //buttons
