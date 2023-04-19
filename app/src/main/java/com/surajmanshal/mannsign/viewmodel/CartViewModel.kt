@@ -72,9 +72,9 @@ class CartViewModel : ViewModel() {
                     it.cartItemId
                 }
                 _cartItems.postValue(list)
-                if(list.isEmpty()){
+                /*if(list.isEmpty()){
                     _msg.postValue("No Cart Items !")
-                }
+                }*/
                 isLoading.postValue(false)
             }
 
