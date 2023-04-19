@@ -195,13 +195,13 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                     product.posterDetails?.let {
                         binding.tvTitle.text = title
-                        if(it.long_desc!!.length > 64){
+                        if(!it.long_desc.isNullOrEmpty() &&  it.long_desc.length> 64 ){
                             Functions.addReadMore(
-                                it.long_desc,
+                                it.long_desc!!,
                                 binding.tvProductDescriptionLong,
                                 binding.tvProductDescriptionShort
                             )
-                        }else{
+                        }else if(!it.long_desc.isNullOrEmpty()){
                             binding.tvProductDescriptionShort.text = product.posterDetails!!.long_desc!!
                         }
                     }
