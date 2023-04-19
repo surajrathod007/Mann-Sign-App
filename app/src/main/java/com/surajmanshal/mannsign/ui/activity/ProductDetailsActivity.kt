@@ -192,15 +192,17 @@ class ProductDetailsActivity : AppCompatActivity() {
                     }
 
                     product.posterDetails?.let {
-                        binding.tvTitle.text = title
-                        if(!it.long_desc.isNullOrEmpty() &&  it.long_desc.length> 64 ){
+                        binding.tvTitle.text = it.title
+                        if(it.short_desc.isNotEmpty() &&  !it.long_desc.isNullOrEmpty() ){
                             Functions.addReadMore(
-                                it.long_desc!!,
+                                it.long_desc,
                                 binding.tvProductDescriptionLong,
                                 binding.tvProductDescriptionShort
                             )
                         }else if(!it.long_desc.isNullOrEmpty()){
-                            binding.tvProductDescriptionShort.text = product.posterDetails!!.long_desc!!
+                            binding.tvProductDescriptionShort.apply {
+                                text = it.short_desc
+                            }
                         }
                     }
 
