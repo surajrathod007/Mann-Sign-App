@@ -131,7 +131,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         val btnOrders = sheetView.findViewById<LinearLayout>(R.id.btnOrdersBottomSheet)
         val btnMyReviews = sheetView.findViewById<LinearLayout>(R.id.btnMyReviewsBottomSheet)
-        val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
+        //val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
         val btnTransactions = sheetView.findViewById<LinearLayout>(R.id.btnTransactionsBottomSheet)
         val btnLogout = sheetView.findViewById<LinearLayout>(R.id.btnLogoutBottomSheet)
         val logoutText = sheetView.findViewById<TextView>(R.id.btnLogOutText)
@@ -147,6 +147,8 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
             startActivity(Intent(requireActivity(), ReviewsActivity::class.java))
         }
 
+        //Not in use
+        /*
         btnProfile.setOnClickListener {
             if(!email.isNullOrEmpty()){
                 if(isMinProfileSetupDone) startActivity(Intent(requireActivity(), ProfileActivity::class.java))
@@ -155,6 +157,8 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
                 startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
             }
         }
+
+         */
 
         btnTransactions.setOnClickListener {
             startActivity(Intent(requireActivity(), TransactionsActivity::class.java))

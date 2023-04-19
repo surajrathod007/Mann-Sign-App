@@ -219,7 +219,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/satoshi_medium"
-                            android:hint="Enter poster description"
+                            android:hint="Describe your needs"
                             android:textColor="@color/title_text_color" />
                     </com.google.android.material.textfield.TextInputLayout>
 
