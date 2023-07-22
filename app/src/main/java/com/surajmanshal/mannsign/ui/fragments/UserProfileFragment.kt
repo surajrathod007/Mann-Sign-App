@@ -37,12 +37,13 @@ import retrofit2.Callback
 import retrofit2.Response
 
 //TODO : Remove static text values in xml file for firstname etc.
-class UserProfileFragment(var token: String?) : Fragment() {
+class UserProfileFragment() : Fragment() {
 
     lateinit var binding: FragmentUserProfileBinding
     lateinit var userDatabase: UserDao
     var mUser: User = User()
     var email: String? = null
+    var token: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

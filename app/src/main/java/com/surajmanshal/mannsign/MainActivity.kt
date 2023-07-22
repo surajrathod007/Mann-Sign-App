@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity() {
         token = intent.getStringExtra(DataStore.JWT_TOKEN)
 
 
-        binding.viewPager.isUserInputEnabled = false
 
         permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
             isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
@@ -44,14 +43,14 @@ class MainActivity : AppCompatActivity() {
 
 
         requestPermission()
-        setupViewPager()
+        //setupViewPager()
 
     }
 
     private fun setupViewPager(){
-        val flist = listOf(HomeFragment(token),CustomOrderFragment(),UserProfileFragment(token))
-        binding.viewPager.adapter = MainViewPagerAdapter(flist,this@MainActivity)
-        binding.bottomNavigationView.setupWithViewPager2(binding.viewPager)
+        //val flist = listOf(HomeFragment(token),CustomOrderFragment(),UserProfileFragment(token))
+        //binding.viewPager.adapter = MainViewPagerAdapter(flist,this@MainActivity)
+        //binding.bottomNavigationView.setupWithViewPager2(binding.viewPager)
     }
 
     fun requestPermission(){

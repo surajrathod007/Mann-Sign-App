@@ -15,6 +15,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
@@ -29,6 +30,7 @@ import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.ui.activity.*
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
@@ -39,12 +41,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
-class HomeFragment(var jwttoken : String?) : Fragment() {
+class HomeFragment() : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var bottomMenu: BottomSheetDialog
     lateinit var vm: HomeViewModel
-    lateinit var bottomNavigation: AnimatedBottomBar
+    var jwttoken : String?=null
+    //lateinit var bottomNavigation: AnimatedBottomBar
 
     var email : String? = ""
     var token : String? = ""
@@ -89,7 +92,7 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
         }
 
 
-        bottomNavigation = requireActivity().findViewById(R.id.bottomNavigationView)
+        //bottomNavigation = requireActivity().findViewById(R.id.bottomNavigationView)
         binding.btnHamBurgur.setOnClickListener {
             showBottomMenu()
         }
@@ -131,10 +134,11 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
 
         val btnOrders = sheetView.findViewById<LinearLayout>(R.id.btnOrdersBottomSheet)
         val btnMyReviews = sheetView.findViewById<LinearLayout>(R.id.btnMyReviewsBottomSheet)
-        //val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
+        val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
         val btnTransactions = sheetView.findViewById<LinearLayout>(R.id.btnTransactionsBottomSheet)
         val btnLogout = sheetView.findViewById<LinearLayout>(R.id.btnLogoutBottomSheet)
         val logoutText = sheetView.findViewById<TextView>(R.id.btnLogOutText)
+        //val btnProfile = sheetView.findViewById<TextView>(R.id.btnProfile)
 
         if(email.isNullOrEmpty()){
             logoutText.text = "Login"
@@ -143,6 +147,15 @@ class HomeFragment(var jwttoken : String?) : Fragment() {
             startActivity(Intent(requireActivity(), OrdersActivity::class.java))
         }
 
+        btnProfile.setOnClickListener {
+            try{
+                findNavController().navigate(R.id.action_homeFragment_to_userProfileFragment)
+                bottomMenu.dismiss()
+            }catch (e : Exception){
+                makeToast(requireContext(),e.message.toString(),true)
+            }
+
+        }
         btnMyReviews.setOnClickListener {
             startActivity(Intent(requireActivity(), ReviewsActivity::class.java))
         }
