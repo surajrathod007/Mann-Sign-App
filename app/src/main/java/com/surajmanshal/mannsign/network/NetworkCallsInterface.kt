@@ -232,4 +232,6 @@ interface NetworkCallsInterface {
     //payment
     @GET("payment/getToken")
     fun getTransactionToken(@Query("orderId") orderId : String,@Query("email") email : String,@Query("amt") amount : String) : SimpleResponse
+    @GET("pp")
+    fun getPP() : Call<SimpleResponse>
 }

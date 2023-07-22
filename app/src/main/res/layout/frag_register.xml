@@ -189,40 +189,49 @@
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
-            <androidx.appcompat.widget.LinearLayoutCompat
+            <TextView
+                android:id="@+id/tvTAndC"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_high"
-                android:orientation="horizontal"
-                android:paddingBottom="@dimen/padding_medium"
-                android:weightSum="1">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:fontFamily="@font/satoshi_regular"
-                    android:gravity="right"
-                    android:text="Already have an account ? "
-                    android:textColor="@color/title_text"
-                    android:textSize="12sp" />
-
-                <TextView
-                    android:id="@+id/tvLoginHere"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:fontFamily="@font/satoshi_regular"
-                    android:text="Log In Here"
-                    android:textColor="@color/buttonColor"
-                    android:textSize="12sp"
-                    android:textStyle="bold|italic" />
-
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                android:gravity="center"
+                android:textSize="13sp"
+                tools:text="By Signing Up you agree to MannSign Terms and Conditions and Privacy Policy"
+                android:layout_marginTop="@dimen/margin_medium"/>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
     </ScrollView>
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_high"
+        android:orientation="horizontal"
+        android:paddingBottom="@dimen/padding_medium"
+        android:weightSum="1"
+        android:layout_gravity="bottom">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:fontFamily="@font/satoshi_regular"
+            android:gravity="right"
+            android:text="Already have an account ? "
+            android:textColor="@color/title_text"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tvLoginHere"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:fontFamily="@font/satoshi_regular"
+            android:text="Log In Here"
+            android:textColor="@color/buttonColor"
+            android:textSize="12sp"
+            android:textStyle="bold|italic" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
 </FrameLayout>

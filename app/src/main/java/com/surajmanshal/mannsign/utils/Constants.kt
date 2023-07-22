@@ -42,4 +42,8 @@ object Constants {
     const val MERCHENT_ID = "GEHAnc22595306265338"
     const val MERCHENT_KEY = "Df52XjAjwekpgUHM"
 
+
+    // Policy URLS
+    const val URL_PRIVACY_POLICY = "https://manshal-git.github.io/MannSign/policy/privacy%20policy.html"
+    const val URL_TERMS_OF_SERVICE = "https://manshal-git.github.io/MannSign/policy/terms%20of%20service.html"
 }

@@ -8,33 +8,41 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
 import android.text.TextUtils
 import android.text.TextWatcher
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.R
-import com.surajmanshal.mannsign.customviews.*
+import com.surajmanshal.mannsign.customviews.MorphButton
+import com.surajmanshal.mannsign.customviews.dp
+import com.surajmanshal.mannsign.customviews.getColorX
+import com.surajmanshal.mannsign.customviews.getDrawableX
+import com.surajmanshal.mannsign.customviews.sp
 import com.surajmanshal.mannsign.data.model.auth.User
-import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragRegisterBinding
+import com.surajmanshal.mannsign.databinding.FragmentPolicyPageBinding
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,7 +92,12 @@ class RegisterFrag : Fragment() {
             toTextColor = getColorX(R.color.black)
             text = "Send Otp"
             textSize = 16 * sp()
-            setPadding((32 * dp()).toInt(), (16 * dp()).toInt(), (32 * dp()).toInt(), (16 * dp()).toInt())
+            setPadding(
+                (32 * dp()).toInt(),
+                (16 * dp()).toInt(),
+                (32 * dp()).toInt(),
+                (16 * dp()).toInt()
+            )
             iconDrawable = getDrawableX(R.drawable.ic_sync).apply {
                 setTint(getColorX(R.color.white))
             }
@@ -117,6 +130,62 @@ class RegisterFrag : Fragment() {
             }
         }
 
+        val strPrivacyPolicy = "Privacy Policy"
+        val strTermsAndConditions = "Terms & Conditions"
+        val agreement = "By Signing Up you agree to MannSign $strTermsAndConditions and $strPrivacyPolicy"
+        val tncStart = agreement.indexOf(strTermsAndConditions)
+        val privacyStart = agreement.indexOf(strPrivacyPolicy)
+        val txtSpannaleString = SpannableString(agreement).apply{
+
+            fun showPolicyDialog(url:String){
+                Dialog(requireContext()).apply {
+
+                    val binding = FragmentPolicyPageBinding.bind(
+                        inflater.inflate(
+                            R.layout.fragment_policy_page,
+                            container,
+                            false
+                        )
+                    )
+                    binding.contentView.loadUrl(url)
+                    setContentView(
+                        binding.root
+                    )
+                    show()
+                }
+            }
+
+            setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(p0: View) {
+                        showPolicyDialog(Constants.URL_TERMS_OF_SERVICE)
+                    }
+                    override fun updateDrawState(txtPaint: TextPaint) {
+                        super.updateDrawState(txtPaint)
+                        txtPaint.isUnderlineText = false
+                        txtPaint.color = AppCompatResources.getColorStateList(requireContext(),R.color.buttonColor).defaultColor
+                    }
+                },tncStart,tncStart+strTermsAndConditions.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            setSpan(
+                object : ClickableSpan() {
+                    override fun onClick(p0: View) {
+                        showPolicyDialog(Constants.URL_PRIVACY_POLICY)
+                    }
+                    override fun updateDrawState(txtPaint: TextPaint) {
+                        super.updateDrawState(txtPaint)
+                        txtPaint.isUnderlineText = false
+                        txtPaint.color = AppCompatResources.getColorStateList(requireContext(),R.color.buttonColor).defaultColor
+                    }
+                },privacyStart,privacyStart+strPrivacyPolicy.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+
+        binding.tvTAndC.apply {
+            text = txtSpannaleString
+            movementMethod = LinkMovementMethod.getInstance()
+        }
+
         return view
     }
 
@@ -144,8 +213,9 @@ class RegisterFrag : Fragment() {
 
             binding.btnVerifyEmail.setUIState(MorphButton.UIState.Loading)
             binding.btnVerifyEmail.isEnabled = false
-            Functions.makeToast(requireContext(),"Sending Otp please wait...")
-            val r = NetworkService.networkInstance.sendOtpNew(binding.ETEmail.text?.trim().toString())
+            Functions.makeToast(requireContext(), "Sending Otp please wait...")
+            val r =
+                NetworkService.networkInstance.sendOtpNew(binding.ETEmail.text?.trim().toString())
             r.enqueue(object : Callback<SimpleResponse?> {
                 override fun onResponse(
                     call: Call<SimpleResponse?>,
@@ -163,7 +233,7 @@ class RegisterFrag : Fragment() {
                 }
 
                 override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
-                    Functions.makeToast(requireContext(),"${t.message}")
+                    Functions.makeToast(requireContext(), "${t.message}")
                     binding.btnVerifyEmail.apply {
                         text = "Send otp"
                         setUIState(MorphButton.UIState.Button)
