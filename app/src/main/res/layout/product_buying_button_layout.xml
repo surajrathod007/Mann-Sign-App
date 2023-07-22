@@ -96,9 +96,18 @@
         android:textAllCaps="false"
         android:text="@string/add_to_cart"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_weight="1.9"
-        android:layout_margin="8dp" />
+        android:layout_margin="8dp"
+        />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabCallNow"
+            android:layout_margin="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_phone"
+            />
 
     </LinearLayout>
 

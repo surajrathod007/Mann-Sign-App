@@ -3,10 +3,16 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -39,17 +45,18 @@ import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
 import java.time.LocalDateTime
 
 class ProductDetailsActivity : AppCompatActivity() {
 
-    private lateinit var binding : ActivityProductDetailsBinding
-    private lateinit var vm : ProductsViewModel
-    private lateinit var cartVm : CartViewModel
-    private lateinit var reviewViewModel : ReviewsViewModel
-    private var currentUser : UserEntity? = null
-    private lateinit var addReviewBottomSheetDialog : BottomSheetDialog
-    var email : String? = null
+    private lateinit var binding: ActivityProductDetailsBinding
+    private lateinit var vm: ProductsViewModel
+    private lateinit var cartVm: CartViewModel
+    private lateinit var reviewViewModel: ReviewsViewModel
+    private var currentUser: UserEntity? = null
+    private lateinit var addReviewBottomSheetDialog: BottomSheetDialog
+    var email: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,43 +68,44 @@ class ProductDetailsActivity : AppCompatActivity() {
         window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        email = sharedPreferences.getString("email",Constants.NO_EMAIL)
+        email = sharedPreferences.getString("email", Constants.NO_EMAIL)
         vm._currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
 
-        with(cartVm){
+        with(cartVm) {
 
             // Observers ----------------------------------------------------------------------------------
 
-            _selectedVariant.observe(owner){
-                with(binding.productBuyingLayout){
-                    tvVariantPrice.text = resources.getString(R.string.selected_variant_price)+it.variantPrice
+            _selectedVariant.observe(owner) {
+                with(binding.productBuyingLayout) {
+                    tvVariantPrice.text =
+                        resources.getString(R.string.selected_variant_price) + it.variantPrice
                     tvAmount.text = "${it.variantPrice?.times(evQty.text.toString().toInt())}"
                 }
                 it.productId?.let { it1 -> setupButtonAction(email!!, it1) }
             }
 
-            _selectedSize.observe(owner){
+            _selectedSize.observe(owner) {
                 calculateVariantPrice()
             }
-            _selectedMaterial.observe(owner){
+            _selectedMaterial.observe(owner) {
                 calculateVariantPrice()
             }
 
-            _currrentProductInCartVariants.observe(owner){
+            _currrentProductInCartVariants.observe(owner) {
                 vm._currentProduct.value?.let { it1 -> setupButtonAction(email!!, it1.productId) }
             }
 
-            cartVm.serverResponse.observe(owner){
+            cartVm.serverResponse.observe(owner) {
                 Toast.makeText(owner, it.message, Toast.LENGTH_SHORT).show()
             }
 
         }
-        with(vm){
+        with(vm) {
 
             // Observers ----------------------------------------------------------------------------------
-            reviewResponse.observe(owner){
-                if(it.success){
-                    makeToast(this@ProductDetailsActivity,it.message)
+            reviewResponse.observe(owner) {
+                if (it.success) {
+                    makeToast(this@ProductDetailsActivity, it.message)
                     _currentProduct.value?.let { it1 -> fetchProductReview(it1.productId) }
                     addReviewBottomSheetDialog.dismiss()
                 }
@@ -109,14 +117,14 @@ class ProductDetailsActivity : AppCompatActivity() {
             _currentProductSubCategory.observe(owner, Observer {
                 setupSubCategoryView(it.name)
             })
-            _currentProductMaterial.observe(owner, Observer { materials->
+            _currentProductMaterial.observe(owner, Observer { materials ->
                 mutableListOf<String>().apply {
                     materials.forEach {
                         add(it.name)
-                        if(isNotEmpty()) binding.materialSpinner.spinner.setSelection(0)
-                        if(size== materials.size){
+                        if (isNotEmpty()) binding.materialSpinner.spinner.setSelection(0)
+                        if (size == materials.size) {
                             binding.materialSpinner.spinner.adapter =
-                                MaterialSpinnerAdapter(this@ProductDetailsActivity,materials)
+                                MaterialSpinnerAdapter(this@ProductDetailsActivity, materials)
                             cartVm._selectedMaterial.value = materials[0]
                         }
                     }
@@ -128,10 +136,10 @@ class ProductDetailsActivity : AppCompatActivity() {
                 mutableListOf<String>().apply {
                     languages.forEach {
                         add(it.name)
-                        if(isNotEmpty()) binding.languageSpinner.spinner.setSelection(0)
-                        if(size== languages.size){
+                        if (isNotEmpty()) binding.languageSpinner.spinner.setSelection(0)
+                        if (size == languages.size) {
                             cartVm._selectedLanguage.value = languages[0]
-                            setupSpinner(binding.languageSpinner.spinner,this)
+                            setupSpinner(binding.languageSpinner.spinner, this)
                         }
                     }
                     binding.languageSpinner.tvSpinnerName.text = "Language"
@@ -139,19 +147,20 @@ class ProductDetailsActivity : AppCompatActivity() {
             })
 
             reviewViewModel.msg.observe(this@ProductDetailsActivity) {
-                Toast.makeText(this@ProductDetailsActivity, it.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ProductDetailsActivity, it.toString(), Toast.LENGTH_SHORT)
+                    .show()
                 _currentProduct.value?.let { it1 -> fetchProductReview(it1.productId) }
             }
             reviewViewModel.selectedReview.observe(this@ProductDetailsActivity) {
                 showReviewUpdateBottomSheet(this@ProductDetailsActivity, reviewViewModel).show()
             }
 
-            _currentProductReviews.observe(owner){
+            _currentProductReviews.observe(owner) {
                 setupProductReviews(it)
             }
 
-            _currentProduct.value?.let { product->
-                with(product){
+            _currentProduct.value?.let { product ->
+                with(product) {
                     cartVm._selectedVariant.value?.apply {
                         this.productId = product.productId
                         sizeId = sizes?.get(0)?.sid
@@ -169,37 +178,37 @@ class ProductDetailsActivity : AppCompatActivity() {
                     // Check for review allowed or not
 
                     email?.let { mail ->
-                        canReview(mail,productId){
-                            if(it) allowReview(mail,productId)
+                        canReview(mail, productId) {
+                            if (it) allowReview(mail, productId)
                         }
                     }
 
                 }
-                with(binding){
-                    if(product.images?.isNotEmpty() == true)
+                with(binding) {
+                    if (product.images?.isNotEmpty() == true)
                         Glide.with(this@ProductDetailsActivity)
-                        .load(urlMaker(product.images!![0].url)).into(ivProduct)
+                            .load(urlMaker(product.images!![0].url)).into(ivProduct)
                     mutableListOf<String>().apply {
                         product.sizes?.forEach {
                             add("${it.width} x ${it.height}")
-                            if(isNotEmpty()) sizeSpinner.spinner.setSelection(0)
-                            if(size== product.sizes!!.size){
+                            if (isNotEmpty()) sizeSpinner.spinner.setSelection(0)
+                            if (size == product.sizes!!.size) {
                                 cartVm._selectedSize.value = product.sizes!![0]
-                                setupSpinner(sizeSpinner.spinner,this)
+                                setupSpinner(sizeSpinner.spinner, this)
                             }
                         }
-                        sizeSpinner.tvSpinnerName.text= "Size"
+                        sizeSpinner.tvSpinnerName.text = "Size"
                     }
 
                     product.posterDetails?.let {
                         binding.tvTitle.text = it.title
-                        if(it.short_desc.isNotEmpty() &&  !it.long_desc.isNullOrEmpty() ){
+                        if (it.short_desc.isNotEmpty() && !it.long_desc.isNullOrEmpty()) {
                             Functions.addReadMore(
                                 it.long_desc,
                                 binding.tvProductDescriptionLong,
                                 binding.tvProductDescriptionShort
                             )
-                        }else if(!it.long_desc.isNullOrEmpty()){
+                        } else if (!it.long_desc.isNullOrEmpty()) {
                             binding.tvProductDescriptionShort.apply {
                                 text = it.short_desc
                             }
@@ -218,7 +227,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                             addVariantToCart(email!!,product.productId)
                         }
                     }*/
-                    sizeSpinner.spinner.onItemSelectedListener = object  :
+                    sizeSpinner.spinner.onItemSelectedListener = object :
                         AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             p0: AdapterView<*>?,
@@ -226,13 +235,14 @@ class ProductDetailsActivity : AppCompatActivity() {
                             index: Int,
                             p3: Long
                         ) {
-                            with(cartVm){
+                            with(cartVm) {
                                 _selectedVariant.value?.apply {
                                     _currentProduct.value?.let {
                                         sizeId = it.sizes?.get(index)?.sid
                                         setVariantSize(it.sizes?.get(index))
                                     }
-                                }}
+                                }
+                            }
                         }
 
                         override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -254,7 +264,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                             }
                         }
                     }*/
-                    materialSpinner.spinner.onItemSelectedListener = object  :
+                    materialSpinner.spinner.onItemSelectedListener = object :
                         AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             p0: AdapterView<*>?,
@@ -265,9 +275,10 @@ class ProductDetailsActivity : AppCompatActivity() {
                             with(cartVm) {
                                 _selectedVariant.value?.apply {
                                     _currentProduct.value?.let {
-                                        val materialId= it.materials?.get(index)
+                                        val materialId = it.materials?.get(index)
                                         cartVm.setVariantMaterial(materialId)
-                                        _selectedMaterial.value = vm._currentProductMaterial.value?.get(index)
+                                        _selectedMaterial.value =
+                                            vm._currentProductMaterial.value?.get(index)
                                     }
                                 }
                             }
@@ -278,7 +289,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                         }
 
                     }
-                    languageSpinner.spinner.onItemSelectedListener = object  :
+                    languageSpinner.spinner.onItemSelectedListener = object :
                         AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             p0: AdapterView<*>?,
@@ -286,16 +297,18 @@ class ProductDetailsActivity : AppCompatActivity() {
                             index: Int,
                             p3: Long
                         ) {
-                            with(cartVm){
+                            with(cartVm) {
                                 _selectedVariant.value?.apply {
                                     _currentProduct.value?.let {
                                         val languageId = it.languages?.get(index)
                                         val imgUrl = it.images?.find { it.languageId == languageId }
                                             ?.let { it1 -> urlMaker(it1.url) }
 
-                                        Glide.with(this@ProductDetailsActivity).load(imgUrl).into(ivProduct)
+                                        Glide.with(this@ProductDetailsActivity).load(imgUrl)
+                                            .into(ivProduct)
                                         cartVm.setVariantLanguage(languageId)
-                                        _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
+                                        _selectedLanguage.value =
+                                            vm._currentProductLanguage.value?.get(index)
                                     }
                                 }
                             }
@@ -307,7 +320,7 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                     }
 
-                    languageSpinner.spinner.onItemSelectedListener = object  :
+                    languageSpinner.spinner.onItemSelectedListener = object :
                         AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(
                             p0: AdapterView<*>?,
@@ -315,7 +328,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                             index: Int,
                             p3: Long
                         ) {
-                            with(cartVm){
+                            with(cartVm) {
                                 _selectedVariant.value?.apply {
                                     _currentProduct.value?.let {
                                         val languageId = it.languages?.get(index)
@@ -323,15 +336,20 @@ class ProductDetailsActivity : AppCompatActivity() {
                                             ?.let { it1 -> urlMaker(it1.url) }
 
                                         ivProduct.apply {
-                                            Glide.with(this@ProductDetailsActivity).load(imgUrl).into(this)
+                                            Glide.with(this@ProductDetailsActivity).load(imgUrl)
+                                                .into(this)
                                             if (imgUrl != null) {
                                                 setOnClickListener {
-                                                    viewFullScreen(this@ProductDetailsActivity,imgUrl)
+                                                    viewFullScreen(
+                                                        this@ProductDetailsActivity,
+                                                        imgUrl
+                                                    )
                                                 }
                                             }
                                         }
                                         cartVm.setVariantLanguage(languageId)
-                                        _selectedLanguage.value = vm._currentProductLanguage.value?.get(index)
+                                        _selectedLanguage.value =
+                                            vm._currentProductLanguage.value?.get(index)
                                     }
                                 }
                             }
@@ -343,21 +361,28 @@ class ProductDetailsActivity : AppCompatActivity() {
                     }
 
                     // Text changed Listeners ----------------------------------------------------------------------------------
-                    with(productBuyingLayout){
+                    with(productBuyingLayout) {
                         evQty.setText("1")
-                        evQty.doOnTextChanged{ text,start,before,count ->
-                            fun invalidQtyHandler(){
+                        evQty.doOnTextChanged { text, start, before, count ->
+                            fun invalidQtyHandler() {
                                 evQty.setText("1")
-                                tvAmount.text = "${cartVm._selectedVariant.value?.variantPrice?.times(1)}"
-                                Toast.makeText(this@ProductDetailsActivity, "Minimum Quantity is 1", Toast.LENGTH_SHORT).show()
+                                tvAmount.text =
+                                    "${cartVm._selectedVariant.value?.variantPrice?.times(1)}"
+                                Toast.makeText(
+                                    this@ProductDetailsActivity,
+                                    "Minimum Quantity is 1",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
-                            if(!text.isNullOrBlank()){
-                                if(text.toString()=="0"){
-                                   invalidQtyHandler()
-                                }else{
-                                    tvAmount.text = "${cartVm._selectedVariant.value?.variantPrice?.times(
-                                        text.toString().toInt()
-                                    )}"
+                            if (!text.isNullOrBlank()) {
+                                if (text.toString() == "0") {
+                                    invalidQtyHandler()
+                                } else {
+                                    tvAmount.text = "${
+                                        cartVm._selectedVariant.value?.variantPrice?.times(
+                                            text.toString().toInt()
+                                        )
+                                    }"
                                 }
                             }
                         }
@@ -368,11 +393,12 @@ class ProductDetailsActivity : AppCompatActivity() {
 
         val db = LocalDatabase.getDatabase(this).userDao()
         val user = db.getUser(email!!)
-        user.observe(this){
+        user.observe(this) {
             currentUser = it
 //            setupProductReviews(emptyList())
         }
-        binding.rvProductReviews.layoutManager = LinearLayoutManager(this,RecyclerView.HORIZONTAL,false)
+        binding.rvProductReviews.layoutManager =
+            LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
 
     }
 
@@ -389,51 +415,95 @@ class ProductDetailsActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    private fun setupButtonAction(email : String,productId: Int){
+    private fun setupButtonAction(email: String, productId: Int) {
+        /*
+        todo : disabled until PG not get set
         if(cartVm._selectedVariant.value?.let { it1 -> isVariantInCart(it1) } == true) setupGoToCart()
-        else setupAddToCart(email, productId)
+        else setupAddToCart(email, productId)*/
+
+        // GetQuote
+        binding.productBuyingLayout.btnAddVariantToCart.apply {
+            text = "Get Quote"
+            setOnClickListener {
+                cartVm._selectedVariant.value?.let {
+                    val getQuoteMsg = it.let {
+                        """
+                        Hii , I have just visited your App and I'm interested in following product
+                        Product Id :${it.productId}
+                        Product Code : ${vm._currentProduct.value?.productCode?:"None"} 
+                   
+                        Regards, ${currentUser?.firstName?:"Unknown"}
+                   
+                         
+                        """.trimIndent()
+
+                    }
+                    startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW).apply {
+//                        type = "text/plain"
+//                        putExtra(Intent.EXTRA_TEXT,getQuoteMsg)
+                        setData(Uri.parse(
+                            "https://api.whatsapp.com/send?phone=${Constants.MANN_SIGN_PHONE_NUMBER}"+"&text=" + URLEncoder.encode(getQuoteMsg, "UTF-8")
+                        ))
+                    },"Send to Owner"))
+                }
+            }
+        }
+        binding.productBuyingLayout.fabCallNow.setOnClickListener {
+                startActivity(Intent(Intent.ACTION_DIAL).apply {
+                    data = Uri.parse("tel:${Constants.MANN_SIGN_PHONE_NUMBER}")
+                })
+        }
+
+
     }
 
     private fun isVariantInCart(variant: Variant): Boolean {
         cartVm._currrentProductInCartVariants.value?.forEach {
-            if(variant.sizeId==it.sizeId)
-                if(variant.materialId==it.materialId)
-                    if(variant.languageId==it.languageId)
+            if (variant.sizeId == it.sizeId)
+                if (variant.materialId == it.materialId)
+                    if (variant.languageId == it.languageId)
                         return true
         }
         return false
     }
 
-    fun addVariantToCart(email : String,productId : Int){
+    fun addVariantToCart(email: String, productId: Int) {
         CoroutineScope(Dispatchers.IO).launch {
             cartVm.addToCart(
                 email,
                 cartVm._selectedVariant.value!!,
-                if(binding.productBuyingLayout.evQty.text.toString()=="") 1 else
+                if (binding.productBuyingLayout.evQty.text.toString() == "") 1 else
                     binding.productBuyingLayout.evQty.text.toString().toInt()
             )
-            cartVm.getMyCartVariants(email,productId)
+            cartVm.getMyCartVariants(email, productId)
         }
     }
 
-    private fun setupGoToCart(){
-        with(binding.productBuyingLayout){
+    private fun setupGoToCart() {
+        with(binding.productBuyingLayout) {
             btnAddVariantToCart.apply {
                 backgroundTintList = resources.getColorStateList(R.color.buttonColor)
                 text = context.getString(R.string.go_to_cart)
-                setOnClickListener { startActivity(Intent(this@ProductDetailsActivity,CartActivity::class.java)) }
+                setOnClickListener {
+                    startActivity(
+                        Intent(
+                            this@ProductDetailsActivity,
+                            CartActivity::class.java
+                        )
+                    )
+                }
             }
         }
     }
 
-    private fun setupAddToCart(email: String,productId: Int){
-        with(binding.productBuyingLayout){
+    private fun setupAddToCart(email: String, productId: Int) {
+        with(binding.productBuyingLayout) {
             btnAddVariantToCart.apply {
                 backgroundTintList = resources.getColorStateList(R.color.order_selected_text_color)
                 text = context.getString(R.string.add_to_cart)
                 setOnClickListener {
-                    if(email==Constants.NO_EMAIL)
-                        startActivity(Intent(this@ProductDetailsActivity,CartActivity::class.java))
+                    if (email == Constants.NO_EMAIL)
+                        startActivity(Intent(this@ProductDetailsActivity, CartActivity::class.java))
                     else
                         addVariantToCart(email, productId)
                 }
@@ -441,15 +511,15 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun calculateVariantPrice(){
-        with(binding){
-            with(cartVm){
+    private fun calculateVariantPrice() {
+        with(binding) {
+            with(cartVm) {
                 val areaOfSize = _selectedSize.value?.let {
-                    return@let it.width*it.height
+                    return@let it.width * it.height
                 }
                 val materialPrice = _selectedMaterial.value?.price
-                if (areaOfSize != null && materialPrice!=null) {
-                    setVariantPrice(areaOfSize* materialPrice)
+                if (areaOfSize != null && materialPrice != null) {
+                    setVariantPrice(areaOfSize * materialPrice)
                 }
             }
         }
@@ -463,15 +533,16 @@ class ProductDetailsActivity : AppCompatActivity() {
         binding.tvSubCategory.text = binding.tvSubCategory.text.toString() + name
     }
 
-    fun setupSpinner(spinner: Spinner, dataList: List<String>){
-        spinner.adapter = CustomSpinnerAdapter(this,dataList)
+    fun setupSpinner(spinner: Spinner, dataList: List<String>) {
+        spinner.adapter = CustomSpinnerAdapter(this, dataList)
     }
 
-    fun setupProductReviews(reviews : List<Review>){
+    fun setupProductReviews(reviews: List<Review>) {
         currentUser?.let {
             binding.tvNoReviews.isVisible = reviews.isEmpty()
             binding.rvProductReviews.isVisible = reviews.isNotEmpty()
-            binding.rvProductReviews.adapter = ReviewAdapter(this,reviews,reviewViewModel,currentUser)
+            binding.rvProductReviews.adapter =
+                ReviewAdapter(this, reviews, reviewViewModel, currentUser)
         }
     }
 
@@ -479,34 +550,40 @@ class ProductDetailsActivity : AppCompatActivity() {
         val context = this@ProductDetailsActivity
         binding.apply {
             giveReviewLayout.apply {
-                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show()
-                setUpReviewBottomSheet(email,productId)}
+                setOnClickListener {
+                    Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT)
+                        .show()
+                    setUpReviewBottomSheet(email, productId)
+                }
                 show()
             }
             ivWriteAReview.apply {
-                setOnClickListener { Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT).show()
-                    setUpReviewBottomSheet(email,productId)}
+                setOnClickListener {
+                    Toast.makeText(context, "Show view to write a review", Toast.LENGTH_SHORT)
+                        .show()
+                    setUpReviewBottomSheet(email, productId)
+                }
                 show()
             }
             addReviewBottomSheetDialog = BottomSheetDialog(context, R.style.BottomSheetStyle)
         }
     }
 
-    fun setUpReviewBottomSheet(emailId: String,productId: Int){
+    fun setUpReviewBottomSheet(emailId: String, productId: Int) {
 
         val sheetView = AddReviewBottomSheetBinding
-            .bind(LayoutInflater.from(this).inflate(R.layout.add_review_bottom_sheet,null))
+            .bind(LayoutInflater.from(this).inflate(R.layout.add_review_bottom_sheet, null))
             .apply {
                 btnPublishReview.setOnClickListener {
-                        Review(
-                            productId = productId,
-                            rating = ratingBar.rating.toInt() ,
-                            comment = etReview.text.toString() ,
-                            emailId = emailId,
-                            reviewDate = LocalDateTime.now()
-                        ).also {
-                            vm.addReview(it)
-                        }
+                    Review(
+                        productId = productId,
+                        rating = ratingBar.rating.toInt(),
+                        comment = etReview.text.toString(),
+                        emailId = emailId,
+                        reviewDate = LocalDateTime.now()
+                    ).also {
+                        vm.addReview(it)
+                    }
                 }
             }
         addReviewBottomSheetDialog.apply {
@@ -515,10 +592,10 @@ class ProductDetailsActivity : AppCompatActivity() {
         }
     }
 
-    fun showReviewUpdateBottomSheet(c : Context,vm: ReviewsViewModel): BottomSheetDialog {
+    fun showReviewUpdateBottomSheet(c: Context, vm: ReviewsViewModel): BottomSheetDialog {
 
         val bottomSheetDialog = BottomSheetDialog(c, R.style.BottomSheetStyle)
-        val v = LayoutInflater.from(c).inflate(R.layout.update_review_bottom_sheet,null)
+        val v = LayoutInflater.from(c).inflate(R.layout.update_review_bottom_sheet, null)
         val ratingBar = v.findViewById<RatingBar>(R.id.ratingBarUpdateReview)
         val edUpdate = v.findViewById<EditText>(R.id.edUpdateReview)
         val btnUpdateReview = v.findViewById<ImageView>(R.id.btnUpdateReviewBottomSheet)
@@ -526,7 +603,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         ratingBar.rating = vm.selectedReview.value?.rating!!.toFloat()
         edUpdate.setText(vm.selectedReview.value!!.comment.toString())
         btnUpdateReview.setOnClickListener {
-            vm.updateReview(ratingBar.rating,edUpdate.text.toString())
+            vm.updateReview(ratingBar.rating, edUpdate.text.toString())
             bottomSheetDialog.dismiss()
         }
 
