@@ -346,6 +346,21 @@
                     android:text="Logout"
                     android:textColor="@color/error"
                     android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/btnDeleteAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:fontFamily="@font/satoshi_medium"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:text="Delete My Account"
+                    android:textColor="@color/error"
+                    android:textSize="18sp" />
+
             </LinearLayout>
 
         </LinearLayout>

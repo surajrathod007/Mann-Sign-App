@@ -2,6 +2,7 @@ package com.surajmanshal.mannsign.network
 
 import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
+import com.surajmanshal.mannsign.data.model.auth.LoginRequest
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.*
@@ -234,4 +235,10 @@ interface NetworkCallsInterface {
     fun getTransactionToken(@Query("orderId") orderId : String,@Query("email") email : String,@Query("amt") amount : String) : SimpleResponse
     @GET("pp")
     fun getPP() : Call<SimpleResponse>
+
+    @POST("user/checkpass")
+    fun checkUserPass(@Body loginRequest : LoginReq) : Call<SimpleResponse>
+
+    @POST("user/delete")
+    fun deleteUser(@Query("email") email : String) : Call<SimpleResponse>
 }
