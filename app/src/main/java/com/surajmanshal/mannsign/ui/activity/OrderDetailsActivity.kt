@@ -2,17 +2,21 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.BitmapDrawable
 import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import com.itextpdf.io.image.ImageDataFactory
@@ -32,7 +36,6 @@ import com.paytm.pgsdk.TransactionManager
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
-import com.surajmanshal.mannsign.databinding.ActivityOrdersBinding
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
@@ -53,6 +56,11 @@ class OrderDetailsActivity : AppCompatActivity() {
 
     lateinit var mHandler: Handler
     lateinit var mRunnable: Runnable
+
+    var isRead = false
+    var isWrite = false
+
+    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
 
     override fun onStart() {
         super.onStart()
@@ -109,7 +117,12 @@ class OrderDetailsActivity : AppCompatActivity() {
             i.putExtra("id", id)
             startActivity(i)
         }
+        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+            isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
+            isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
+        }
         binding.btnDownloadInvoice.setOnClickListener {
+            requestPermission()
             makeInvoice()
         }
         binding.btnMakePayment.setOnClickListener {
@@ -692,5 +705,28 @@ class OrderDetailsActivity : AppCompatActivity() {
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(i)
         }
+    }
+
+    fun requestPermission(){
+
+        //check permission already granted or not
+        isRead = ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        isWrite = ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+
+        var permissionRequest : MutableList<String> = ArrayList()
+
+        if(!isRead){
+            permissionRequest.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        }
+
+        if(!isWrite){
+            permissionRequest.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        }
+
+        if(permissionRequest.isNotEmpty()){
+            //request permission
+            permissionLauncher.launch(permissionRequest.toTypedArray())
+        }
+
     }
 }
