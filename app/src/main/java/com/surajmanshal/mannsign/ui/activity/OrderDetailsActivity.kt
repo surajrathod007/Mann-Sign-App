@@ -266,9 +266,12 @@ class OrderDetailsActivity : AppCompatActivity() {
 
             var lst = vm.order.value!!.orderItems
 
-            val path =
+            val path = if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q)
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
                     .toString()
+            else
+                applicationContext.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.toString()
+
             val file = File(path, "mann_sign_invoice${System.currentTimeMillis()}.pdf")
             val output = FileOutputStream(file)
 
@@ -683,7 +686,11 @@ class OrderDetailsActivity : AppCompatActivity() {
             document.add(table4)
             document.close()
             Toast.makeText(this, "Pdf Created", Toast.LENGTH_SHORT).show()
-            openFile(file, path)
+            if (path != null) {
+                openFile(file, path)
+            }else{
+                Toast.makeText(this, "Access Denied to External storage", Toast.LENGTH_SHORT).show()
+            }
 
         } catch (e: Exception) {
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
