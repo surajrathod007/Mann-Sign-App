@@ -20,6 +20,7 @@ import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentUserProfileBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.user.UserDao
+import com.surajmanshal.mannsign.ui.activity.AccountDeleteActivity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
 import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.ui.activity.WishListActivity
@@ -116,6 +117,9 @@ class UserProfileFragment() : Fragment() {
 
     private fun setupClickListeners() {
         with(binding) {
+            btnDeleteAccount.setOnClickListener {
+                startActivity(Intent(requireActivity(), AccountDeleteActivity::class.java))
+            }
             btnMyOrdersFrag.setOnClickListener {
                 startActivity(Intent(requireActivity(), OrdersActivity::class.java))
             }
