@@ -469,7 +469,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                    
                         Regards, ${currentUser?.firstName ?: "Unknown"}
                    
-                         
+                         ${Constants.APP_URL}/${it.productId}/${it.sizeId}/${it.materialId}/${it.languageId}
                         """.trimIndent()
 
                     }

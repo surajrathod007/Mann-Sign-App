@@ -1,18 +1,10 @@
 package com.surajmanshal.mannsign
 
 
-import android.content.pm.PackageManager
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
-import com.surajmanshal.mannsign.adapter.MainViewPagerAdapter
+import androidx.appcompat.app.AppCompatActivity
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
-import com.surajmanshal.mannsign.ui.fragments.CustomOrderFragment
-import com.surajmanshal.mannsign.ui.fragments.HomeFragment
-import com.surajmanshal.mannsign.ui.fragments.UserProfileFragment
 import com.surajmanshal.mannsign.utils.auth.DataStore
 
 class MainActivity : AppCompatActivity() {
@@ -23,7 +15,7 @@ class MainActivity : AppCompatActivity() {
     var isWrite = false
     var token : String? = ""
 
-    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
+//    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,14 +27,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
+        /*permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
             isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
             isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
-        }
+        }*/
 
 
 
-        requestPermission()
+//        requestPermission()
         //setupViewPager()
 
     }
@@ -53,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         //binding.bottomNavigationView.setupWithViewPager2(binding.viewPager)
     }
 
-    fun requestPermission(){
+    /*fun requestPermission(){
 
         //check permission already granted or not
         isRead = ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
@@ -75,5 +67,5 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-    }
+    }*/
 }

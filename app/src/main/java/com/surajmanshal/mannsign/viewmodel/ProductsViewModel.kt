@@ -3,7 +3,11 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.Category
+import com.surajmanshal.mannsign.data.model.Language
+import com.surajmanshal.mannsign.data.model.Material
+import com.surajmanshal.mannsign.data.model.Review
+import com.surajmanshal.mannsign.data.model.SubCategory
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.repository.Repository
@@ -100,6 +104,7 @@ class ProductsViewModel : ViewModel() {
         })
     }
     fun getLanguagesByIds(ids : List<Int>){
+        println(ids)
         val response = repository.getLanguagesByIds(ids)
         response.enqueue(object : Callback<List<Language>>{
             override fun onResponse(
@@ -107,7 +112,13 @@ class ProductsViewModel : ViewModel() {
                 response: Response<List<Language>>
             ) {
                 response.body()?.let {
-                    _currentProductLanguage.postValue(it as MutableList<Language>?)
+                    println(it)
+                    // The response we are getting is sorted by id
+                    val responseMap = it.associateBy { it.id }
+                    // Arrange the response list elements according to the order of IDs in the request list
+                    val arrangedResponseList = ids.mapNotNull { id -> responseMap[id] }
+
+                    _currentProductLanguage.postValue(arrangedResponseList as MutableList<Language>?)
                 }
             }
 
