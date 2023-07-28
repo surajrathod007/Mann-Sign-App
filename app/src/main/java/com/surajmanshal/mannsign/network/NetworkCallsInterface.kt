@@ -2,7 +2,6 @@ package com.surajmanshal.mannsign.network
 
 import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
-import com.surajmanshal.mannsign.data.model.auth.LoginRequest
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.*
@@ -61,6 +60,9 @@ interface NetworkCallsInterface {
 
     @GET("product/posters")
     fun fetchAllPosters() : Call<List<Product>>
+
+    @GET("product/posters/{page}")
+    fun fetchPagedPosters(@Path("page") page : Int) : Call<List<Product>>
 
     @GET("order/getall")
     fun fetchAllOrders() : Call<List<Order>>

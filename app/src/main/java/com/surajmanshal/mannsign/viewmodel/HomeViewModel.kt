@@ -72,7 +72,7 @@ class HomeViewModel : ViewModel() {
     }
     fun getAllPosters() {
         _isLoading.postValue(true)
-        val r = db.fetchAllPosters()
+        val r = db.fetchPagedPosters(1)
         r.enqueue(object : Callback<List<Product>?> {
             override fun onResponse(
                 call: Call<List<Product>?>,
