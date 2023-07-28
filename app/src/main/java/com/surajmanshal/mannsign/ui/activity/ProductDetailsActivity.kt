@@ -661,14 +661,9 @@ class ProductDetailsActivity : AppCompatActivity() {
         val density = resources.displayMetrics.density
         val displayWidth = display.widthPixels / density
 
-
         val width = resource.width.toFloat()
         val height = resource.height.toFloat()
 
-        //binding.edHeight.setText(height.toInt().toString())
-        //binding.edWidth.setText(width.toInt().toString())
-
-        //Aspect ratio setup
         val GCD = gcd(width.toInt(), height.toInt())
 
         val AREA = 200
