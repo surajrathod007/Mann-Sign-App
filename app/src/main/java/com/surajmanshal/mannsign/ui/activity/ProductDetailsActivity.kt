@@ -2,11 +2,17 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.DisplayMetrics
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.EditText
 import android.widget.ImageView
@@ -21,6 +27,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.SimpleTarget
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.CustomSpinnerAdapter
@@ -37,6 +45,7 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
+import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
@@ -47,6 +56,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.time.LocalDateTime
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.roundToInt
 
 class ProductDetailsActivity : AppCompatActivity() {
 
@@ -185,9 +197,24 @@ class ProductDetailsActivity : AppCompatActivity() {
 
                 }
                 with(binding) {
-                    if (product.images?.isNotEmpty() == true)
-                        Glide.with(this@ProductDetailsActivity)
-                            .load(urlMaker(product.images!![0].url)).into(ivProduct)
+
+                    if (product.images?.isNotEmpty() == true) {
+
+                        val g = Glide.with(this@ProductDetailsActivity).asBitmap()
+                            .load(urlMaker(product.images!![0].url))
+                            .into(object : SimpleTarget<Bitmap>() {
+                                override fun onResourceReady(
+                                    resource: Bitmap,
+                                    transition: Transition<in Bitmap>?
+                                ) {
+                                    setImageHeightWidth(resource)
+                                    //makeToast(this@ProductDetailsActivity,"${resource.width} x ${resource.height}")
+                                }
+
+                            })
+
+                    }
+
                     mutableListOf<String>().apply {
                         product.sizes?.forEach {
                             add("${it.width} x ${it.height}")
@@ -335,9 +362,17 @@ class ProductDetailsActivity : AppCompatActivity() {
                                         val imgUrl = it.images?.find { it.languageId == languageId }
                                             ?.let { it1 -> urlMaker(it1.url) }
 
+                                        Glide.with(this@ProductDetailsActivity).asBitmap().load(imgUrl)
+                                            .into(object : SimpleTarget<Bitmap>(){
+                                                override fun onResourceReady(
+                                                    resource: Bitmap,
+                                                    transition: Transition<in Bitmap>?
+                                                ) {
+                                                    setImageHeightWidth(resource)
+                                                }
+
+                                            })
                                         ivProduct.apply {
-                                            Glide.with(this@ProductDetailsActivity).load(imgUrl)
-                                                .into(this)
                                             if (imgUrl != null) {
                                                 setOnClickListener {
                                                     viewFullScreen(
@@ -430,9 +465,9 @@ class ProductDetailsActivity : AppCompatActivity() {
                         """
                         Hii , I have just visited your App and I'm interested in following product
                         Product Id :${it.productId}
-                        Product Code : ${vm._currentProduct.value?.productCode?:"None"} 
+                        Product Code : ${vm._currentProduct.value?.productCode ?: "None"} 
                    
-                        Regards, ${currentUser?.firstName?:"Unknown"}
+                        Regards, ${currentUser?.firstName ?: "Unknown"}
                    
                          
                         """.trimIndent()
@@ -441,17 +476,22 @@ class ProductDetailsActivity : AppCompatActivity() {
                     startActivity(Intent.createChooser(Intent(Intent.ACTION_VIEW).apply {
 //                        type = "text/plain"
 //                        putExtra(Intent.EXTRA_TEXT,getQuoteMsg)
-                        setData(Uri.parse(
-                            "https://api.whatsapp.com/send?phone=${Constants.MANN_SIGN_PHONE_NUMBER}"+"&text=" + URLEncoder.encode(getQuoteMsg, "UTF-8")
-                        ))
-                    },"Send to Owner"))
+                        setData(
+                            Uri.parse(
+                                "https://api.whatsapp.com/send?phone=${Constants.MANN_SIGN_PHONE_NUMBER}" + "&text=" + URLEncoder.encode(
+                                    getQuoteMsg,
+                                    "UTF-8"
+                                )
+                            )
+                        )
+                    }, "Send to Owner"))
                 }
             }
         }
         binding.productBuyingLayout.fabCallNow.setOnClickListener {
-                startActivity(Intent(Intent.ACTION_DIAL).apply {
-                    data = Uri.parse("tel:${Constants.MANN_SIGN_PHONE_NUMBER}")
-                })
+            startActivity(Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:${Constants.MANN_SIGN_PHONE_NUMBER}")
+            })
         }
 
 
@@ -609,5 +649,61 @@ class ProductDetailsActivity : AppCompatActivity() {
 
         bottomSheetDialog.setContentView(v)
         return bottomSheetDialog
+    }
+
+    fun setImageHeightWidth(resource: Bitmap) {
+
+        val display = DisplayMetrics()
+        windowManager.defaultDisplay.getMetrics(display)
+
+        val wManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        val density = resources.displayMetrics.density
+        val displayWidth = display.widthPixels / density
+
+
+        val width = resource.width.toFloat()
+        val height = resource.height.toFloat()
+
+        //binding.edHeight.setText(height.toInt().toString())
+        //binding.edWidth.setText(width.toInt().toString())
+
+        //Aspect ratio setup
+        val GCD = gcd(width.toInt(), height.toInt())
+
+        val AREA = 200
+        val newHeight: Float
+        val newWidth: Float
+
+        if (height > width) {
+            newHeight = AREA.toFloat()
+            newWidth = (min(height, width) * AREA) / max(height, width)
+        } else if (height < width) {
+            newWidth = AREA.toFloat()
+            newHeight = (min(height, width) * AREA) / max(height, width)
+        } else {
+            newWidth = AREA.toFloat()
+            newHeight = AREA.toFloat()
+        }
+
+        val params = binding.ivProduct.layoutParams
+        params.height = pxToDp(newHeight)
+        params.width = pxToDp(newWidth)
+
+        binding.ivProduct.layoutParams = params
+        binding.ivProduct.setImageBitmap(resource)
+    }
+
+    fun gcd(a: Int, b: Int): Int {
+        if (b == 0)
+            return a
+        return gcd(b, a % b)
+    }
+
+    private fun Context.pxToDp(value: Float): Int {
+        val r: Resources = resources
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, value, r.displayMetrics
+        ).roundToInt()
     }
 }
