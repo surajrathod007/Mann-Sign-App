@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -45,7 +44,6 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
-import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
@@ -69,6 +67,7 @@ class ProductDetailsActivity : AppCompatActivity() {
     private var currentUser: UserEntity? = null
     private lateinit var addReviewBottomSheetDialog: BottomSheetDialog
     var email: String? = null
+    lateinit var rupeeSign : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,7 +81,7 @@ class ProductDetailsActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", Constants.NO_EMAIL)
         vm._currentProduct.value = intent.getSerializableExtra(Constants.PRODUCT) as Product?
-
+        rupeeSign = resources.getString(R.string.rupee_sign)
         with(cartVm) {
 
             // Observers ----------------------------------------------------------------------------------
@@ -91,7 +90,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                 with(binding.productBuyingLayout) {
                     tvVariantPrice.text =
                         resources.getString(R.string.selected_variant_price) + it.variantPrice
-                    tvAmount.text = "${it.variantPrice?.times(evQty.text.toString().toInt())}"
+                    tvAmount.text = "$rupeeSign${it.variantPrice?.times(evQty.text.toString().toInt())}"
                 }
                 it.productId?.let { it1 -> setupButtonAction(email!!, it1) }
             }
@@ -402,7 +401,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                             fun invalidQtyHandler() {
                                 evQty.setText("1")
                                 tvAmount.text =
-                                    "${cartVm._selectedVariant.value?.variantPrice?.times(1)}"
+                                    "$rupeeSign${cartVm._selectedVariant.value?.variantPrice?.times(1)}"
                                 Toast.makeText(
                                     this@ProductDetailsActivity,
                                     "Minimum Quantity is 1",
@@ -413,7 +412,7 @@ class ProductDetailsActivity : AppCompatActivity() {
                                 if (text.toString() == "0") {
                                     invalidQtyHandler()
                                 } else {
-                                    tvAmount.text = "${
+                                    tvAmount.text = "$rupeeSign${
                                         cartVm._selectedVariant.value?.variantPrice?.times(
                                             text.toString().toInt()
                                         )
