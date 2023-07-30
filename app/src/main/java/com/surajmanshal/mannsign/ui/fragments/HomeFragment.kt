@@ -63,6 +63,15 @@ class HomeFragment() : Fragment() {
         vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(NetworkService.checkForInternet(requireContext())){
+            loadData()
+        }else{
+            makeToast(requireContext(),"No internet")
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -96,7 +105,6 @@ class HomeFragment() : Fragment() {
                     }
                 }
             }
-            loadData()
             setupObservers()
 
         } else {
@@ -124,6 +132,10 @@ class HomeFragment() : Fragment() {
                 Functions.makeToast(requireContext(), e.message.toString())
             }
 
+        }
+
+        binding.refreshHome.setOnRefreshListener {
+            loadData()
         }
 
         val localDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
@@ -307,6 +319,7 @@ class HomeFragment() : Fragment() {
                 Handler().postDelayed({
                     binding.linearContent.visibility = View.VISIBLE
                     binding.shimmerView.visibility = View.GONE
+                    binding.refreshHome.isRefreshing = false
                 }, 1500)
             }
         }
