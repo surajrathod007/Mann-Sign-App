@@ -25,6 +25,7 @@ import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
@@ -37,20 +38,24 @@ import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import com.surajrathod.authme.util.GetInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeFragment() : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var bottomMenu: BottomSheetDialog
     lateinit var vm: HomeViewModel
-    var jwttoken : String?=null
+    var jwttoken: String? = null
     //lateinit var bottomNavigation: AnimatedBottomBar
 
-    var email : String? = ""
-    var token : String? = ""
+    var email: String? = ""
+    var token: String? = ""
     var isMinProfileSetupDone = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,12 +72,13 @@ class HomeFragment() : Fragment() {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
         binding = DataBindingUtil.bind(view)!!
 
-        val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
+        val sharedPreference =
+            requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", null)
-        token = sharedPreference.getString("token","")      //not in use
+        token = sharedPreference.getString("token", "")      //not in use
 
         binding.shimmerView.startShimmer()
-        if(jwttoken.isNullOrEmpty()){
+        if (jwttoken.isNullOrEmpty()) {
             CoroutineScope(Dispatchers.IO).launch {
                 jwttoken = getToken(JWT_TOKEN)
             }
@@ -80,9 +86,15 @@ class HomeFragment() : Fragment() {
 
 
         if (NetworkService.checkForInternet(requireContext())) {
-            if(!email.isNullOrEmpty()){
-                setupDeviceId()
-                Functions.makeToast(requireContext(),"Device id set $email")
+            if (!email.isNullOrEmpty()) {
+                isUserExists(email!!) {
+                    if (it) {
+                        setupDeviceId()
+                        Functions.makeToast(requireContext(), "Device id set $email")
+                    } else {
+                        deleteAllData()
+                    }
+                }
             }
             loadData()
             setupObservers()
@@ -103,13 +115,13 @@ class HomeFragment() : Fragment() {
         }
 
         binding.btnSearch.setOnClickListener {
-            try{
+            try {
                 val i = Intent(requireActivity(), ProductCategoryDetailsActivity::class.java)
                 val text = GetInput.takeFrom(binding.edSearch)
-                i.putExtra("name",text.trim())
+                i.putExtra("name", text.trim())
                 requireActivity().startActivity(i)
-            }catch (e : Exception){
-                Functions.makeToast(requireContext(),e.message.toString())
+            } catch (e: Exception) {
+                Functions.makeToast(requireContext(), e.message.toString())
             }
 
         }
@@ -117,13 +129,41 @@ class HomeFragment() : Fragment() {
         val localDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
 
         val user = email?.let { localDatabase.getUser(it) }
-        user?.observe(viewLifecycleOwner){
-            isMinProfileSetupDone = it.firstName!=null
+        user?.observe(viewLifecycleOwner) {
+            isMinProfileSetupDone = it.firstName != null
         }
 
 
 
         return binding.root
+    }
+
+    private fun deleteAllData() {
+        makeToast(requireContext(), "Your account deleted from our site !")
+        logout()
+    }
+
+    private fun isUserExists(email: String, exists: (Boolean) -> Unit = {}) {
+
+        val ans = NetworkService.networkInstance.getUserByEmail(email)
+        ans.enqueue(object : Callback<SimpleResponse?> {
+            override fun onResponse(
+                call: Call<SimpleResponse?>,
+                response: Response<SimpleResponse?>
+            ) {
+                val ans = response.body()!!
+                if(ans.success){
+                    exists.invoke(true)
+                }else{
+                    exists.invoke(false)
+                }
+            }
+
+            override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                makeToast(requireContext(),t.message.toString())
+            }
+        })
+
     }
 
     private fun showBottomMenu() {
@@ -140,7 +180,7 @@ class HomeFragment() : Fragment() {
         val logoutText = sheetView.findViewById<TextView>(R.id.btnLogOutText)
         //val btnProfile = sheetView.findViewById<TextView>(R.id.btnProfile)
 
-        if(email.isNullOrEmpty()){
+        if (email.isNullOrEmpty()) {
             logoutText.text = "Login"
         }
         btnOrders.setOnClickListener {
@@ -148,11 +188,11 @@ class HomeFragment() : Fragment() {
         }
 
         btnProfile.setOnClickListener {
-            try{
+            try {
                 findNavController().navigate(R.id.action_homeFragment_to_userProfileFragment)
                 bottomMenu.dismiss()
-            }catch (e : Exception){
-                makeToast(requireContext(),e.message.toString(),true)
+            } catch (e: Exception) {
+                makeToast(requireContext(), e.message.toString(), true)
             }
 
         }
@@ -179,32 +219,31 @@ class HomeFragment() : Fragment() {
 
         btnLogout.setOnClickListener {
 
-            if(!email.isNullOrEmpty())
-            {
+            if (!email.isNullOrEmpty()) {
                 //bottomMenu.dismiss()
                 val d = AlertDialog.Builder(requireContext())
                 d.setTitle("Do you want to logout ?")
                 d.setMessage("You can login anytime ;)")
-                d.setPositiveButton("Yes"){v,m ->
-                    try{
-                        vm.logout(email!!,jwttoken!!)
-                    }catch (e : Exception){
-                        Functions.makeToast(requireContext(),e.message.toString())
+                d.setPositiveButton("Yes") { v, m ->
+                    try {
+                        vm.logout(email!!, jwttoken!!)
+                    } catch (e: Exception) {
+                        Functions.makeToast(requireContext(), e.message.toString())
                     }
                 }
-                d.setNegativeButton("No"){v,m->
+                d.setNegativeButton("No") { v, m ->
                     v.dismiss()
                 }
                 d.show()
-            }else{
-                startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
+            } else {
+                startActivity(Intent(requireActivity(), AuthenticationActivity::class.java))
                 requireActivity().finish()
             }
         }
 
-        with(sheetView){
+        with(sheetView) {
             findViewById<View>(R.id.menuItemWishlist).setOnClickListener {
-                startActivity(Intent(requireContext(),WishListActivity::class.java))
+                startActivity(Intent(requireContext(), WishListActivity::class.java))
                 bottomMenu.dismiss()
             }
         }
@@ -215,14 +254,26 @@ class HomeFragment() : Fragment() {
     }
 
     private fun logout() {
-        val sharedPreference = requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
-        val ed = sharedPreference.edit()
-        ed.putString("email",null)
-        ed.commit()
-        CoroutineScope(Dispatchers.IO).launch{
-            requireActivity().preferenceDataStoreAuth.edit {
-                it[stringPreferencesKey(JWT_TOKEN)] = ""
+        try {
+            val localDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
+            if (!email.isNullOrEmpty()) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    localDatabase.deleteUser(email!!)
+                }
             }
+            val sharedPreference =
+                requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
+            val ed = sharedPreference.edit()
+            ed.putString("email", null)
+            ed.commit()
+            CoroutineScope(Dispatchers.IO).launch {
+                requireActivity().preferenceDataStoreAuth.edit {
+                    it[stringPreferencesKey(JWT_TOKEN)] = ""
+                }
+            }
+
+        } catch (e: Exception) {
+            makeToast(requireContext(), e.message.toString())
         }
     }
 
@@ -243,46 +294,46 @@ class HomeFragment() : Fragment() {
 //        vm.products.observe(viewLifecycleOwner) {
 //            binding.rvProductsMain.adapter = ProductAdapter(requireContext(), it, vm,)
 //        }
-        vm.posters.observe(viewLifecycleOwner){
-            binding.rvProductsMain.adapter = ProductsMainAdapter(requireContext(),it,vm,viewLifecycleOwner)
+        vm.posters.observe(viewLifecycleOwner) {
+            binding.rvProductsMain.adapter =
+                ProductsMainAdapter(requireContext(), it, vm, viewLifecycleOwner)
         }
 
-        vm.isLoading.observe(viewLifecycleOwner){
-            if(it){
+        vm.isLoading.observe(viewLifecycleOwner) {
+            if (it) {
                 binding.linearContent.visibility = View.GONE
                 binding.shimmerView.visibility = View.VISIBLE
-            }else{
+            } else {
                 Handler().postDelayed({
                     binding.linearContent.visibility = View.VISIBLE
                     binding.shimmerView.visibility = View.GONE
-                },1500)
+                }, 1500)
             }
         }
 
-        vm.isLoggedOut.observe(viewLifecycleOwner){
-            if(!email.isNullOrEmpty())
-            {
-                if(it){
+        vm.isLoggedOut.observe(viewLifecycleOwner) {
+            if (!email.isNullOrEmpty()) {
+                if (it) {
                     logout()
-                    Functions.makeToast(requireContext(),"Logged out")
+                    Functions.makeToast(requireContext(), "Logged out")
                     Handler().postDelayed({
                         requireActivity().finish()
-                    },2000)
+                    }, 2000)
                 }
-            }else{
+            } else {
                 //Functions.makeToast(requireContext(),"Can not logout")
             }
         }
     }
 
-    private fun setupDeviceId(){
+    private fun setupDeviceId() {
         val id = OneSignal.getDeviceState()?.userId
-        if(!id.isNullOrEmpty()){
-            vm.setDeviceID(LoginReq(email!!,"",id))
+        if (!id.isNullOrEmpty()) {
+            vm.setDeviceID(LoginReq(email!!, "", id))
         }
     }
 
-    suspend fun getToken(key : String) : String? {
+    suspend fun getToken(key: String): String? {
         val data = requireActivity().preferenceDataStoreAuth.data.first()
         return data[stringPreferencesKey(key)]
     }

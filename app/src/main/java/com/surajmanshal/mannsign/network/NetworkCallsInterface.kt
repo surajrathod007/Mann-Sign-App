@@ -243,4 +243,7 @@ interface NetworkCallsInterface {
 
     @POST("user/delete")
     fun deleteUser(@Query("email") email : String) : Call<SimpleResponse>
+
+    @GET("user/get")
+    fun getUserByEmail(@Query("email") email : String) : Call<SimpleResponse>
 }
