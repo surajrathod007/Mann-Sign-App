@@ -19,8 +19,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
-import com.surajmanshal.mannsign.ProfileActivity
-import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
@@ -29,7 +27,12 @@ import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
-import com.surajmanshal.mannsign.ui.activity.*
+import com.surajmanshal.mannsign.ui.activity.CartActivity
+import com.surajmanshal.mannsign.ui.activity.OrdersActivity
+import com.surajmanshal.mannsign.ui.activity.ProductCategoryDetailsActivity
+import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
+import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
+import com.surajmanshal.mannsign.ui.activity.WishListActivity
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
@@ -38,10 +41,8 @@ import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import com.surajrathod.authme.util.GetInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import nl.joery.animatedbottombar.AnimatedBottomBar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -157,7 +158,7 @@ class HomeFragment() : Fragment() {
 
     private fun isUserExists(email: String, exists: (Boolean) -> Unit = {}) {
 
-        val ans = NetworkService.networkInstance.getUserByEmail(email)
+        val ans = NetworkService.networkInstance.isUserExist(email)
         ans.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
                 call: Call<SimpleResponse?>,
