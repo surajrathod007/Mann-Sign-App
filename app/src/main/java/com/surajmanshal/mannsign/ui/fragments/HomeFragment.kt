@@ -1,5 +1,8 @@
 package com.surajmanshal.mannsign.ui.fragments
 
+import alirezat775.lib.carouselview.Carousel
+import alirezat775.lib.carouselview.CarouselModel
+import alirezat775.lib.carouselview.CarouselView
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
@@ -11,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -21,8 +25,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.adapter.BannerAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
+import com.surajmanshal.mannsign.data.model.BannerImage
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
@@ -149,6 +155,7 @@ class HomeFragment() : Fragment() {
         }
 
 
+        //loadCarousal()
 
         return binding.root
     }
@@ -294,8 +301,23 @@ class HomeFragment() : Fragment() {
 
 
     private fun loadData() {
+
         vm.getSubCategories()
         vm.getAllPosters()
+        loadCarousal()
+    }
+
+    private fun loadCarousal() {
+        val adp = BannerAdapter()
+        val carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, adp)
+        carousel.setOrientation(CarouselView.HORIZONTAL, false)
+        carousel.autoScroll(true, 2000, true)
+        carousel.scaleView(true)
+        val images = mutableListOf<BannerImage>()
+        images.add(BannerImage(R.drawable.banner_1))
+        images.add(BannerImage(R.drawable.banner_5))
+        images.add(BannerImage(R.drawable.banner_6))
+        carousel.addAll(images as MutableList<CarouselModel>)
     }
 
     private fun setupObservers() {
