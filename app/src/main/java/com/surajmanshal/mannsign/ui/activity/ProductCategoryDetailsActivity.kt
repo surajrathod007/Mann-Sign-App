@@ -6,14 +6,14 @@ import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
 import com.surajmanshal.mannsign.databinding.ActivityProductCategoryDetailsBinding
 import com.surajmanshal.mannsign.viewmodel.ProductCategoryDetailsViewModel
 
-class ProductCategoryDetailsActivity : AppCompatActivity() {
+class ProductCategoryDetailsActivity : SecuredScreenActivity() {
 
     lateinit var binding : ActivityProductCategoryDetailsBinding
     lateinit var vm : ProductCategoryDetailsViewModel

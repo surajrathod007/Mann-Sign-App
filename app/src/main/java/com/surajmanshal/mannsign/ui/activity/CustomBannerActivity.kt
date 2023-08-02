@@ -19,10 +19,10 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.gson.internal.LinkedTreeMap
 import com.surajmanshal.mannsign.ImageUploading
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.CustomSpinnerAdapter
 import com.surajmanshal.mannsign.adapter.MaterialSpinnerAdapter
 import com.surajmanshal.mannsign.data.model.Image
@@ -46,7 +46,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class CustomBannerActivity : AppCompatActivity() {
+class CustomBannerActivity : SecuredScreenActivity() {
 
     val arrProductType = listOf("Poster", "Banner")
     val REQUEST_CODE = 0

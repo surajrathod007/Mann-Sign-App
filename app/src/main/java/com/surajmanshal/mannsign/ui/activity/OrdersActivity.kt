@@ -3,18 +3,17 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.lifecycle.ViewModelProvider
 import com.surajmanshal.mannsign.AuthenticationActivity
-import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrdersAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrdersBinding
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 
-class OrdersActivity : AppCompatActivity() {
+class OrdersActivity : SecuredScreenActivity() {
 
     lateinit var binding : ActivityOrdersBinding
     lateinit var vm : OrdersViewModel

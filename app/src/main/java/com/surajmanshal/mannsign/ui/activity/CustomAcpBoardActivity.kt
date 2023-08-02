@@ -2,11 +2,9 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.app.DownloadManager
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -21,12 +19,13 @@ import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.FontAdapter
 import com.surajmanshal.mannsign.databinding.ActivityCustomAcpBoardBinding
 import com.surajmanshal.mannsign.viewmodel.CustomAcpViewModel
 import java.io.File
 
-class CustomAcpBoardActivity : AppCompatActivity() {
+class CustomAcpBoardActivity : SecuredScreenActivity() {
 
     lateinit var binding: ActivityCustomAcpBoardBinding
     lateinit var downLoadManager: DownloadManager

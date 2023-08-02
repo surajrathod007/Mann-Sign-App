@@ -1,13 +1,13 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.databinding.ActivityOrderPlacedBinding
 
-class OrderPlacedActivity : AppCompatActivity() {
+class OrderPlacedActivity : SecuredScreenActivity() {
 
     lateinit var binding : ActivityOrderPlacedBinding
     override fun onCreate(savedInstanceState: Bundle?) {
