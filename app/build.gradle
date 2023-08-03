@@ -143,4 +143,8 @@ dependencies {
     //implementation 'com.paytm.appinvokesdk:appinvokesdk:1.6.0'
     implementation(name: 'paytmsdk', ext: 'aar')
 
+
+    implementation 'com.github.alirezat775:carousel-view:1.1.1'
+
+
 }
