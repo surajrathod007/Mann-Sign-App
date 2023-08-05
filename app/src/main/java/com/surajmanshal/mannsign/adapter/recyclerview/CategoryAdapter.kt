@@ -39,6 +39,7 @@ class CategoryAdapter(val c: Context, val list: List<SubCategory>) :
                 i.putExtra("sub",data.id)
                 c.startActivity(i)
             }
+            binding.ivCategory.setImageDrawable(null)
             data.imgUrl?.let{
                 Glide.with(binding.root).load(Functions.urlMaker(it)).error(R.drawable.button_bg).into(binding.ivCategory)
             }
