@@ -15,7 +15,6 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
@@ -34,6 +33,7 @@ import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
 import com.surajmanshal.mannsign.utils.Constants
@@ -48,7 +48,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class OrderDetailsActivity : AppCompatActivity() {
+class OrderDetailsActivity : SecuredScreenActivity() {
 
     private val requestCode: Int = 123
     lateinit var binding: ActivityOrderDetailsBinding

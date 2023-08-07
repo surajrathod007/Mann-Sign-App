@@ -5,7 +5,6 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.auth.User
@@ -22,7 +21,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ProfileEdit : AppCompatActivity() {
+class ProfileEdit : SecuredScreenActivity() {
 
 
     lateinit var binding: ActivityProfileEditBinding

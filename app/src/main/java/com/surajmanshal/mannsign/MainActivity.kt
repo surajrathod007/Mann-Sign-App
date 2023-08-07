@@ -3,11 +3,10 @@ package com.surajmanshal.mannsign
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
 import com.surajmanshal.mannsign.utils.auth.DataStore
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : SecuredScreenActivity() {
 
 
     lateinit var binding : ActivityMainBinding

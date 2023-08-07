@@ -1,27 +1,21 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
-import com.onesignal.OSNotificationReceivedEvent
-import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
-import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.CartItemAdapter
 import com.surajmanshal.mannsign.databinding.ActivityCartBinding
-import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 
-class CartActivity : AppCompatActivity() {
+class CartActivity : SecuredScreenActivity() {
 
     lateinit var binding: ActivityCartBinding
     lateinit var vm: CartViewModel

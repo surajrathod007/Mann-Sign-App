@@ -1,13 +1,13 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.databinding.FragmentViewProfilePicBinding
 
-class ImageViewingActivity : AppCompatActivity() {
+class ImageViewingActivity : SecuredScreenActivity() {
 
     lateinit var binding: FragmentViewProfilePicBinding
     var imgUrl : String? = null

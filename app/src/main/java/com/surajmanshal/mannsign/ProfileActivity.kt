@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
@@ -26,7 +25,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : SecuredScreenActivity() {
 
     lateinit var btnEdit : Button
     lateinit var btnLogout : Button

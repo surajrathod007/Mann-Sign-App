@@ -10,11 +10,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.ChatAdapter
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.databinding.ActivityChatBinding
@@ -30,7 +30,7 @@ import okhttp3.RequestBody
 import java.io.File
 import java.io.FileOutputStream
 
-class ChatActivity : AppCompatActivity() {
+class ChatActivity : SecuredScreenActivity() {
 
     lateinit var binding: ActivityChatBinding
     lateinit var vm: ChatViewModel
