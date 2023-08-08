@@ -40,10 +40,12 @@ import com.surajmanshal.mannsign.ui.activity.ProductCategoryDetailsActivity
 import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
 import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.ui.activity.WishListActivity
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
+import com.surajmanshal.mannsign.utils.makeACall
 import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import com.surajrathod.authme.util.GetInput
 import kotlinx.coroutines.CoroutineScope
@@ -154,7 +156,9 @@ class HomeFragment() : Fragment() {
             isMinProfileSetupDone = it.firstName != null
         }
 
-
+        binding.btnCall.setOnClickListener {
+            requireContext().makeACall(Constants.MANN_SIGN_PHONE_NUMBER)
+        }
         //loadCarousal()
 
         return binding.root
