@@ -22,13 +22,13 @@
         app:contentPadding="4dp">
 
        <androidx.appcompat.widget.LinearLayoutCompat
-           android:layout_width="match_parent"
+           android:layout_width="92dp"
            android:layout_height="wrap_content"
            android:orientation="vertical">
 
            <com.google.android.material.imageview.ShapeableImageView
                android:id="@+id/ivCategory"
-               android:layout_width="92dp"
+               android:layout_width="match_parent"
                android:layout_height="108dp"
                android:layout_marginHorizontal="4dp"
                android:scaleType="fitCenter"
@@ -45,7 +45,8 @@
                android:text="Poster"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
-               android:layout_gravity="bottom|center_horizontal"
+               android:foregroundGravity="bottom"
+               android:maxLines="4"
                />
 
        </androidx.appcompat.widget.LinearLayoutCompat>

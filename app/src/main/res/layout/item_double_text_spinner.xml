@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:textSize="14sp"
         android:layout_gravity="end|center_vertical"
+        android:visibility="gone"
         />
 
     <androidx.constraintlayout.utils.widget.ImageFilterView

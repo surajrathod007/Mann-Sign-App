@@ -44,6 +44,7 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
+import com.surajmanshal.mannsign.utils.makeACall
 import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
@@ -488,9 +489,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
             }
         }
         binding.productBuyingLayout.fabCallNow.setOnClickListener {
-            startActivity(Intent(Intent.ACTION_DIAL).apply {
-                data = Uri.parse("tel:${Constants.MANN_SIGN_PHONE_NUMBER}")
-            })
+            makeACall(Constants.MANN_SIGN_PHONE_NUMBER)
         }
 
 

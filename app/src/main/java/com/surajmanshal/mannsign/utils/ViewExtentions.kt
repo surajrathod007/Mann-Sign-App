@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.util.Pair
 import android.view.View
 import android.widget.EditText
@@ -41,4 +42,10 @@ fun ImageView.viewFullScreen(activity: Activity,imgUrl : String){
             putExtra("imgUrl",imgUrl)
         }, optionsBundle)
 
+}
+
+fun Context.makeACall(number : String){
+    startActivity(Intent(Intent.ACTION_DIAL).apply {
+        data = Uri.parse("tel:${number}")
+    })
 }
