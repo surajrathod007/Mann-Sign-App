@@ -3,7 +3,6 @@ package com.surajmanshal.mannsign.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -12,12 +11,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.TransactionAdapter
 import com.surajmanshal.mannsign.data.model.DateFilter
 import com.surajmanshal.mannsign.databinding.ActivityTransactionsBinding
@@ -29,7 +28,7 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class TransactionsActivity : AppCompatActivity() {
+class TransactionsActivity : SecuredScreenActivity() {
 
     lateinit var binding : ActivityTransactionsBinding
     lateinit var vm : TransactionViewModel

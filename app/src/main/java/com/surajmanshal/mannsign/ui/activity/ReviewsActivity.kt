@@ -11,18 +11,18 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.databinding.ActivityReviewsBinding
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 
-class ReviewsActivity : AppCompatActivity() {
+class ReviewsActivity : SecuredScreenActivity() {
 
     lateinit var binding: ActivityReviewsBinding
     lateinit var vm: ReviewsViewModel

@@ -1,15 +1,20 @@
 package com.surajmanshal.mannsign.ui.fragments
 
+import alirezat775.lib.carouselview.Carousel
+import alirezat775.lib.carouselview.CarouselModel
+import alirezat775.lib.carouselview.CarouselView
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -19,17 +24,22 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
-import com.surajmanshal.mannsign.ProfileActivity
-import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.adapter.BannerAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
+import com.surajmanshal.mannsign.data.model.BannerImage
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
-import com.surajmanshal.mannsign.ui.activity.*
+import com.surajmanshal.mannsign.ui.activity.CartActivity
+import com.surajmanshal.mannsign.ui.activity.OrdersActivity
+import com.surajmanshal.mannsign.ui.activity.ProductCategoryDetailsActivity
+import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
+import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
+import com.surajmanshal.mannsign.ui.activity.WishListActivity
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
@@ -38,10 +48,8 @@ import com.surajmanshal.mannsign.viewmodel.HomeViewModel
 import com.surajrathod.authme.util.GetInput
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import nl.joery.animatedbottombar.AnimatedBottomBar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -99,7 +107,8 @@ class HomeFragment() : Fragment() {
                 isUserExists(email!!) {
                     if (it) {
                         setupDeviceId()
-                        Functions.makeToast(requireContext(), "Device id set $email")
+//                        Functions.makeToast(requireContext(), "Device id set $email")
+                        Log.d(this.javaClass.name,"Device id set $email")
                     } else {
                         deleteAllData()
                     }
@@ -146,6 +155,7 @@ class HomeFragment() : Fragment() {
         }
 
 
+        //loadCarousal()
 
         return binding.root
     }
@@ -157,7 +167,7 @@ class HomeFragment() : Fragment() {
 
     private fun isUserExists(email: String, exists: (Boolean) -> Unit = {}) {
 
-        val ans = NetworkService.networkInstance.getUserByEmail(email)
+        val ans = NetworkService.networkInstance.isUserExist(email)
         ans.enqueue(object : Callback<SimpleResponse?> {
             override fun onResponse(
                 call: Call<SimpleResponse?>,
@@ -291,14 +301,30 @@ class HomeFragment() : Fragment() {
 
 
     private fun loadData() {
+
         vm.getSubCategories()
         vm.getAllPosters()
+        loadCarousal()
+    }
+
+    private fun loadCarousal() {
+        val adp = BannerAdapter()
+        val carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, adp)
+        carousel.setOrientation(CarouselView.HORIZONTAL, false)
+        carousel.autoScroll(true, 2000, true)
+        carousel.scaleView(true)
+        val images = mutableListOf<BannerImage>()
+        images.add(BannerImage(R.drawable.banner_1))
+        images.add(BannerImage(R.drawable.banner_5))
+        images.add(BannerImage(R.drawable.banner_6))
+        carousel.addAll(images as MutableList<CarouselModel>)
     }
 
     private fun setupObservers() {
 
         vm.msg.observe(viewLifecycleOwner) {
-            Functions.makeToast(requireContext(), it)
+//            Functions.makeToast(requireContext(), it)
+            Log.e("${this.javaClass.name}:OCCURED",it)
         }
         vm.subCategories.observe(viewLifecycleOwner) {
             binding.rvCategories.adapter = CategoryAdapter(requireContext(), it)

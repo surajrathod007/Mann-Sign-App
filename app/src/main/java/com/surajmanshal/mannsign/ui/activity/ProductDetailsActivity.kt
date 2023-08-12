@@ -18,7 +18,6 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
@@ -30,6 +29,7 @@ import com.bumptech.glide.request.target.SimpleTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.CustomSpinnerAdapter
 import com.surajmanshal.mannsign.adapter.MaterialSpinnerAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
@@ -58,7 +58,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ProductDetailsActivity : AppCompatActivity() {
+class ProductDetailsActivity : SecuredScreenActivity() {
 
     private lateinit var binding: ActivityProductDetailsBinding
     private lateinit var vm: ProductsViewModel

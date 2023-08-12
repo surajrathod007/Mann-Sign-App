@@ -1,9 +1,9 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
+import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.WishlistAdapter
 import com.surajmanshal.mannsign.databinding.ActivityWishListBinding
 import com.surajmanshal.mannsign.room.LocalDatabase
@@ -11,7 +11,7 @@ import com.surajmanshal.mannsign.room.wishlist.WishListDao
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.WishListViewModel
 
-class WishListActivity : AppCompatActivity() {
+class WishListActivity : SecuredScreenActivity() {
 
     lateinit var vm : WishListViewModel
     lateinit var wishListDao : WishListDao
