@@ -246,4 +246,7 @@ interface NetworkCallsInterface {
 
     @GET("user/exist")
     fun isUserExist(@Query("email") email : String) : Call<SimpleResponse>
+
+    @GET("banner/getall")
+    fun getAllBanners() : Call<List<AdBanner>>
 }

@@ -68,6 +68,8 @@ class HomeFragment() : Fragment() {
     var token: String? = ""
     var isMinProfileSetupDone = false
 
+    val adp = BannerAdapter()
+    lateinit var carousel : Carousel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
@@ -104,6 +106,7 @@ class HomeFragment() : Fragment() {
         }
 
 
+        carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, adp)
         if (NetworkService.checkForInternet(requireContext())) {
             if (!email.isNullOrEmpty()) {
                 isUserExists(email!!) {
@@ -308,26 +311,30 @@ class HomeFragment() : Fragment() {
 
         vm.getSubCategories()
         vm.getAllPosters()
-        loadCarousal()
+        vm.getAdBanners()
+
     }
 
-    private fun loadCarousal() {
-        val adp = BannerAdapter()
-        val carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, adp)
-        carousel.setOrientation(CarouselView.HORIZONTAL, false)
-        carousel.autoScroll(true, 2000, true)
-        carousel.scaleView(true)
-        val images = mutableListOf<BannerImage>()
-        images.add(BannerImage(R.drawable.banner_1))
-        images.add(BannerImage(R.drawable.banner_5))
-        images.add(BannerImage(R.drawable.banner_6))
-        carousel.addAll(images as MutableList<CarouselModel>)
-    }
 
     private fun setupObservers() {
 
+        vm.adBanners.observe(viewLifecycleOwner){
+            if(!it.isNullOrEmpty()){
+                carousel.setOrientation(CarouselView.HORIZONTAL, false)
+                carousel.autoScroll(true, 2000, true)
+                carousel.scaleView(true)
+                val images = mutableListOf<BannerImage>()
+                it.forEach {
+                    images.add(BannerImage(it.imgUrl.toString()))
+                }
+                carousel.addAll(images as MutableList<CarouselModel>)
+                binding.bannerCarousel.visibility = View.VISIBLE
+            }else{
+                binding.bannerCarousel.visibility = View.GONE
+            }
+        }
         vm.msg.observe(viewLifecycleOwner) {
-//            Functions.makeToast(requireContext(), it)
+           //Functions.makeToast(requireContext(), it)
             Log.e("${this.javaClass.name}:OCCURED",it)
         }
         vm.subCategories.observe(viewLifecycleOwner) {

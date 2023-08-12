@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.surajmanshal.mannsign.data.model.AdBanner
 import com.surajmanshal.mannsign.data.model.SubCategory
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.product.MainPoster
@@ -26,6 +27,10 @@ class HomeViewModel : ViewModel() {
     private var _subCategories = MutableLiveData<List<SubCategory>>(mutableListOf())
     val subCategories: LiveData<List<SubCategory>> get() = _subCategories
 
+
+    private var _adBanners = MutableLiveData<List<AdBanner>>(mutableListOf())
+    val adBanners: LiveData<List<AdBanner>> get() = _adBanners
+
     private var _products = MutableLiveData<List<Product>>(mutableListOf())
     val products: LiveData<List<Product>> get() = _products
 
@@ -43,6 +48,35 @@ class HomeViewModel : ViewModel() {
 
     companion object {
         val db = NetworkService.networkInstance
+    }
+
+
+    fun getAdBanners(){
+        _isLoading.postValue(true)
+        try{
+            val r = db.getAllBanners()
+            r.enqueue(object : Callback<List<AdBanner>?> {
+                override fun onResponse(
+                    call: Call<List<AdBanner>?>,
+                    response: Response<List<AdBanner>?>
+                ) {
+                    if(response.body() != null){
+                        _adBanners.postValue(response.body())
+                    }else{
+                        _msg.postValue("Response is null")
+                    }
+                    _isLoading.postValue(false)
+                }
+
+                override fun onFailure(call: Call<List<AdBanner>?>, t: Throwable) {
+                    _msg.postValue(t.message)
+                    _isLoading.postValue(false)
+                }
+            })
+        }catch (e : Exception){
+            _msg.postValue(e.message)
+            _isLoading.postValue(false)
+        }
     }
 
     fun getSubCategories() {

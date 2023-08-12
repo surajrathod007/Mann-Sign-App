@@ -8,6 +8,7 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.BannerImage
+import com.surajmanshal.mannsign.utils.Functions
 
 class BannerAdapter : CarouselAdapter() {
 
@@ -36,7 +37,7 @@ class BannerAdapter : CarouselAdapter() {
             is MyViewHolder -> {
                 vh = holder
                 val model = getItems()[position] as BannerImage
-                Glide.with(holder.itemView.context).load(model.getId()).into((vh as MyViewHolder).imgPoster)
+                Glide.with(holder.itemView.context).load(Functions.urlMaker(model.getId())).into((vh as MyViewHolder).imgPoster)
             }
         }
     }
