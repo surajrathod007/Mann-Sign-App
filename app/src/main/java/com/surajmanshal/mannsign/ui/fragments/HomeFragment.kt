@@ -70,10 +70,14 @@ class HomeFragment() : Fragment() {
 
     val adp = BannerAdapter()
     lateinit var carousel : Carousel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
     }
+
+
 
     override fun onResume() {
         super.onResume()

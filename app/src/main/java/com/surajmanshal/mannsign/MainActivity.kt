@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign
 
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.Toast
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
 import com.surajmanshal.mannsign.utils.auth.DataStore
 
@@ -16,6 +17,7 @@ class MainActivity : SecuredScreenActivity() {
 
 //    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
 
+    var backPressedTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -36,6 +38,16 @@ class MainActivity : SecuredScreenActivity() {
 //        requestPermission()
         //setupViewPager()
 
+    }
+
+    override fun onBackPressed() {
+        if (backPressedTime + 3000 > System.currentTimeMillis()) {
+            super.onBackPressed()
+            finish()
+        } else {
+            Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_LONG).show()
+        }
+        backPressedTime = System.currentTimeMillis()
     }
 
     private fun setupViewPager(){
