@@ -38,4 +38,13 @@
         <item name="android:textColor">@color/text_normal_color</item>
     </style>
 
+    <style name="splash_screen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@color/black</item>
+    </style>
+
+
 </resources>
