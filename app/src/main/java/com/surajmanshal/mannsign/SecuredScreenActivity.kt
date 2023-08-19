@@ -9,6 +9,7 @@ open class SecuredScreenActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        window.setFlags(preventScreenShot,preventScreenShot)
+        if(!BuildConfig.DEBUG)
+            window.setFlags(preventScreenShot,preventScreenShot)
     }
 }
