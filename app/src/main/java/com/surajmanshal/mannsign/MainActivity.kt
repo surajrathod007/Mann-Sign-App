@@ -9,11 +9,16 @@ import com.surajmanshal.mannsign.utils.auth.DataStore
 
 class MainActivity : SecuredScreenActivity() {
 
+    interface MainActivityBackPressListener {
+        fun onActivityBackPressed()
+    }
 
-    lateinit var binding : ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     var isRead = false
     var isWrite = false
-    var token : String? = ""
+    var token: String? = ""
+
+    val listners = mutableListOf<MainActivityBackPressListener>()
 
 //    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
 
@@ -27,12 +32,10 @@ class MainActivity : SecuredScreenActivity() {
         token = intent.getStringExtra(DataStore.JWT_TOKEN)
 
 
-
         /*permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
             isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
             isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
         }*/
-
 
 
 //        requestPermission()
@@ -41,6 +44,9 @@ class MainActivity : SecuredScreenActivity() {
     }
 
     override fun onBackPressed() {
+        listners.forEach {
+            it.onActivityBackPressed()
+        }
         if (backPressedTime + 3000 > System.currentTimeMillis()) {
             super.onBackPressed()
             finish()
@@ -50,7 +56,15 @@ class MainActivity : SecuredScreenActivity() {
         backPressedTime = System.currentTimeMillis()
     }
 
-    private fun setupViewPager(){
+    fun registerListener(listener: MainActivityBackPressListener) {
+        listners.add(listener)
+    }
+
+    fun removeListener(listener: MainActivityBackPressListener) {
+        listners.remove(listener)
+    }
+
+    private fun setupViewPager() {
         //val flist = listOf(HomeFragment(token),CustomOrderFragment(),UserProfileFragment(token))
         //binding.viewPager.adapter = MainViewPagerAdapter(flist,this@MainActivity)
         //binding.bottomNavigationView.setupWithViewPager2(binding.viewPager)

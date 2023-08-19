@@ -57,6 +57,45 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
+                <com.google.android.material.appbar.AppBarLayout
+                    android:elevation="0dp"
+                    app:elevation="0dp"
+                    android:background="@color/white"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp">
+
+                    <LinearLayout
+                        android:weightSum="1"
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <ImageView
+                            android:layout_gravity="center"
+                            android:layout_weight="0.2"
+                            android:clickable="true"
+                            android:foreground="?attr/selectableItemBackground"
+                            android:id="@+id/btnProfileBack"
+                            android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                            android:layout_width="0dp"
+                            android:layout_height="30dp"
+                            app:tint="@color/title_text_color" />
+                        <TextView
+                            android:layout_weight="0.6"
+                            android:textSize="22sp"
+                            android:textColor="@color/title_text_color"
+                            android:fontFamily="@font/satoshi_bold"
+                            android:text="Profile"
+                            android:gravity="center"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"/>
+
+
+
+                    </LinearLayout>
+
+                </com.google.android.material.appbar.AppBarLayout>
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnEditProfileFrag"
                     android:layout_width="wrap_content"

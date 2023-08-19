@@ -8,11 +8,15 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.AuthenticationActivity
+import com.surajmanshal.mannsign.MainActivity
 import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.auth.User
@@ -38,7 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 
 //TODO : Remove static text values in xml file for firstname etc.
-class UserProfileFragment() : Fragment() {
+class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressListener{
 
     lateinit var binding: FragmentUserProfileBinding
     lateinit var userDatabase: UserDao
@@ -88,13 +92,31 @@ class UserProfileFragment() : Fragment() {
         } else {
             binding.llUserContent.visibility = View.GONE
             binding.userLogin.visibility = View.VISIBLE
-            binding.btnLogoutFrag.setTextColor(R.color.order_selected_text_color)
+            binding.btnLogoutFrag.setTextColor(resources.getColor(R.color.order_selected_text_color))
             binding.btnLogoutFrag.text = "Login/Register"
             makeToast(requireContext(), "Please Login")
         }
 
+        registerListeners()
         setupClickListeners()
+        setupOnBackPressed()
         return binding.root
+    }
+
+    private fun registerListeners() {
+        if(activity is MainActivity){
+            (activity as MainActivity).registerListener(this)
+        }
+    }
+
+    override fun onDestroyView() {
+        if(activity is MainActivity){
+            (activity as MainActivity).removeListener(this)
+        }
+        super.onDestroyView()
+    }
+    private fun setupOnBackPressed() {
+
     }
 
     override fun onResume() {
@@ -117,6 +139,9 @@ class UserProfileFragment() : Fragment() {
 
     private fun setupClickListeners() {
         with(binding) {
+            btnProfileBack.setOnClickListener {
+                findNavController().popBackStack()
+            }
             btnDeleteAccount.setOnClickListener {
                 startActivity(Intent(requireActivity(), AccountDeleteActivity::class.java))
             }
@@ -261,5 +286,9 @@ class UserProfileFragment() : Fragment() {
     suspend fun getToken(key: String): String? {
         val data = requireActivity().preferenceDataStoreAuth.data.first()
         return data[stringPreferencesKey(key)]
+    }
+
+    override fun onActivityBackPressed() {
+        findNavController().popBackStack()
     }
 }
