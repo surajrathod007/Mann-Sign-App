@@ -332,6 +332,7 @@ class HomeFragment() : Fragment() {
                     images.add(BannerImage(it.imgUrl.toString()))
                 }
                 carousel.addAll(images as MutableList<CarouselModel>)
+                carousel.resumeAutoScroll()
                 binding.bannerCarousel.visibility = View.VISIBLE
             }else{
                 binding.bannerCarousel.visibility = View.GONE
