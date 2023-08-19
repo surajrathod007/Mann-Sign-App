@@ -20,6 +20,14 @@
             android:textStyle="bold"
             android:layout_gravity="center_vertical"/>
 
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Inclusive of all Taxes"
+            android:textColor="@color/normal_button_color"
+            android:layout_gravity="bottom"/>
+
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:id="@+id/qtyInputLayout"
