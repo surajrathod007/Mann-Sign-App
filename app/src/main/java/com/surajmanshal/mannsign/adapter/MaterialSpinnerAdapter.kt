@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.core.view.isVisible
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.Material
 import com.surajmanshal.mannsign.databinding.ItemDoubleTextSpinnerBinding
@@ -41,7 +40,7 @@ class MaterialSpinnerAdapter(
 
         ItemDoubleTextSpinnerBinding.bind(view).apply {
             tvPrimaryText.text = material.name
-            ivDropDown.isVisible = selected
+//            ivDropDown.isVisible = selected   // previously used to manually give it a look of a spinner
             if(selected){
                 tvSecondaryText.hide()
             }else{

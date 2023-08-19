@@ -39,7 +39,7 @@ class CustomSpinnerAdapter(
 
         ItemDoubleTextSpinnerBinding.bind(view).apply {
             tvPrimaryText.text = item
-            ivDropDown.isVisible = selected
+//            ivDropDown.isVisible = selected  // previously used to manually give it a look of a spinner
             tvSecondaryText.isVisible = selected
             return root
         }
