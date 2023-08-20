@@ -59,8 +59,9 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
     var isRead = false
     var isWrite = false
+    var isStorageGranted = false
 
-    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
+    lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onStart() {
         super.onStart()
@@ -117,23 +118,42 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             i.putExtra("id", id)
             startActivity(i)
         }
-        permissionLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){
-            isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
-            isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
-        }
+        permissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+                if (Build.VERSION.SDK_INT >= 33) {
+                    val audio = it[android.Manifest.permission.READ_MEDIA_AUDIO] ?: false
+                    val video = it[android.Manifest.permission.READ_MEDIA_VIDEO] ?: false
+                    val image = it[android.Manifest.permission.READ_MEDIA_IMAGES] ?: false
+                    if (audio && video && image) {
+                        isStorageGranted = true
+                    }
+                } else {
+                    isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
+                    isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
+                    if (isRead && isWrite) {
+                        isStorageGranted = true
+                    }
+                }
+
+            }
         binding.btnDownloadInvoice.setOnClickListener {
             requestPermission()
-            makeInvoice()
+            if (isStorageGranted) {
+                makeInvoice()
+            } else {
+                makeToast(this@OrderDetailsActivity, "Please grant storage permission", true)
+            }
+
         }
         binding.btnMakePayment.setOnClickListener {
             val d = AlertDialog.Builder(this)
             d.setTitle("Want to make payment ?")
             d.setMessage("You can make payment through paytm app or in browser !")
-            d.setPositiveButton("Yes"){d,w ->
+            d.setPositiveButton("Yes") { d, w ->
                 makePayment()
             }
-            d.setNegativeButton("No"){d,w ->
-                makeToast(this,"Payment canceled")
+            d.setNegativeButton("No") { d, w ->
+                makeToast(this, "Payment canceled")
                 d.dismiss()
             }
             d.show()
@@ -143,48 +163,61 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
     private fun makePayment() {
 
-        var callBackUrl = "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${vm.order.value?.orderId}"
+        var callBackUrl =
+            "https://securegw-stage.paytm.in/theia/paytmCallback?ORDER_ID=${vm.order.value?.orderId}"
         var orderId = vm.order.value?.orderId.toString()
         val amount = vm.order.value?.total.toString()
 
-        val txnToken = vm.getTransactionToken(orderId,vm.order.value!!.emailId,amount)
-        if(txnToken != null){
-            val paytmOrder = PaytmOrder(orderId,Constants.MERCHENT_ID,txnToken,amount,callBackUrl)
-            val transaction = TransactionManager(paytmOrder,object : PaytmPaymentTransactionCallback {
+        val txnToken = vm.getTransactionToken(orderId, vm.order.value!!.emailId, amount)
+        if (txnToken != null) {
+            val paytmOrder =
+                PaytmOrder(orderId, Constants.MERCHENT_ID, txnToken, amount, callBackUrl)
+            val transaction =
+                TransactionManager(paytmOrder, object : PaytmPaymentTransactionCallback {
 
-                override fun onTransactionResponse(inResponse: Bundle?) {
-                    Toast.makeText(applicationContext, "Payment Transaction response " + inResponse.toString(), Toast.LENGTH_LONG).show();
+                    override fun onTransactionResponse(inResponse: Bundle?) {
+                        Toast.makeText(
+                            applicationContext,
+                            "Payment Transaction response " + inResponse.toString(),
+                            Toast.LENGTH_LONG
+                        ).show();
 
-                }
+                    }
 
-                override fun networkNotAvailable() {
-                    makeToast(this@OrderDetailsActivity,"Network not available")
-                }
+                    override fun networkNotAvailable() {
+                        makeToast(this@OrderDetailsActivity, "Network not available")
+                    }
 
-                override fun onErrorProceed(p0: String?) {
-                    makeToast(this@OrderDetailsActivity,"onErrorProceed $p0")
-                }
+                    override fun onErrorProceed(p0: String?) {
+                        makeToast(this@OrderDetailsActivity, "onErrorProceed $p0")
+                    }
 
-                override fun clientAuthenticationFailed(p0: String?) {
-                    makeToast(this@OrderDetailsActivity,"clientAuthenticationFailed $p0")
-                }
+                    override fun clientAuthenticationFailed(p0: String?) {
+                        makeToast(this@OrderDetailsActivity, "clientAuthenticationFailed $p0")
+                    }
 
-                override fun someUIErrorOccurred(p0: String?) {
-                    makeToast(this@OrderDetailsActivity,"someUIErrorOccurred $p0")
-                }
+                    override fun someUIErrorOccurred(p0: String?) {
+                        makeToast(this@OrderDetailsActivity, "someUIErrorOccurred $p0")
+                    }
 
-                override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
-                    makeToast(this@OrderDetailsActivity,"onErrorLoadingWebPage $p0 - $p1 - $p2")
-                }
+                    override fun onErrorLoadingWebPage(p0: Int, p1: String?, p2: String?) {
+                        makeToast(
+                            this@OrderDetailsActivity,
+                            "onErrorLoadingWebPage $p0 - $p1 - $p2"
+                        )
+                    }
 
-                override fun onBackPressedCancelTransaction() {
-                    makeToast(this@OrderDetailsActivity,"onBackPressedCancelTransaction ")
-                }
+                    override fun onBackPressedCancelTransaction() {
+                        makeToast(this@OrderDetailsActivity, "onBackPressedCancelTransaction ")
+                    }
 
-                override fun onTransactionCancel(p0: String?, p1: Bundle?) {
-                    makeToast(this@OrderDetailsActivity,"onTransactionCancel $p0 - ${p1.toString()} ")
-                }
-            })
+                    override fun onTransactionCancel(p0: String?, p1: Bundle?) {
+                        makeToast(
+                            this@OrderDetailsActivity,
+                            "onTransactionCancel $p0 - ${p1.toString()} "
+                        )
+                    }
+                })
             transaction.setAppInvokeEnabled(true)
             transaction.setShowPaymentUrl("https://securegw-stage.paytm.in/theia/api/v1/showPaymentPage")
             transaction.startTransaction(this, requestCode);
@@ -194,10 +227,15 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == resultCode && data != null){
-            Toast.makeText(this, data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"), Toast.LENGTH_SHORT).show()
+        if (requestCode == resultCode && data != null) {
+            Toast.makeText(
+                this,
+                data.getStringExtra("nativeSdkForMerchantMessage") + data.getStringExtra("response"),
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
     private fun setObservers() {
         vm.order.observe(this) {
             binding.rvOrderItems.adapter = OrderItemsAdapter(this, it.orderItems!!)
@@ -224,28 +262,34 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
             if (it.orderStatus != Constants.ORDER_PENDING || it.orderStatus != Constants.ORDER_CONFIRMED || it.orderStatus != Constants.ORDER_CANCELED) {
                 binding.btnDownloadInvoice.visibility = View.VISIBLE
-            }else{
+            } else {
                 binding.btnDownloadInvoice.visibility = View.GONE
             }
             when (it.orderStatus) {
                 Constants.ORDER_PENDING -> {
                     binding.txtOrderDetailsStatus.text = "Pending"
                 }
+
                 Constants.ORDER_CONFIRMED -> {
                     binding.txtOrderDetailsStatus.text = "Confirmed"
                 }
+
                 Constants.ORDER_PROCCESSING -> {
                     binding.txtOrderDetailsStatus.text = "Processing"
                 }
+
                 Constants.ORDER_READY -> {
                     binding.txtOrderDetailsStatus.text = "Ready"
                 }
+
                 Constants.ORDER_OUT_FOR_DELIVERY -> {
                     binding.txtOrderDetailsStatus.text = "Out for delivery !"
                 }
+
                 Constants.ORDER_DELIVERED -> {
                     binding.txtOrderDetailsStatus.text = "Delivered"
                 }
+
                 Constants.ORDER_CANCELED -> {
                     binding.txtOrderDetailsStatus.text = "Canceled"
                 }
@@ -266,7 +310,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
             var lst = vm.order.value!!.orderItems
 
-            val path = if(Build.VERSION.SDK_INT > Build.VERSION_CODES.Q)
+            val path = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q)
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
                     .toString()
             else
@@ -467,9 +511,10 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             )
             table3.addCell(
                 Cell().add(
-                    Paragraph("Rs. ${vm.order.value!!.total}").setFontSize(10f).setBold().setTextAlignment(
-                        TextAlignment.RIGHT
-                    )
+                    Paragraph("Rs. ${vm.order.value!!.total}").setFontSize(10f).setBold()
+                        .setTextAlignment(
+                            TextAlignment.RIGHT
+                        )
                 )
             )
 
@@ -552,7 +597,8 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             )
             table3.addCell(
                 Cell().add(
-                    Paragraph("Rs. ${vm.order.value!!.total+cgst+sgst}").setFontSize(10f).setBold()
+                    Paragraph("Rs. ${vm.order.value!!.total + cgst + sgst}").setFontSize(10f)
+                        .setBold()
                         .setTextAlignment(
                             TextAlignment.RIGHT
                         )
@@ -572,9 +618,10 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             )
             table3.addCell(
                 Cell().add(
-                    Paragraph("Rs. ${vm.order.value!!.deliveryCharge}").setFontSize(10f).setBold().setTextAlignment(
-                        TextAlignment.RIGHT
-                    )
+                    Paragraph("Rs. ${vm.order.value!!.deliveryCharge}").setFontSize(10f).setBold()
+                        .setTextAlignment(
+                            TextAlignment.RIGHT
+                        )
                 )
             )
 
@@ -688,7 +735,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             Toast.makeText(this, "Pdf Created", Toast.LENGTH_SHORT).show()
             if (path != null) {
                 openFile(file, path)
-            }else{
+            } else {
                 Toast.makeText(this, "Access Denied to External storage", Toast.LENGTH_SHORT).show()
             }
 
@@ -714,23 +761,64 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         }
     }
 
-    fun requestPermission(){
+    fun requestPermission() {
 
         //check permission already granted or not
-        isRead = ContextCompat.checkSelfPermission(this,android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-        isWrite = ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+        isRead = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+        isWrite = ContextCompat.checkSelfPermission(
+            this,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
 
-        var permissionRequest : MutableList<String> = ArrayList()
 
-        if(!isRead){
-            permissionRequest.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+        var permissionRequest: MutableList<String> = ArrayList()
+
+        if (Build.VERSION.SDK_INT >= 33) {
+
+            val audio = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_MEDIA_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+
+            val video = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_MEDIA_VIDEO
+            ) == PackageManager.PERMISSION_GRANTED
+
+            val image = ContextCompat.checkSelfPermission(
+                this,
+                android.Manifest.permission.READ_MEDIA_IMAGES
+            ) == PackageManager.PERMISSION_GRANTED
+
+            if (!audio) {
+                permissionRequest.add(android.Manifest.permission.READ_MEDIA_AUDIO)
+            }
+
+            if (!video) {
+                permissionRequest.add(android.Manifest.permission.READ_MEDIA_VIDEO)
+            }
+
+            if (!image) {
+                permissionRequest.add(android.Manifest.permission.READ_MEDIA_IMAGES)
+            }
+
+
+        } else {
+            if (!isRead) {
+                permissionRequest.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+
+            if (!isWrite) {
+                permissionRequest.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
         }
 
-        if(!isWrite){
-            permissionRequest.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        }
 
-        if(permissionRequest.isNotEmpty()){
+
+        if (permissionRequest.isNotEmpty()) {
             //request permission
             permissionLauncher.launch(permissionRequest.toTypedArray())
         }
