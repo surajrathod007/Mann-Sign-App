@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.surajmanshal.mannsign"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 4
         versionName "1.3"
 
