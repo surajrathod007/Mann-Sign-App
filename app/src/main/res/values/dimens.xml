@@ -6,4 +6,5 @@
     <dimen name="very_low_radius">4dp</dimen>
     <dimen name="custom_image_width">200dp</dimen>
     <dimen name="custom_image_height">200dp</dimen>
+    <dimen name="dimen_low">8dp</dimen>
 </resources>
