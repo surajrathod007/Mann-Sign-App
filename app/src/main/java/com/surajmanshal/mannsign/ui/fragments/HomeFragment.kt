@@ -35,6 +35,7 @@ import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.ui.activity.CartActivity
+import com.surajmanshal.mannsign.ui.activity.ContactUsActivity
 import com.surajmanshal.mannsign.ui.activity.OrdersActivity
 import com.surajmanshal.mannsign.ui.activity.ProductCategoryDetailsActivity
 import com.surajmanshal.mannsign.ui.activity.ReviewsActivity
@@ -210,6 +211,7 @@ class HomeFragment() : Fragment() {
         val btnProfile = sheetView.findViewById<LinearLayout>(R.id.btnProfileBottomSheet)
         val btnTransactions = sheetView.findViewById<LinearLayout>(R.id.btnTransactionsBottomSheet)
         val btnLogout = sheetView.findViewById<LinearLayout>(R.id.btnLogoutBottomSheet)
+        val btnContactUs = sheetView.findViewById<View>(R.id.btnContactUsBottomSheet)
         val logoutText = sheetView.findViewById<TextView>(R.id.btnLogOutText)
         //val btnProfile = sheetView.findViewById<TextView>(R.id.btnProfile)
 
@@ -272,6 +274,10 @@ class HomeFragment() : Fragment() {
                 startActivity(Intent(requireActivity(), AuthenticationActivity::class.java))
                 requireActivity().finish()
             }
+        }
+
+        btnContactUs.setOnClickListener {
+            startActivity(Intent(requireContext(),ContactUsActivity::class.java))
         }
 
         with(sheetView) {

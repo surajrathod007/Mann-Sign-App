@@ -1,41 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.activity.ContactUsActivity">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp" />
+    <ImageView
+        android:id="@+id/ivBack"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:padding="4dp"
+        android:src="@drawable/ic_baseline_arrow_back_ios_24"
+        app:tint="@color/black"
+        android:layout_margin="@dimen/margin_medium"/>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         android:paddingHorizontal="@dimen/margin_medium"
         android:theme="@style/satoshiTypeface">
-
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="Mann Sign"
+            android:text="Contact Us"
             android:textColor="@color/black"
-            android:textSize="32sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <View
             android:id="@+id/divider4"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/dimen_low"
+            android:layout_marginTop="@dimen/margin_medium"
             android:background="?android:attr/listDivider" />
 
         <TextView
@@ -44,18 +46,21 @@
             android:layout_marginVertical="@dimen/margin_medium"
             android:text="Manan Panchal"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="22sp" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/callLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            >
 
             <ImageView
+                android:layout_gravity="center_vertical"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:padding="4dp"
-                android:src="@drawable/ic_phone" />
+                android:src="@drawable/ic_phone"
+                app:tint="@color/light_blue_600" />
 
             <TextView
                 android:id="@+id/tvPhoneNo"
@@ -63,20 +68,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_medium"
                 android:layout_marginStart="@dimen/dimen_low"
-                android:textSize="22sp" />
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"/>
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/waLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            >
 
             <ImageView
+                android:layout_gravity="center_vertical"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:padding="4dp"
-                android:src="@drawable/ic_phone" />
+
+                android:src="@drawable/ic_wa" />
 
             <TextView
                 android:id="@+id/tvWhatAppNo"
@@ -84,20 +92,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_medium"
                 android:layout_marginStart="@dimen/dimen_low"
-                android:textSize="22sp" />
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"/>
 
-        </LinearLayout>
+        </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <FrameLayout
+            android:id="@+id/mailLayout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical">
+            >
 
             <ImageView
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:padding="4dp"
-                android:src="@drawable/ic_phone" />
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:paddingStart="4dp"
+                android:src="@drawable/gmail_icon"
+                android:layout_gravity="center_vertical"
+                />
 
             <TextView
                 android:id="@+id/tvEmail"
@@ -105,7 +117,48 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/margin_medium"
                 android:layout_marginStart="@dimen/dimen_low"
-                android:textSize="22sp" />
+                android:textSize="18sp"
+                android:layout_gravity="end|center_vertical"/>
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/locationLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                >
+
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:paddingStart="4dp"
+                    android:src="@drawable/ic_gps"
+                    android:layout_gravity="center_vertical"
+                    app:tint="@color/normal_button_color" />
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/margin_medium"
+                    android:layout_marginStart="@dimen/dimen_low"
+                    android:textSize="16sp"
+                    />
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="225dp"
+                android:src="@drawable/mannsign_location"
+                android:scaleType="centerCrop"/>
+
 
         </LinearLayout>
 
@@ -116,7 +169,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/dimen_low">
 
         <TextView
             android:layout_width="wrap_content"
@@ -130,7 +184,8 @@
             android:id="@+id/divider5"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?android:attr/listDivider" />
+            android:background="?android:attr/listDivider"
+            android:layout_marginHorizontal="56dp"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -140,20 +195,21 @@
                 android:id="@+id/ivWebsite"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_phone"
+                android:src="@drawable/ic_web"
                 android:layout_margin="@dimen/dimen_low"/>
             <ImageView
                 android:id="@+id/ivIG"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
-                android:src="@drawable/ic_phone"
+                android:src="@drawable/ic_ig"
                 android:layout_margin="@dimen/dimen_low"/>
             <ImageView
                 android:id="@+id/ivFB"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:src="@drawable/ic_phone"
-                android:layout_margin="@dimen/dimen_low"/>
+                android:layout_width="38dp"
+                android:layout_height="38dp"
+                android:src="@drawable/ic_fb"
+                android:layout_marginHorizontal="@dimen/dimen_low"
+                android:layout_marginVertical="6dp"/>
 
         </LinearLayout>
 

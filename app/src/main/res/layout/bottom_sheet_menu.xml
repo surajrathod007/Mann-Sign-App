@@ -139,6 +139,33 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/btnContactUsBottomSheet"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_phone"
+                android:layout_width="24dp"
+                android:layout_height="24dp"/>
+
+            <TextView
+                android:id="@+id/btnContactUs"
+                android:layout_margin="10dp"
+                android:text="Contact Us"
+                android:textSize="16sp"
+                android:textColor="@color/title_text_color"
+                android:fontFamily="@font/satoshi_medium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/btnLogoutBottomSheet"
             android:clickable="true"
             android:foreground="?attr/selectableItemBackground"
