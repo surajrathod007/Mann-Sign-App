@@ -70,12 +70,15 @@ class ContactUsActivity : AppCompatActivity() {
                 }
             }
             ivFB.setOnClickListener {
-                startActivity(
+                openLink(
+                    "https://www.facebook.com/profile.php?id=61550310882789&mibextid=ZbWKwL"
+                )
+                /*startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("https://www.facebook.com/${Constants.FB_PAGE}")
                     ) //catches and opens a url to the desired page
-                )
+                )*/
                 /*val x = try {
                     packageManager.getPackageInfo("com.facebook.katana", PackageManager.PackageInfoFlags.of(0L))
 
