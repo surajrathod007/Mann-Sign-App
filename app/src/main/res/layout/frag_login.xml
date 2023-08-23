@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,11 +9,22 @@
     android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
     tools:context=".ui.fragments.auth.LoginFrag">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:paddingHorizontal="56dp"
+        android:src="@drawable/log_in_page_logo"
+        app:layout_constraintBottom_toTopOf="@+id/loginTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/loginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="220dp"
         android:fontFamily="@font/satoshi_medium"
         android:text="Let's Sign in !"
         android:textColor="@color/title_text_color"
@@ -33,35 +45,35 @@
         app:layout_constraintTop_toBottomOf="@id/loginTitle">
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginHorizontal="26dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="26dp"
             android:hint="Enter email">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:fontFamily="@font/satoshi_medium"
                 android:id="@+id/ETEmail"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
+                android:fontFamily="@font/satoshi_medium"
                 android:textSize="16sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:layout_marginHorizontal="26dp"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="26dp"
             android:layout_marginTop="16dp"
             android:hint="Enter password"
             app:passwordToggleEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:fontFamily="@font/satoshi_medium"
                 android:id="@+id/ETPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/satoshi_medium"
                 android:inputType="textPassword"
                 android:textSize="16sp" />
 
