@@ -243,7 +243,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
                     }
 
 
-                    tvBasePrice.text = "${tvBasePrice.text} ${product.basePrice}"
+//                    tvBasePrice.text = "${tvBasePrice.text} ${product.basePrice}"
 
                     // Click Listeners ----------------------------------------------------------------------------------
                     btnChatBack.setOnClickListener {

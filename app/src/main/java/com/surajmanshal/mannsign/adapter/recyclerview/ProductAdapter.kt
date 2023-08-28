@@ -67,7 +67,7 @@ class ProductAdapter(
                         }
                     }
                     txtProductName.text = data.posterDetails!!.title
-                    txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + data.basePrice.toString()
+//                    txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + data.basePrice.toString()
                     productCard.setOnClickListener {
                         context.startActivity(Intent(context, ProductDetailsActivity::class.java).apply {
                             putExtra(Constants.PRODUCT,data)

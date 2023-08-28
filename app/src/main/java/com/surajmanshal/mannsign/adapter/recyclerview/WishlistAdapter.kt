@@ -58,7 +58,7 @@ open class WishlistAdapter(
 
                 product.posterDetails?.let { txtProductName.text = it.title }
 //                txtProductCategory.text = product.subCategory.toString()
-                txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + product.basePrice.toString()
+//                txtProductPrice.text = context.resources.getString(R.string.rupee_sign) + product.basePrice.toString()
                 productCard.setOnClickListener {
                     context.startActivity(Intent(context, ProductDetailsActivity::class.java).apply {
                         putExtra(Constants.PRODUCT,product)

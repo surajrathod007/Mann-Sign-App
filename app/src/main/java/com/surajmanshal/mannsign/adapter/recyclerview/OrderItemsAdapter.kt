@@ -21,7 +21,7 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
         RecyclerView.ViewHolder(binding.root) {
 
         val txtOrderItemTitle = binding.txtOrderItemTitle
-        val txtOrderItemBasePrice = binding.txtOrderItemBasePrice
+//        val txtOrderItemBasePrice = binding.txtOrderItemBasePrice
         val txtOrderItemQty = binding.txtOrderItemQty
         val txtOrderItemTotalPrice = binding.txtOrderItemTotalPrice
         val imgProduct = binding.imgProductOrderItem
@@ -44,7 +44,7 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
 
         with(holder) {
             txtOrderItemQty.text = "Quantity : " + o.quantity.toString()
-            txtOrderItemBasePrice.text = "Base Price : ₹" + o.product!!.basePrice.toString()
+//            txtOrderItemBasePrice.text = "Base Price : ₹" + o.product!!.basePrice.toString()
             txtOrderItemTotalPrice.text = "₹" + o.totalPrice.toString()
             with(o) {
 //                val url = product?.images?.let {

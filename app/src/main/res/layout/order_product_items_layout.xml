@@ -45,13 +45,13 @@
                     android:fontFamily="@font/satoshi_medium"
                     android:text="Safty poster with nothing" />
 
-                <TextView
+                <!--<TextView
                     android:textColor="@color/text_normal_color"
                     android:id="@+id/txtOrderItemBasePrice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/satoshi_medium"
-                    android:text="$500" />
+                    android:text="$500" />-->
 
                 <TextView
                     android:textColor="@color/text_normal_color"
