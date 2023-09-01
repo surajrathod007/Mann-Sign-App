@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.phonepe.intent.sdk.api.PhonePe
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
 import com.surajmanshal.mannsign.utils.auth.DataStore
 
@@ -30,14 +31,13 @@ class MainActivity : SecuredScreenActivity() {
 
     val listners = mutableListOf<MainActivityBackPressListener>()
 
-//    lateinit var permissionLauncher : ActivityResultLauncher<Array<String>>
-
     var backPressedTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        PhonePe.init(this)
+        println("pkg sign "+PhonePe.getPackageSignature())
         window.statusBarColor = Color.BLACK
         token = intent.getStringExtra(DataStore.JWT_TOKEN)
 
