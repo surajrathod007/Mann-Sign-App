@@ -29,7 +29,7 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
     </style>
-    
+
     <style name="satoshiTypeface" parent="appColorsScheme" >
         <item name="fontFamily">@font/satoshi_medium</item>
     </style>
@@ -44,6 +44,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/black</item>
+    </style>
+  <!-- Base application theme. -->
+    <style name="Base.Theme.MannSignApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
 

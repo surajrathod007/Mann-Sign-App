@@ -7,4 +7,5 @@
     <dimen name="custom_image_width">200dp</dimen>
     <dimen name="custom_image_height">200dp</dimen>
     <dimen name="dimen_low">8dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>
