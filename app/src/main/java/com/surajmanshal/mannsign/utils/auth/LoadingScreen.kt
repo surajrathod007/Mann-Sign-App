@@ -18,13 +18,14 @@ class LoadingScreen(context: Context) : AppCompatDialog(context) {
             title?.let {
                 tvTitle.text = it
             }
+            dialog.setCancelable(false)
             dialog.setContentView(root)
         }
         return dialog
     }
     fun toggleDialog(dialog: Dialog){
         if(dialog.isShowing){
-            dialog.hide()
+            dialog.dismiss()
         }else{
             dialog.show()
         }

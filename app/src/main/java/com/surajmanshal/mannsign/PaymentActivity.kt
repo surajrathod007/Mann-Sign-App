@@ -4,9 +4,13 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.surajmanshal.mannsign.databinding.ActivityPaymentBinding
 import com.surajmanshal.mannsign.ui.fragments.PhonePeFragment
+import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 
 class PaymentActivity : AppCompatActivity() {
     lateinit var binding: ActivityPaymentBinding
+    val loadingScreen by lazy {
+        LoadingScreen(this)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
