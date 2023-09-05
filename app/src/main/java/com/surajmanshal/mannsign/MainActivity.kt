@@ -14,8 +14,14 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.play.core.appupdate.AppUpdateManager
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.AppUpdateType
+import com.google.android.play.core.install.model.UpdateAvailability
+
 import com.phonepe.intent.sdk.api.PhonePe
 import com.surajmanshal.mannsign.databinding.ActivityMainBinding
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.auth.DataStore
 
 class MainActivity : SecuredScreenActivity() {
@@ -23,6 +29,8 @@ class MainActivity : SecuredScreenActivity() {
     interface MainActivityBackPressListener {
         fun onActivityBackPressed()
     }
+
+    lateinit var appUpdateManager: AppUpdateManager
 
     lateinit var binding: ActivityMainBinding
     var isRead = false
@@ -36,6 +44,9 @@ class MainActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
+        // Todo : Make its parameter server driven
+        checkForAppUpdates(AppUpdateType.IMMEDIATE)
         PhonePe.init(this)
         println("pkg sign "+PhonePe.getPackageSignature())
         window.statusBarColor = Color.BLACK
@@ -136,4 +147,35 @@ class MainActivity : SecuredScreenActivity() {
 
 
     }*/
+
+    fun checkForAppUpdates(updateType: Int){
+        appUpdateManager.appUpdateInfo.addOnSuccessListener {
+            val isUpdateAvailable = it.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+            val isUpdateAllowed = when(updateType){
+                AppUpdateType.FLEXIBLE -> it.isUpdateTypeAllowed(updateType)
+                AppUpdateType.IMMEDIATE -> it.isUpdateTypeAllowed(updateType)
+                else -> false
+            }
+            if (isUpdateAvailable && isUpdateAllowed){
+                appUpdateManager.startUpdateFlowForResult(
+                    it,
+                    updateType,
+                    this,
+                    Constants.APP_UPDATE_REQUEST
+                )
+            }
+        }.addOnFailureListener {
+            Log.e("App Update","$it")
+            Toast.makeText(this, "Failed to Check for Updates", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.APP_UPDATE_REQUEST){
+            if (resultCode != RESULT_OK){
+                Toast.makeText(this, "App Update Failed", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 }

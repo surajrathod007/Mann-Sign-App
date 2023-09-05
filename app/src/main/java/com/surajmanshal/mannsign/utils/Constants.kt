@@ -59,4 +59,7 @@ object Constants {
     const val FB_PAGE: String = "mannsafetysign"
     const val IG_PAGE: String = "mann_sign"
     const val WEBSITE: String = "https://mannsign.business.site/"
+
+
+    const val APP_UPDATE_REQUEST: Int = 987
 }
