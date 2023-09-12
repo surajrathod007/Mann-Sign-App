@@ -1,5 +1,8 @@
 package com.surajmanshal.mannsign.ui.fragments
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,11 +18,11 @@ import com.surajmanshal.mannsign.utils.show
 class PhonePeFragment : Fragment() {
 
     lateinit var binding: FragmentPhonePeBinding
-
+    lateinit var paymentActivity : PaymentActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        paymentActivity = requireActivity() as PaymentActivity
     }
 
     override fun onCreateView(
@@ -27,11 +30,10 @@ class PhonePeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val parentActivity = (requireActivity() as PaymentActivity)
-        val loadingDialog = parentActivity
+        val loadingDialog = paymentActivity
             .loadingScreen
             .loadingScreen("Initiating Payment")
-        val upiApps = listOf("Paytm","PhonePe","GPay","Bhim")
+        val upiApps = getInstalledUPIApps()/*listOf("Paytm","PhonePe","GPay","Bhim")*/
         binding = FragmentPhonePeBinding.inflate(layoutInflater)
         val adapter: ArrayAdapter<String> =
             ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, upiApps)
@@ -41,7 +43,9 @@ class PhonePeFragment : Fragment() {
         binding.upiAppsList.setOnItemClickListener { adapterView, view, i, l ->
             val appPkg = upiApps[i]
             loadingDialog.show()
-            // Todo : Make api call to get PayAPI RequestPayLoad
+            paymentActivity.initiatePayment(appPkg){
+                loadingDialog.dismiss()
+            }
         }
         /*binding.optionUPI.setOnClickListener {
             binding.upiAppsList.toggleVisibility()
@@ -54,6 +58,19 @@ class PhonePeFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    private fun getInstalledUPIApps(): ArrayList<String> {
+        val upiList = ArrayList<String>()
+        val uri = Uri.parse("upi://pay")
+        val upiUriIntent = Intent().apply { data = uri }
+        val packageManager = requireActivity().application.packageManager
+        val resolveInfoList =
+            packageManager.queryIntentActivities(upiUriIntent, PackageManager.MATCH_DEFAULT_ONLY)
+        resolveInfoList.forEach { resolveInfo ->
+            upiList.add(resolveInfo.activityInfo.packageName)
+        }
+        return upiList
     }
 
     companion object {

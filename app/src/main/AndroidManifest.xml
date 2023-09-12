@@ -26,11 +26,36 @@
         android:theme="@style/Theme.MannSignApp"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+
+        <!-- Keep it true in UAT environment for both the flags -->
+        <meta-data
+            android:name="com.phonepe.android.sdk.isUAT"
+            android:value="false" />
+        <meta-data
+            android:name="com.phonepe.android.sdk.isSimulator"
+            android:value="false" /> <!-- The value will be the MID -->
+        <meta-data
+            android:name="com.phonepe.android.sdk.MerchantId"
+            android:value="M1ERITRXM74C" />
+        <!--
+            For UAT, App Id is not required.
+            Make sure to add the following and you get the APP Id for Production after UAT Sign-off
+        -->
+        <meta-data
+            android:name="com.phonepe.android.sdk.AppId"
+            android:value="ce51c56340b84825bdd60e02a5ba4f45" />
+
         <activity
             android:name=".PaymentActivity"
-            android:exported="false"
+            android:exported="true"
             android:label="@string/title_activity_payment"
             android:theme="@style/Theme.MannSignApp" >
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
         <activity

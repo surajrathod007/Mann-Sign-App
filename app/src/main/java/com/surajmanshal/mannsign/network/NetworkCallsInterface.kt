@@ -5,6 +5,8 @@ import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.*
+import com.surajmanshal.mannsign.data.model.payment.InitiateTxnRequest
+import com.surajmanshal.mannsign.data.model.payment.PhonePePayLoad
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.data.model.product.ProductType
 import com.surajmanshal.mannsign.data.response.SimpleResponse
@@ -249,4 +251,9 @@ interface NetworkCallsInterface {
 
     @GET("banner/getall")
     fun getAllBanners() : Call<List<AdBanner>>
+
+    // ---------------------   Payment   ------------------------------------------------------------
+    @POST("payment/getUPIPaymentPayLoad")
+    fun getPhonePePayload(@Body initiateTxnRequest: InitiateTxnRequest) : Call<PhonePePayLoad>
+
 }
