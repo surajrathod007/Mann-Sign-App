@@ -32,6 +32,7 @@ import com.itextpdf.layout.properties.VerticalAlignment
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
+import com.surajmanshal.mannsign.PaymentActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
@@ -150,7 +151,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             d.setTitle("Want to make payment ?")
             d.setMessage("You can make payment through paytm app or in browser !")
             d.setPositiveButton("Yes") { d, w ->
-                makePayment()
+                startPaymentActivity()
             }
             d.setNegativeButton("No") { d, w ->
                 makeToast(this, "Payment canceled")
@@ -159,6 +160,12 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             d.show()
         }
 
+    }
+
+    private fun startPaymentActivity() {
+        startActivity(Intent(this,PaymentActivity::class.java).apply {
+            putExtra("order",vm.order.value)
+        })
     }
 
     private fun makePayment() {
