@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -44,7 +43,6 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.Functions.urlMaker
-import com.surajmanshal.mannsign.utils.makeACall
 import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
@@ -53,7 +51,6 @@ import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.URLEncoder
 import java.time.LocalDateTime
 import kotlin.math.max
 import kotlin.math.min
@@ -451,11 +448,11 @@ class ProductDetailsActivity : SecuredScreenActivity() {
     }
 
     private fun setupButtonAction(email: String, productId: Int) {
-        /*
-        todo : disabled until PG not get set
+//        todo : keep disabled until PG not get set
         if(cartVm._selectedVariant.value?.let { it1 -> isVariantInCart(it1) } == true) setupGoToCart()
-        else setupAddToCart(email, productId)*/
+        else setupAddToCart(email, productId)
 
+        /*
         // GetQuote
         binding.productBuyingLayout.btnAddVariantToCart.apply {
             text = "Get Quote"
@@ -490,7 +487,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
         }
         binding.productBuyingLayout.fabCallNow.setOnClickListener {
             makeACall(Constants.MANN_SIGN_PHONE_NUMBER)
-        }
+        }*/
 
 
     }
