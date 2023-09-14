@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.phonepe.intent.sdk.api.B2BPGRequestBuilder
@@ -11,6 +12,7 @@ import com.phonepe.intent.sdk.api.PhonePe
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.payment.InitiateTxnRequest
 import com.surajmanshal.mannsign.data.model.payment.PhonePePayLoad
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.ActivityPaymentBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.ui.fragments.PhonePeFragment
@@ -145,6 +147,31 @@ class PaymentActivity : AppCompatActivity() {
             Toast.makeText(this, "Check Payment Status", Toast.LENGTH_SHORT).show()
             // Handle payment completion UI callback
             // todo :  Inform your server to check the payment status
+            val paymentStatusDialog = AlertDialog.Builder(this@PaymentActivity)
+
+            NetworkService.networkInstance.getPaymentStatus(order!!.orderId)
+                .enqueue(object : Callback<SimpleResponse?> {
+                    override fun onResponse(
+                        call: Call<SimpleResponse?>,
+                        response: Response<SimpleResponse?>
+                    ) {
+                        response.body()?.let {
+                            if(it.success){
+                                paymentStatusDialog.setIcon(R.drawable.ic_tick)
+                            }else{
+                                paymentStatusDialog.setIcon(R.drawable.ic_wrong)
+                            }
+                            paymentStatusDialog.setTitle(it.message).show()
+                            false
+                        }?:run{
+                            Toast.makeText(this@PaymentActivity, "Null res", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+
+                    }
+                })
         }
     }
 

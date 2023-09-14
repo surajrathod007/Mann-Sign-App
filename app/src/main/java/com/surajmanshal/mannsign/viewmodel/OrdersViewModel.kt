@@ -1,17 +1,18 @@
 package com.surajmanshal.mannsign.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.Language
+import com.surajmanshal.mannsign.data.model.Material
+import com.surajmanshal.mannsign.data.model.Review
+import com.surajmanshal.mannsign.data.model.Size
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.Order
+import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.repository.Repository
-import com.surajmanshal.mannsign.data.response.SimpleResponse
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,17 +64,22 @@ class OrdersViewModel : ViewModel() {
 
     fun getCustomerOrders(email : String){
         isLoading.postValue(true)
+        Log.d("My Orders",email)
         val r = db.getOrderByEmail(email)
-        r.enqueue(object : Callback<List<Order>?> {
-            override fun onResponse(call: Call<List<Order>?>, response: Response<List<Order>?>) {
-                if(response.body()!!.isEmpty()){
+        r.enqueue(object : Callback<List<Order>> {
+            override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
+                Log.d("My Orders",response.toString())
+                if(response.body()?.isEmpty() == true){
                     _msg.postValue("No Orders , Please Order Something!")
                 }
-                _customerOrders.postValue(response.body()!!)
+                response.body()?.let {
+                    _customerOrders.postValue(it)
+                }
                 isLoading.postValue(false)
             }
 
-            override fun onFailure(call: Call<List<Order>?>, t: Throwable) {
+            override fun onFailure(call: Call<List<Order>>, t: Throwable) {
+                Log.d("My Orders",t.toString())
                 _msg.postValue(t.message.toString())
                 isLoading.postValue(false)
             }

@@ -256,4 +256,6 @@ interface NetworkCallsInterface {
     @POST("payment/getUPIPaymentPayLoad")
     fun getPhonePePayload(@Body initiateTxnRequest: InitiateTxnRequest) : Call<PhonePePayLoad>
 
+    @GET("payment/paymentStatus")
+    fun getPaymentStatus(@Query("orderId") orderId: String) : Call<SimpleResponse>
 }
