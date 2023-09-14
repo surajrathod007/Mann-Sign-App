@@ -33,10 +33,12 @@ class PhonePeFragment : Fragment() {
         val loadingDialog = paymentActivity
             .loadingScreen
             .loadingScreen("Initiating Payment")
-        val upiApps = getInstalledUPIApps()/*listOf("Paytm","PhonePe","GPay","Bhim")*/
+        val upiApps = getInstalledUPIApps().apply {
+            add("abc")
+        }/*listOf("Paytm","PhonePe","GPay","Bhim")*/
         binding = FragmentPhonePeBinding.inflate(layoutInflater)
         val adapter: ArrayAdapter<String> =
-            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, upiApps)
+            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, upiApps.map { getAppName(it) })
 
         // Set the adapter to the ListView
         binding.upiAppsList.setAdapter(adapter)
@@ -58,6 +60,18 @@ class PhonePeFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    private fun getAppName(pkg: String): String {
+        return when(pkg){
+            "com.google.android.apps.nbu.paisa.user" -> "GPAY"
+            "net.one97.paytm" -> "Paytm"
+            "com.phonepe.app" -> "Phonepe"
+            "in.org.npci.upiapp" -> "BHIM"
+            "in.amazon.mShop.android.shopping" -> "Amazon"
+            "com.whatsapp" -> "WhatsApp"
+            else -> pkg
+        }
     }
 
     private fun getInstalledUPIApps(): ArrayList<String> {
