@@ -149,7 +149,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         binding.btnMakePayment.setOnClickListener {
             val d = AlertDialog.Builder(this)
             d.setTitle("Want to make payment ?")
-            d.setMessage("You can make payment through paytm app or in browser !")
+            d.setMessage("You can make payment through your registered UPI apps !")
             d.setPositiveButton("Yes") { d, w ->
                 startPaymentActivity()
             }

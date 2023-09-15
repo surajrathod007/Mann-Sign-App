@@ -148,10 +148,10 @@ class CartActivity : SecuredScreenActivity() {
             val b = AlertDialog.Builder(this)
             b.setTitle("Confirm your order please")
             b.setMessage("Subtotal : ₹${vm._total.value}\nDiscount : ₹${vm._discount.value}\nDelivery : ₹${vm._delivery.value}\nYou have to pay : ₹${vm._amountToPay.value}")
-            b.setPositiveButton("Pay") { v, m ->
+            b.setPositiveButton("Confirm") { v, m ->
                 vm.placeOrder()
             }
-            b.setNegativeButton("Cancel") { v, m ->
+            b.setNegativeButton("back") { v, m ->
                 Toast.makeText(this, "Order canceled", Toast.LENGTH_LONG).show()
                 v.dismiss()
             }
