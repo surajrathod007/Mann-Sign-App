@@ -14,3 +14,4 @@
 .cxx
 local.properties
 /app/src/main/java/com/surajmanshal/mannsign/URL.kt
+/.idea/kotlinc.xml
