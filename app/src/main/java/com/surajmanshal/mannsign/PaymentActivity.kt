@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -143,11 +144,20 @@ class PaymentActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == B2B_PG_REQUEST_CODE) {
-            Toast.makeText(this, "Payment Flow Complete", Toast.LENGTH_SHORT).show()
+            println(resultCode)
+            if(resultCode == 0){
+                Toast.makeText(this, "cancelled from phonepe", Toast.LENGTH_SHORT).show()
+            }else if(resultCode == RESULT_OK){
+                Toast.makeText(this, "Payment Flow Complete", Toast.LENGTH_SHORT).show()
+            }
             Toast.makeText(this, "Check Payment Status", Toast.LENGTH_SHORT).show()
             // Handle payment completion UI callback
             // todo :  Inform your server to check the payment status
-            val paymentStatusDialog = AlertDialog.Builder(this@PaymentActivity)
+            val paymentStatusDialog = AlertDialog.Builder(this@PaymentActivity).setPositiveButton("Okay",object : DialogInterface.OnClickListener {
+                override fun onClick(p0: DialogInterface?, p1: Int) {
+                    finish()
+                }
+            })
 
             NetworkService.networkInstance.getPaymentStatus(order!!.orderId)
                 .enqueue(object : Callback<SimpleResponse?> {
