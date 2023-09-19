@@ -1,21 +1,20 @@
 package com.surajmanshal.mannsign
 
-import android.content.DialogInterface
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.phonepe.intent.sdk.api.B2BPGRequestBuilder
 import com.phonepe.intent.sdk.api.PhonePe
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.payment.InitiateTxnRequest
 import com.surajmanshal.mannsign.data.model.payment.PhonePePayLoad
-import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.ActivityPaymentBinding
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.ui.fragments.CheckPaymentStatusFragment
 import com.surajmanshal.mannsign.ui.fragments.PhonePeFragment
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import kotlinx.coroutines.launch
@@ -46,9 +45,7 @@ class PaymentActivity : AppCompatActivity() {
         }
         println(order.toString())
         PhonePe.init(this)
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer,PhonePeFragment())
-            .commit()
+        chnageFragment(PhonePeFragment())
     }
 
     fun initiatePayment(selectedApp: String,onInitiated : (Boolean) -> Unit) {
@@ -147,45 +144,25 @@ class PaymentActivity : AppCompatActivity() {
             println(resultCode)
             if(resultCode == 0){
                 Toast.makeText(this, "cancelled from phonepe", Toast.LENGTH_SHORT).show()
-            }else if(resultCode == RESULT_OK){
-                Toast.makeText(this, "Payment Flow Complete", Toast.LENGTH_SHORT).show()
+                return
             }
-            Toast.makeText(this, "Check Payment Status", Toast.LENGTH_SHORT).show()
-            // Handle payment completion UI callback
-            // todo :  Inform your server to check the payment status
-            val paymentStatusDialog = AlertDialog.Builder(this@PaymentActivity).setPositiveButton("Okay",object : DialogInterface.OnClickListener {
-                override fun onClick(p0: DialogInterface?, p1: Int) {
-                    finish()
+            if(resultCode == RESULT_OK){
+                order?.let {
+                    chnageFragment(CheckPaymentStatusFragment.newInstance(it.orderId))
                 }
-            })
-
-            NetworkService.networkInstance.getPaymentStatus(order!!.orderId)
-                .enqueue(object : Callback<SimpleResponse?> {
-                    override fun onResponse(
-                        call: Call<SimpleResponse?>,
-                        response: Response<SimpleResponse?>
-                    ) {
-                        response.body()?.let {
-                            if(it.success){
-                                paymentStatusDialog.setIcon(R.drawable.ic_tick)
-                            }else{
-                                paymentStatusDialog.setIcon(R.drawable.ic_wrong)
-                            }
-                            paymentStatusDialog.setTitle(it.message).show()
-                            false
-                        }?:run{
-                            Toast.makeText(this@PaymentActivity, "Null res", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                    override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
-
-                    }
-                })
+                Toast.makeText(this, "Check Payment Status", Toast.LENGTH_SHORT).show()
+            }
+            // Handle payment completion UI callback
         }
     }
 
     companion object {
         const val B2B_PG_REQUEST_CODE = 79
+    }
+
+    private fun chnageFragment(fragment : Fragment) {
+        supportFragmentManager
+            .beginTransaction().replace(R.id.fragmentContainer, fragment)
+            .commit()
     }
 }
