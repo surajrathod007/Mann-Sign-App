@@ -44,6 +44,10 @@ class PaymentActivity : AppCompatActivity() {
             finish()
             return
         }
+        if (BuildConfig.DEBUG){
+            chnageFragment(CheckPaymentStatusFragment.newInstance(order!!.orderId))
+            return
+        }
         println(order.toString())
         PhonePe.init(this)
         println(PhonePe.getPackageSignature())

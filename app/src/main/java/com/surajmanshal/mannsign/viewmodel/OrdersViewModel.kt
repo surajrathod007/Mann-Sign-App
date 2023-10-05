@@ -141,8 +141,10 @@ class OrdersViewModel : ViewModel() {
                         call: Call<SimpleResponse?>,
                         response: Response<SimpleResponse?>
                     ) {
-                        _serverResponse.postValue(response.body())
 
+                        response.body()?.let {
+                            _serverResponse.postValue(it)
+                        }
                         //this is not working
                         /*
                         CoroutineScope(Dispatchers.IO).launch {
@@ -150,7 +152,6 @@ class OrdersViewModel : ViewModel() {
                             refreshOrders()
                         }
                          */
-
                     }
 
                     override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {

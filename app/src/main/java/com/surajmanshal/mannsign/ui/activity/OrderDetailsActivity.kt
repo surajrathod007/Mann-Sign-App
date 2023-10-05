@@ -17,6 +17,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument
@@ -36,10 +37,12 @@ import com.surajmanshal.mannsign.PaymentActivity
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
+import com.surajmanshal.mannsign.data.model.ordering.PaymentStatus
 import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
+import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
 import java.io.ByteArrayOutputStream
@@ -54,6 +57,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
     private val requestCode: Int = 123
     lateinit var binding: ActivityOrderDetailsBinding
     lateinit var vm: OrdersViewModel
+    lateinit var orderId : String
 
     lateinit var mHandler: Handler
     lateinit var mRunnable: Runnable
@@ -82,15 +86,14 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         vm = ViewModelProvider(this).get(OrdersViewModel::class.java)
         setContentView(binding.root)
 
-        val id = intent.getStringExtra("id")
+        orderId = intent.getStringExtra("id")?: kotlin.run {
+            finish()
+            ""
+        }
 
 
         window.statusBarColor = Color.BLACK
-        if (!id.isNullOrEmpty()) {
-            vm.getOrderById(id)
-        } else {
-            Functions.makeToast(this@OrderDetailsActivity, "Order id is null !")
-        }
+        getOrder()
         //TODO : Every 5 second new request is made
         /*
         mHandler = Handler()
@@ -116,7 +119,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         }
         binding.btnOrderChat.setOnClickListener {
             val i = Intent(this, ChatActivity::class.java)
-            i.putExtra("id", id)
+            i.putExtra("id", orderId)
             startActivity(i)
         }
         permissionLauncher =
@@ -151,6 +154,8 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             d.setTitle("Want to make payment ?")
             d.setMessage("You can make payment through your registered UPI apps !")
             d.setPositiveButton("Yes") { d, w ->
+
+//                todo : reveal while publishing
                 startPaymentActivity()
             }
             d.setNegativeButton("No") { d, w ->
@@ -160,6 +165,19 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             d.show()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getOrder()
+    }
+
+    private fun getOrder() {
+        if (orderId.isNotEmpty()) {
+            vm.getOrderById(orderId)
+        } else {
+            Functions.makeToast(this@OrderDetailsActivity, "Order id is null !")
+        }
     }
 
     private fun startPaymentActivity() {
@@ -244,35 +262,41 @@ class OrderDetailsActivity : SecuredScreenActivity() {
     }
 
     private fun setObservers() {
-        vm.order.observe(this) {
-            binding.rvOrderItems.adapter = OrderItemsAdapter(this, it.orderItems!!)
-            binding.txtOrderIdDetails.text = it.orderId
-            binding.txtOrderDateDetails.text = it.orderDate.toString()
-            binding.txtOrderTotalDetails.text = it.total.toString()
-            binding.txtEstimatedDays.text = if (it.days == null) "0" else it.days.toString()
-            if (!it.trackingUrl.isNullOrEmpty())
-                binding.edTrackingUrl.setText(it.trackingUrl.toString())
-            binding.txtOrderPaymentStatus.text = if (it.paymentStatus == 0) "Pending" else "Done"
-            binding.txtOrderQuantityDetails.text = it.quantity.toString()
-            binding.txtOrderDiscountDetails.text = "- ₹" + it.discount
-            binding.txtOrderDeliveryDetails.text = "+ ₹" + it.deliveryCharge
-            binding.txtOrderGrandTotalDetails.text = "₹" + it.totalRecieved
-            if (it.paymentStatus == 0)
+        vm.order.observe(this) { order ->
+            binding.rvOrderItems.adapter = OrderItemsAdapter(this, order.orderItems!!)
+            binding.txtOrderIdDetails.text = order.orderId
+            binding.txtOrderDateDetails.text = order.orderDate.toString()
+            binding.txtOrderTotalDetails.text = order.total.toString()
+            binding.txtEstimatedDays.text = if (order.days == null) "0" else order.days.toString()
+            if (!order.trackingUrl.isNullOrEmpty())
+                binding.edTrackingUrl.setText(order.trackingUrl.toString())
+            binding.txtOrderPaymentStatus.text = if (order.paymentStatus == PaymentStatus.Pending.ordinal) "Pending" else "Done"
+            binding.txtOrderQuantityDetails.text = order.quantity.toString()
+            binding.txtOrderDiscountDetails.text = "- ₹" + order.discount
+            binding.txtOrderDeliveryDetails.text = "+ ₹" + order.deliveryCharge
+            binding.txtOrderGrandTotalDetails.text = "₹" + order.totalRecieved
+            if (order.paymentStatus == PaymentStatus.Pending.ordinal)
                 binding.txtYouHaveToPay.text = "You have to pay : "
             else
                 binding.txtYouHaveToPay.text = "You paid : "
 
-            if (it.orderStatus == Constants.ORDER_CONFIRMED)
+            if (order.orderStatus == Constants.ORDER_CONFIRMED )
                 binding.btnMakePayment.visibility = View.VISIBLE
             else
                 binding.btnMakePayment.visibility = View.GONE
 
-            if (it.orderStatus != Constants.ORDER_PENDING || it.orderStatus != Constants.ORDER_CONFIRMED || it.orderStatus != Constants.ORDER_CANCELED) {
+            if(order.paymentStatus == PaymentStatus.Complete.ordinal){
+                binding.btnMakePayment.hide()
+            }
+
+
+            binding.btnDownloadInvoice.isVisible = order.orderStatus > 1
+            /*if (it.orderStatus != Constants.ORDER_PENDING || it.orderStatus != Constants.ORDER_CONFIRMED || it.orderStatus != Constants.ORDER_CANCELED) {
                 binding.btnDownloadInvoice.visibility = View.VISIBLE
             } else {
                 binding.btnDownloadInvoice.visibility = View.GONE
-            }
-            when (it.orderStatus) {
+            }*/
+            when (order.orderStatus) {
                 Constants.ORDER_PENDING -> {
                     binding.txtOrderDetailsStatus.text = "Pending"
                 }
