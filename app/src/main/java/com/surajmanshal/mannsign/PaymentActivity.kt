@@ -1,6 +1,7 @@
 package com.surajmanshal.mannsign
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
@@ -45,6 +46,7 @@ class PaymentActivity : AppCompatActivity() {
         }
         println(order.toString())
         PhonePe.init(this)
+        println(PhonePe.getPackageSignature())
         chnageFragment(PhonePeFragment())
     }
 
@@ -71,6 +73,7 @@ class PaymentActivity : AppCompatActivity() {
                                 onInitiated(it.simpleResponse.success)
                                 if (it.simpleResponse.success) {
                                     // SDK Less
+                                    startPaymentIntent(it.simpleResponse.message,selectedApp)
                                     /*lifecycleScope.launch {
                                             NetworkService.networkInstance2.makePayment(
                                                 it.checksum!!,
@@ -101,12 +104,12 @@ class PaymentActivity : AppCompatActivity() {
                                                     call: Call<PG_PAY_Response>,
                                                     t: Throwable
                                                 ) {
-                                                    println("$t")
+                                                    println(t.toString())
                                                 }
                                             })
                                         }*/
                                     // SDK
-                                    makeB2BReq(it.base64Payload!!,it.checksum!!,selectedApp)
+//                                    makeB2BReq(it.base64Payload!!,it.checksum!!,selectedApp)
                                 }
                             }
                         }
@@ -137,6 +140,16 @@ class PaymentActivity : AppCompatActivity() {
         )
     }
 
+    fun startPaymentIntent(redirectUrl: String,selectedApp: String){
+        println(redirectUrl)
+        val intent = Intent().apply {
+            action = Intent.ACTION_VIEW
+            data = Uri.parse(redirectUrl) // PhonePe Intent redirectUrl from the response.
+            setPackage(selectedApp) // selectedApp will be the package name of the App selected by the user.
+        }
+        startActivityForResult(intent, B2B_PG_REQUEST_CODE)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -150,9 +163,7 @@ class PaymentActivity : AppCompatActivity() {
                 order?.let {
                     chnageFragment(CheckPaymentStatusFragment.newInstance(it.orderId))
                 }
-                Toast.makeText(this, "Check Payment Status", Toast.LENGTH_SHORT).show()
             }
-            // Handle payment completion UI callback
         }
     }
 

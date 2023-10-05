@@ -53,13 +53,15 @@ class CheckPaymentStatusFragment : Fragment() {
                                 delay(3000)
                                 withContext(Dispatchers.Main) {
                                     binding.progressLayout.hide()
-                                    binding.resultLayout.show()
+                                    binding.paymentSuccessLayout.show()
                                     binding.btnComplete.setOnClickListener {
                                         requireActivity().finish()
                                     }
                                 }
                             }
                         }else{
+                            binding.progressLayout.hide()
+                            binding.paymentNotSucceedLayout.show()
                             Toast.makeText(requireContext(), "Payment Failed: ${it.message}", Toast.LENGTH_SHORT).show()
                         }
                         false

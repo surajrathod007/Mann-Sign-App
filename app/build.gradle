@@ -23,6 +23,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix ".debug"
+        }
     }
     defaultConfig {
         // Required when setting minSdkVersion to 20 or lower
@@ -143,7 +146,7 @@ dependencies {
 
     implementation 'com.github.alirezat775:carousel-view:1.1.1'
 
-    implementation 'phonepe.intentsdk.android.release:IntentSDK:2.0.0'
+    implementation 'phonepe.intentsdk.android.release:IntentSDK:2.1.1'
 
     implementation 'com.google.android.play:core:1.9.0'
 //    implementation 'com.google.android.play:app-update:2.0.1'
