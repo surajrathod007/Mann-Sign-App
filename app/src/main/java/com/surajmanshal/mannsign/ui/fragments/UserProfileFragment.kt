@@ -8,11 +8,9 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.AuthenticationActivity
@@ -196,33 +194,37 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
     }
 
     private fun setupUserDetails(u: User) {
-        u.let {
-            mUser = it
+        u.let { user ->
+            mUser = user
             with(binding) {
-                if (!it.firstName.isNullOrEmpty() && !it.lastName.isNullOrEmpty()) {
-                    txtUserNameFrag.text = it.firstName + " " + it.lastName
+                if (!user.firstName.isNullOrEmpty() && !user.lastName.isNullOrEmpty()) {
+                    txtUserNameFrag.text = user.firstName + " " + user.lastName
                 } else {
                     txtUserNameFrag.text = "-----"
                 }
-                txtUserEmailFrag.text = it.emailId
+                txtUserEmailFrag.text = user.emailId
 
-                if (!it.address.isNullOrEmpty()) {
-                    txtUserAddressFrag.text = it.address
+                if (!user.address.isNullOrEmpty()) {
+                    txtUserAddressFrag.text = user.address
                 } else {
                     txtUserAddressFrag.text = "-"
                 }
-                if (it.phoneNumber.isNotEmpty()) {
-                    txtUserPhoneFrag.text = it.phoneNumber
+                if (user.phoneNumber.isNotEmpty()) {
+                    txtUserPhoneFrag.text = user.phoneNumber
                 } else {
                     txtUserPhoneFrag.text = "-"
                 }
-                if (it.pinCode != null) {
-                    txtUserPincodeFrag.text = it.pinCode.toString()
+                if (user.pinCode != null) {
+                    txtUserPincodeFrag.text = user.pinCode.toString()
                 } else {
                     txtUserPincodeFrag.text = "-"
                 }
-                if (it.profileImage != null) {
-                    val imgUrl = it.profileImage?.let { it1 -> Functions.urlMaker(it1) }
+                tvGSTNo.text = user.gstNo.let {
+                    if (it.isNullOrEmpty()) "-"
+                    else it
+                }
+                if (user.profileImage != null) {
+                    val imgUrl = user.profileImage?.let { it1 -> Functions.urlMaker(it1) }
                     Glide.with(requireActivity()).load(imgUrl)
                         .error(R.drawable.person_user).circleCrop().into(binding.imgProfilePicFrag)
 
