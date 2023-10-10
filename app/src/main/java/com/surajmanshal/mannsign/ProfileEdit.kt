@@ -73,6 +73,7 @@ class ProfileEdit : SecuredScreenActivity() {
                 editPhone.setText(it.phoneNumber)
                 editEmailName.setText(it.emailId)
                 it.pinCode?.let { it1 -> binding.etPinCode.setText(it1.toString()) }
+                it.gstNo?.let { gstNo -> binding.etGstNo.setText(gstNo) }
             }
 
             ivProfilePic.apply {
@@ -128,6 +129,7 @@ class ProfileEdit : SecuredScreenActivity() {
                 lastName = editLastName.text.toString(),
                 phoneNumber = editPhone.text.toString(),
                 address = editAddress.text.toString(),
+                gstNo = etGstNo.text.toString()
             ).apply {
                 if(etPinCode.text.isNotEmpty()) pinCode = etPinCode.text.toString().toInt()
                 mUser.profileImage?.let { profileImage = it }
@@ -145,7 +147,8 @@ class ProfileEdit : SecuredScreenActivity() {
                             token = "",
                             phoneNumber = user.phoneNumber,
                             pinCode = user.pinCode,
-                            profileImage = mUser.profileImage
+                            profileImage = mUser.profileImage,
+                            gstNo = user.gstNo
                         )
                     )
                     if (res.success) {

@@ -11,5 +11,6 @@ data class User(
     var pinCode : Int? = null,
     var token : String = "",
     var deviceId : String? = null,
-    var profilePic : String? = null
+    var profilePic : String? = null,
+    var gstNo : String? = null
 ) : java.io.Serializable

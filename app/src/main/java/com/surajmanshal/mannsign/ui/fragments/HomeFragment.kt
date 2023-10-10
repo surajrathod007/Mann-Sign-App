@@ -185,8 +185,8 @@ class HomeFragment() : Fragment() {
                 call: Call<SimpleResponse?>,
                 response: Response<SimpleResponse?>
             ) {
-                val ans = response.body()!!
-                if(ans.success){
+                val ans = response.body()
+                if(ans?.success == true){
                     exists.invoke(true)
                 }else{
                     exists.invoke(false)

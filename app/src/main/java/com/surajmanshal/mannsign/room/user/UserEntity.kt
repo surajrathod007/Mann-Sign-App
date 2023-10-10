@@ -17,5 +17,6 @@ data class UserEntity(
     var profileImage: String? = null,
     val address: String? = null,
     var pinCode: Int? = null,
-    var profilePic: String? = null
+    var profilePic: String? = null,
+    var gstNo: String? = null
 )

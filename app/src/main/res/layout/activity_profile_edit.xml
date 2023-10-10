@@ -152,6 +152,20 @@
                     android:maxLength="6"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/satoshi_regular"
+                    android:text="GST No. ( optional )"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/etGstNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp" />
+
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btnUpdateProfile"
                     android:layout_width="match_parent"
