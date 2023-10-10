@@ -7,10 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.surajmanshal.mannsign.PaymentActivity
+import com.surajmanshal.mannsign.R
+import com.surajmanshal.mannsign.adapter.IconedSpinnerAdapter
+import com.surajmanshal.mannsign.data.model.payment.UPIApp
 import com.surajmanshal.mannsign.databinding.FragmentPhonePeBinding
 import com.surajmanshal.mannsign.utils.show
 
@@ -35,8 +37,14 @@ class PhonePeFragment : Fragment() {
             .loadingScreen("Initiating Payment")
         val upiApps = getInstalledUPIApps()/*listOf("Paytm","PhonePe","GPay","Bhim")*/
         binding = FragmentPhonePeBinding.inflate(layoutInflater)
-        val adapter: ArrayAdapter<String> =
-            ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, upiApps.map { getAppName(it) })
+        val adapter =
+            IconedSpinnerAdapter(requireContext(), upiApps.map {
+                UPIApp(
+                    getAppIcon(it),
+                    getAppName(it),
+                    pkg = it
+                )
+            })
 
         // Set the adapter to the ListView
         binding.upiAppsList.setAdapter(adapter)
@@ -52,7 +60,7 @@ class PhonePeFragment : Fragment() {
         }*/
         binding.upiAppsList.show()
         binding.payOptionsToolbar.apply {
-            tvToolbarTitle.text = "Select Payment Method"
+            tvToolbarTitle.text = "Select UPI App"
             ivBackButton.setOnClickListener {
                 requireActivity().onBackPressedDispatcher.onBackPressed()
             }
@@ -69,6 +77,18 @@ class PhonePeFragment : Fragment() {
             "in.amazon.mShop.android.shopping" -> "Amazon"
             "com.whatsapp" -> "WhatsApp"
             else -> pkg
+        }
+    }
+
+    private fun getAppIcon(pkg: String): Int? {
+        return when(pkg){
+            "com.google.android.apps.nbu.paisa.user" -> R.drawable.gpay
+            "net.one97.paytm" -> R.drawable.paytm
+            "com.phonepe.app" -> R.drawable.phonepe
+            "in.org.npci.upiapp" -> 5
+            "in.amazon.mShop.android.shopping" -> R.drawable.amazone_pay
+            "com.whatsapp" -> R.drawable.ic_wa
+            else -> null
         }
     }
 
