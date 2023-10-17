@@ -12,7 +12,6 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
@@ -25,7 +24,6 @@ import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
-import com.surajmanshal.mannsign.utils.UsecaseGenerateInvoice
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
@@ -119,7 +117,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
                 }
 
             }
-        binding.btnDownloadInvoice.setOnClickListener {
+        /*binding.btnDownloadInvoice.setOnClickListener {
             requestPermission()
             if (isStorageGranted) {
                 UsecaseGenerateInvoice(this).invoke(vm.order.value!!)
@@ -127,7 +125,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
                 makeToast(this@OrderDetailsActivity, "Please grant storage permission", true)
             }
 
-        }
+        }*/
         binding.btnMakePayment.setOnClickListener {
             val d = AlertDialog.Builder(this)
             d.setTitle("Want to make payment ?")
@@ -269,7 +267,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             }
 
 
-            binding.btnDownloadInvoice.isVisible = order.orderStatus > 1
+//            binding.btnDownloadInvoice.isVisible = order.orderStatus > 1 // todo : commented due to removal of bill module
             /*if (it.orderStatus != Constants.ORDER_PENDING || it.orderStatus != Constants.ORDER_CONFIRMED || it.orderStatus != Constants.ORDER_CANCELED) {
                 binding.btnDownloadInvoice.visibility = View.VISIBLE
             } else {
