@@ -15,5 +15,6 @@ data class Order(
     var total : Float,
     val discount : Float = 0.0f,
     val totalRecieved : Float,
-    val deliveryCharge : Float
+    val deliveryCharge : Float,
+    val invoiceNo : String?
 ) : Serializable

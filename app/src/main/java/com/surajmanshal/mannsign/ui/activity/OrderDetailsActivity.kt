@@ -3,38 +3,21 @@ package com.surajmanshal.mannsign.ui.activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.BitmapDrawable
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
-import com.itextpdf.io.image.ImageDataFactory
-import com.itextpdf.kernel.pdf.PdfDocument
-import com.itextpdf.kernel.pdf.PdfWriter
-import com.itextpdf.layout.Document
-import com.itextpdf.layout.element.Cell
-import com.itextpdf.layout.element.Image
-import com.itextpdf.layout.element.Paragraph
-import com.itextpdf.layout.element.Table
-import com.itextpdf.layout.properties.HorizontalAlignment
-import com.itextpdf.layout.properties.TextAlignment
-import com.itextpdf.layout.properties.VerticalAlignment
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
 import com.surajmanshal.mannsign.PaymentActivity
-import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
 import com.surajmanshal.mannsign.data.model.ordering.PaymentStatus
@@ -42,14 +25,10 @@ import com.surajmanshal.mannsign.databinding.ActivityOrderDetailsBinding
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
+import com.surajmanshal.mannsign.utils.UsecaseGenerateInvoice
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 class OrderDetailsActivity : SecuredScreenActivity() {
@@ -143,7 +122,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         binding.btnDownloadInvoice.setOnClickListener {
             requestPermission()
             if (isStorageGranted) {
-                makeInvoice()
+                UsecaseGenerateInvoice(this).invoke(vm.order.value!!)
             } else {
                 makeToast(this@OrderDetailsActivity, "Please grant storage permission", true)
             }
@@ -335,7 +314,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         }
     }
 
-    fun makeInvoice() {
+    /*fun makeInvoice() {
 
         try {
 
@@ -774,23 +753,11 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             Toast.makeText(this, e.message, Toast.LENGTH_SHORT).show()
         }
 
-    }
+    }*/
+    // Updated Invoice Structure
 
-    fun openFile(file: File, path: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val uri = FileProvider.getUriForFile(this, this.packageName + ".provider", file)
-            intent.setData(uri)
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            startActivity(intent)
-        } else {
-            intent.setDataAndType(Uri.parse(path), "application/pdf")
-            val i = Intent.createChooser(intent, "Open File With")
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(i)
-        }
-    }
+
 
     fun requestPermission() {
 

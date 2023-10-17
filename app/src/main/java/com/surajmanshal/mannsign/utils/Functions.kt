@@ -1,6 +1,9 @@
 package com.surajmanshal.mannsign.utils
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.text.InputType
 import android.text.SpannableString
 import android.text.Spanned
@@ -11,43 +14,48 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.URL
+import java.io.File
 import java.sql.Timestamp
 import java.time.Instant
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Date
 
 object Functions {
-    fun urlMaker(imageurl :String): String {
+    fun urlMaker(imageurl: String): String {
         val fileName = imageurl.substringAfter("http://localhost:8700/images/")
-        return URL.IMAGE_PATH+ fileName
+        return URL.IMAGE_PATH + fileName
     }
 
     //http://localhost:8700/chat/images/image1674652908599.jpg
-    fun urlMakerChat(imageurl :String): String {
+    fun urlMakerChat(imageurl: String): String {
         val fileName = imageurl.substringAfter("http://localhost:8700/chat/images/")
-        return URL.CHAT_IMAGE_PATH+ fileName
+        return URL.CHAT_IMAGE_PATH + fileName
     }
 
 
-    fun setTypeNumber(editText: EditText){
+    fun setTypeNumber(editText: EditText) {
         editText.inputType = InputType.TYPE_CLASS_NUMBER
     }
 
-    fun makeViewVisible(view : View){
+    fun makeViewVisible(view: View) {
         view.visibility = View.VISIBLE
     }
-    fun makeViewGone(view : View){
+
+    fun makeViewGone(view: View) {
         view.visibility = View.GONE
     }
-    fun makeToast(context : Context, msg : String,long : Boolean=false){
-        if(long){
-            Toast.makeText(context,msg,Toast.LENGTH_LONG).show()
-        }else{
-            Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
+
+    fun makeToast(context: Context, msg: String, long: Boolean = false) {
+        if (long) {
+            Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -56,7 +64,7 @@ object Functions {
         val ss = SpannableString(text.substring(0, 64) + "... read more")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                addReadLess(text, textViewShort,textViewLong)
+                addReadLess(text, textViewShort, textViewLong)
                 textViewLong.visibility = View.VISIBLE
                 textViewShort.visibility = View.GONE
             }
@@ -77,7 +85,7 @@ object Functions {
         val ss = SpannableString("$text read less")
         val clickableSpan: ClickableSpan = object : ClickableSpan() {
             override fun onClick(view: View) {
-                addReadMore(text, textViewLong,textViewShort)
+                addReadMore(text, textViewLong, textViewShort)
                 textViewLong.visibility = View.GONE
                 textViewShort.visibility = View.VISIBLE
             }
@@ -94,11 +102,50 @@ object Functions {
         textViewLong.movementMethod = LinkMovementMethod.getInstance()
     }
 
-    fun timeStampToDate(timestamp : String): String {
+    fun timeStampToDate(timestamp: String): String {
         val date = Date(timestamp.toLong())
         val t = Timestamp(timestamp.toLong())
-        val d = LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp.toLong()), ZoneId.systemDefault())
+        val d = LocalDateTime.ofInstant(
+            Instant.ofEpochMilli(timestamp.toLong()),
+            ZoneId.systemDefault()
+        )
 
         return d.format(DateTimeFormatter.ofPattern("E, dd MMM yyyy hh:mm a"))
+    }
+
+    fun getFinancialYearString(date: LocalDate): String {
+        return "${date.year}-${date.year + 1}"
+    }
+
+    fun getFormatedTimestamp(millis: Long, format: String): String? {
+        val instant = Instant.ofEpochMilli(millis)
+        val formatter = DateTimeFormatter.ofPattern(format)
+            .withZone(ZoneId.systemDefault())
+        return formatter.format(instant)
+    }
+}
+fun Float.getTwoDecimalValue(): String {
+    /*
+    val decimalFormat = DecimalFormat("#.##", DecimalFormatSymbols(Locale.ENGLISH))
+    decimalFormat.roundingMode = RoundingMode.DOWN
+    return decimalFormat.format(this)
+
+     */
+    return "Rs "+String.format("%.2f", this)
+}
+
+fun Context.openFile(file: File, path: String) {
+    val intent = Intent(Intent.ACTION_VIEW)
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        val uri = FileProvider.getUriForFile(this, this.packageName + ".provider", file)
+        intent.setData(uri)
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivity(intent)
+    } else {
+        intent.setDataAndType(Uri.parse(path), "application/pdf")
+        val i = Intent.createChooser(intent, "Open File With")
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(i)
     }
 }
