@@ -10,13 +10,26 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.surajmanshal.mannsign.AuthenticationActivity
+import com.surajmanshal.mannsign.PaymentActivity
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.CartItemAdapter
+import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.databinding.ActivityCartBinding
+import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CartActivity : SecuredScreenActivity() {
 
+    private val orderProcessingDialog by lazy {
+        AlertDialog.Builder(this)
+            .setTitle("Creating Order")
+            .setMessage("Your order is being processing")
+            .setCancelable(false)
+            .create()
+    }
     lateinit var binding: ActivityCartBinding
     lateinit var vm: CartViewModel
 
@@ -118,7 +131,7 @@ class CartActivity : SecuredScreenActivity() {
                         binding.shimmerCartLoading.visibility = View.GONE
                         //binding.emptyCartView.root.visibility = View.GONE
                         //binding.sCartNested.visibility = View.VISIBLE
-                        if(vm.showScroll.value!!)
+                        if (vm.showScroll.value!!)
                             binding.sCartNested.visibility = View.VISIBLE
                     }, 1500)
                 }
@@ -132,7 +145,8 @@ class CartActivity : SecuredScreenActivity() {
 
         }
         vm.orderPlaced.observe(this) {
-            if (it) {
+            if (it.success) {
+                // todo : reload should be no longer needed
                 loadCarts(email!!)
                 vm.clearValues()
                 vm.setScrollVisibility(false)
@@ -140,7 +154,20 @@ class CartActivity : SecuredScreenActivity() {
 //                b.setTitle("Your order is placed !")
 //                b.setMessage("Thanks you for ordering from mann sign ;)")
 //                b.show()
-                startActivity(Intent(this@CartActivity,OrderPlacedActivity::class.java))
+                NetworkService.networkInstance.getOrderById(it.message)
+                    .enqueue(object : Callback<Order?> {
+                        override fun onResponse(call: Call<Order?>, response: Response<Order?>) {
+                            response.body()?.let { order ->
+                                orderProcessingDialog.dismiss()
+                                startPaymentActivity(order)
+                            }
+                        }
+
+                        override fun onFailure(call: Call<Order?>, t: Throwable) {
+                            Toast.makeText(this@CartActivity, t.message, Toast.LENGTH_SHORT).show()
+                        }
+                    })
+//                startActivity(Intent(this@CartActivity,OrderPlacedActivity::class.java))
             }
         }
         //buttons
@@ -149,6 +176,8 @@ class CartActivity : SecuredScreenActivity() {
             b.setTitle("Confirm your order please")
             b.setMessage("Subtotal : ₹${vm._total.value}\nDiscount : ₹${vm._discount.value}\nDelivery : ₹${vm._delivery.value}\nYou have to pay : ₹${vm._amountToPay.value}")
             b.setPositiveButton("Confirm") { v, m ->
+                orderProcessingDialog.show()
+                v.dismiss()
                 vm.placeOrder()
             }
             b.setNegativeButton("back") { v, m ->
@@ -161,6 +190,12 @@ class CartActivity : SecuredScreenActivity() {
         binding.btnApplyCoupon.setOnClickListener {
             vm.useCoupon(binding.edCouponCode.text.toString())
         }
+    }
+
+    private fun startPaymentActivity(it: Order) {
+        startActivity(Intent(this, PaymentActivity::class.java).apply {
+            putExtra("order", it)
+        })
     }
 
 

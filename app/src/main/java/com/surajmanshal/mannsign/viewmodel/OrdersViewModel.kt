@@ -92,7 +92,9 @@ class OrdersViewModel : ViewModel() {
 
         r.enqueue(object : Callback<Order?> {
             override fun onResponse(call: Call<Order?>, response: Response<Order?>) {
-                _order.postValue(response.body()!!)
+                response.body()?.let {
+                _order.postValue(it)
+                }
                 isLoading.postValue(false)
             }
 

@@ -3,7 +3,11 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.surajmanshal.mannsign.data.model.*
+import com.surajmanshal.mannsign.data.model.Area
+import com.surajmanshal.mannsign.data.model.Language
+import com.surajmanshal.mannsign.data.model.Material
+import com.surajmanshal.mannsign.data.model.Size
+import com.surajmanshal.mannsign.data.model.Variant
 import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.CartItem
 import com.surajmanshal.mannsign.data.model.ordering.Carts
@@ -34,8 +38,8 @@ class CartViewModel : ViewModel() {
 
     var _currrentProductInCartVariants = MutableLiveData<List<Variant>>(emptyList())
 
-    var _orderPlaced = MutableLiveData<Boolean>(false)
-    val orderPlaced : LiveData<Boolean> get() = _orderPlaced
+    var _orderPlaced = MutableLiveData<SimpleResponse>()
+    val orderPlaced : LiveData<SimpleResponse> get() = _orderPlaced
 
     var _showScroll = MutableLiveData<Boolean>(false)
     val showScroll : LiveData<Boolean> get() = _showScroll
@@ -124,10 +128,12 @@ class CartViewModel : ViewModel() {
                 call: Call<SimpleResponse?>,
                 response: Response<SimpleResponse?>
             ) {
-                _msg.postValue(response.body()!!.message)
 
-                if(response.body()!!.success)
-                    _orderPlaced.postValue(true)
+
+                response.body()?.let {
+                    _msg.postValue(it.message)
+                    _orderPlaced.postValue(it)
+                }
 
                 isLoading.postValue(false)
             }
@@ -223,7 +229,7 @@ class CartViewModel : ViewModel() {
         _amountToPay.postValue(0f)
         //_delivery.postValue(0f)
         _discount.postValue(0f)
-        _orderPlaced.postValue(false)
+        _orderPlaced.postValue(SimpleResponse(false,"none"))
     }
 
 

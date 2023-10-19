@@ -75,7 +75,7 @@ class PhonePeFragment : Fragment() {
             "com.phonepe.app" -> "Phonepe"
             "in.org.npci.upiapp" -> "BHIM"
             "in.amazon.mShop.android.shopping" -> "Amazon"
-            "com.whatsapp" -> "WhatsApp"
+            "com.whatsapp" -> "WhatsApp (Not recommended for Rs.2000+)"
             else -> pkg
         }
     }
