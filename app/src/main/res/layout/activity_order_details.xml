@@ -191,13 +191,34 @@
                         android:fontFamily="@font/satoshi_medium"
                         android:text="Tracking Url : " />
 
-                    <EditText
-                        android:id="@+id/edTrackingUrl"
-                        android:textColor="@color/text_normal_color"
-                        android:fontFamily="@font/satoshi_medium"
-                        android:gravity="center"
-                        android:hint="Getting soon..."
-                        android:textSize="16sp" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        >
+
+                        <EditText
+                            android:id="@+id/edTrackingUrl"
+                            android:textColor="@color/text_normal_color"
+                            android:fontFamily="@font/satoshi_medium"
+                            android:gravity="center"
+                            android:hint="Getting soon..."
+                            android:textSize="16sp"
+                            android:enabled="false"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:layout_width="0dp"
+                            />
+
+                        <ImageView
+                            android:id="@+id/ivCopyURL"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_clipboard"
+                            android:padding="7dp"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
 
                     <TextView
                         android:textColor="@color/title_text_color"

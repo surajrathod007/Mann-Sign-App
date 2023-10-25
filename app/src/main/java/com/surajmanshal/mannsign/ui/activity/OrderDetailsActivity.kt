@@ -1,6 +1,9 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.app.AlertDialog
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -25,6 +28,7 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.hide
+import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
 
@@ -245,8 +249,27 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             binding.txtOrderDateDetails.text = order.orderDate.toString()
             binding.txtOrderTotalDetails.text = order.total.toString()
             binding.txtEstimatedDays.text = if (order.days == null) "0" else order.days.toString()
-            if (!order.trackingUrl.isNullOrEmpty())
-                binding.edTrackingUrl.setText(order.trackingUrl.toString())
+            if (!order.trackingUrl.isNullOrEmpty()) {
+                val url = order.trackingUrl.toString()
+                binding.edTrackingUrl.setText(url)
+                binding.ivCopyURL.apply {
+                    show()
+                    setOnClickListener {
+
+                        // Get a reference to the ClipboardManager
+                        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+                        // Create a ClipData object to store the text
+                        val clip = ClipData.newPlainText("text", url)
+
+                        // Set the text to the clipboard
+                        clipboard.setPrimaryClip(clip)
+
+                        // Show a message to indicate that the text has been copied
+                        Toast.makeText(this@OrderDetailsActivity, "URL copied ", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
             binding.txtOrderPaymentStatus.text = if (order.paymentStatus == PaymentStatus.Pending.ordinal) "Pending" else "Done"
             binding.txtOrderQuantityDetails.text = order.quantity.toString()
             binding.txtOrderDiscountDetails.text = "- ₹" + order.discount
