@@ -6,7 +6,7 @@ data class Order(
     val orderId : String,
     val emailId : String,
     val orderDate : String,
-    val orderItems : List<OrderItem>? = null,
+//    val orderItems : List<OrderItem>? = null,
     val quantity : Int = 0,
     var trackingUrl : String?=null,
     var days : Int? = null,

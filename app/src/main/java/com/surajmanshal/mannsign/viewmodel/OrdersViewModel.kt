@@ -9,13 +9,16 @@ import com.surajmanshal.mannsign.data.model.Material
 import com.surajmanshal.mannsign.data.model.Review
 import com.surajmanshal.mannsign.data.model.Size
 import com.surajmanshal.mannsign.data.model.auth.User
+import com.surajmanshal.mannsign.data.model.debug.LogData
 import com.surajmanshal.mannsign.data.model.ordering.Order
+import com.surajmanshal.mannsign.data.model.ordering.OrderItem
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.repository.Repository
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.time.LocalDateTime
 
 class OrdersViewModel : ViewModel() {
 
@@ -53,6 +56,12 @@ class OrdersViewModel : ViewModel() {
     private var _order = MutableLiveData<Order>()
     val order : LiveData<Order> get() = _order
 
+    private val _orderItems = MutableLiveData<List<OrderItem>>()
+    val orderItems: LiveData<List<OrderItem>> get() = _orderItems
+    fun setOrderItems(value : List<OrderItem>){
+        _orderItems.postValue(value)
+    }
+
     companion object {
         val repository = Repository()
         val db = NetworkService.networkInstance
@@ -89,11 +98,33 @@ class OrdersViewModel : ViewModel() {
     fun getOrderById(id : String){
         isLoading.postValue(true)
         val r = db.getOrderById(id)
-
+        println(id)
         r.enqueue(object : Callback<Order?> {
             override fun onResponse(call: Call<Order?>, response: Response<Order?>) {
-                response.body()?.let {
-                _order.postValue(it)
+                println(response.body().toString())
+                if (response.isSuccessful) {
+                    response.body()?.let {
+                        _order.postValue(it)
+                    }
+                }else{
+                    // todo : try debug log
+                    NetworkService.networkInstance.sendLog(
+                        LogData(
+                            loggedAt = LocalDateTime.now(),
+                            exc = response.toString()
+                        )
+                    ).enqueue(object : Callback<SimpleResponse?> {
+                        override fun onResponse(
+                            call: Call<SimpleResponse?>,
+                            response: Response<SimpleResponse?>
+                        ) {
+                            // TODO("Not yet implemented")
+                        }
+
+                        override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                            // TODO("Not yet implemented")
+                        }
+                    })
                 }
                 isLoading.postValue(false)
             }
@@ -104,7 +135,11 @@ class OrdersViewModel : ViewModel() {
         })
     }
 
-    fun filterOrder(status: Int) {
+    fun getOrderItemsByOid(id : String){
+//        todo : db.getOrderItems()
+    }
+
+    /*fun filterOrder(status: Int) {
         val list = _allOrders.value?.filter { it.orderStatus == status }
         _allOrders.value = list!!
     }
@@ -148,12 +183,12 @@ class OrdersViewModel : ViewModel() {
                             _serverResponse.postValue(it)
                         }
                         //this is not working
-                        /*
+                        *//*
                         CoroutineScope(Dispatchers.IO).launch {
                             getAllOrders()
                             refreshOrders()
                         }
-                         */
+                         *//*
                     }
 
                     override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
@@ -240,7 +275,7 @@ class OrdersViewModel : ViewModel() {
 
             }
         })
-    }
+    }*/
 
     fun getTransactionToken(orderId : String,email : String, amount : String) : String?{
         val r = db.getTransactionToken(orderId,email,amount)

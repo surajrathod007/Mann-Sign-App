@@ -100,7 +100,6 @@
                     android:id="@+id/rvOrderItems"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -196,6 +195,13 @@
                         android:layout_height="wrap_content"
                         >
 
+                        <ImageView
+                            android:id="@+id/ivCopyURL"
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:src="@drawable/ic_clipboard"
+                            android:padding="7dp"
+                            android:visibility="gone"/>
                         <EditText
                             android:id="@+id/edTrackingUrl"
                             android:textColor="@color/text_normal_color"
@@ -209,13 +215,6 @@
                             android:layout_width="0dp"
                             />
 
-                        <ImageView
-                            android:id="@+id/ivCopyURL"
-                            android:layout_width="36dp"
-                            android:layout_height="36dp"
-                            android:src="@drawable/ic_clipboard"
-                            android:padding="7dp"
-                            android:visibility="gone"/>
 
                     </LinearLayout>
 

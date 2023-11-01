@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
@@ -74,7 +75,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
 
         window.statusBarColor = Color.BLACK
-        getOrder()
+//        getOrder()
         //TODO : Every 5 second new request is made
         /*
         mHandler = Handler()
@@ -93,6 +94,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
 
         setObservers()
+        binding.rvOrderItems.layoutManager = LinearLayoutManager(this)
 
         binding.btnOrderDetailBack.setOnClickListener {
             onBackPressed()
@@ -243,8 +245,15 @@ class OrderDetailsActivity : SecuredScreenActivity() {
     }
 
     private fun setObservers() {
+        vm.orderItems.observe(this){
+            if (it.isEmpty()){
+                // todo : show failed to load orders
+            }else{
+                binding.rvOrderItems.adapter = OrderItemsAdapter(this@OrderDetailsActivity, it )
+            }
+        }
         vm.order.observe(this) { order ->
-            binding.rvOrderItems.adapter = OrderItemsAdapter(this, order.orderItems!!)
+//            binding.rvOrderItems.adapter = OrderItemsAdapter(this, order.orderItems!!)
             binding.txtOrderIdDetails.text = order.orderId
             binding.txtOrderDateDetails.text = order.orderDate.toString()
             binding.txtOrderTotalDetails.text = order.total.toString()

@@ -17,11 +17,15 @@ import com.surajmanshal.mannsign.utils.Functions
 class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
     RecyclerView.Adapter<OrderItemsAdapter.OrderItemViewHolder>() {
 
+    /*init {
+        println("Items:" + list.toString())
+    }*/
     class OrderItemViewHolder(val binding: OrderProductItemsLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         val txtOrderItemTitle = binding.txtOrderItemTitle
-//        val txtOrderItemBasePrice = binding.txtOrderItemBasePrice
+
+        //        val txtOrderItemBasePrice = binding.txtOrderItemBasePrice
         val txtOrderItemQty = binding.txtOrderItemQty
         val txtOrderItemTotalPrice = binding.txtOrderItemTotalPrice
         val imgProduct = binding.imgProductOrderItem
@@ -40,7 +44,7 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
     }
 
     override fun onBindViewHolder(holder: OrderItemViewHolder, position: Int) {
-        val o = list[position]
+        /*val o = list[position]
 
         with(holder) {
             txtOrderItemQty.text = "Quantity : " + o.quantity.toString()
@@ -79,6 +83,45 @@ class OrderItemsAdapter(val c: Context, val list: List<OrderItem>) :
                 c.startActivity(Intent(c, ProductDetailsActivity::class.java).apply {
                     putExtra(Constants.PRODUCT, o.product)
                 })
+            }
+        }*/
+        val order = list[position]
+
+        with(holder) {
+            txtOrderItemQty.text = "Quantity : ${order.quantity}"
+            txtOrderItemTotalPrice.text = "₹${order.totalPrice}"
+
+            order.product?.let { pro ->
+                pro.images?.let {
+                    if (it.isNotEmpty()) {
+                        val imageUrl = Functions.urlMaker(it.first().url)
+                        Glide.with(c)
+                            .load(Uri.parse(imageUrl))
+                            .placeholder(R.drawable.no_photo)
+                            .into(imgProduct)
+                    } else {
+                        Functions.makeToast(c, "Failed to load image!")
+                    }
+                }
+                when {
+                    pro.posterDetails != null -> {
+                        txtOrderItemTitle.text = pro.posterDetails!!.title
+                        txtProductType.text = "Poster"
+                    }
+
+                    pro.boardDetails != null -> {
+                        txtProductType.text = "ACP Board"
+                    }
+
+                    pro.bannerDetails != null -> {
+                        txtProductType.text = "Banner"
+                    }
+                }
+                itemView.setOnClickListener {
+                    val intent = Intent(c, ProductDetailsActivity::class.java)
+                    intent.putExtra(Constants.PRODUCT, pro)
+                    c.startActivity(intent)
+                }
             }
         }
     }

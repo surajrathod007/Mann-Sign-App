@@ -4,6 +4,7 @@ import com.surajmanshal.mannsign.data.model.*
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
 import com.surajmanshal.mannsign.data.model.auth.User
+import com.surajmanshal.mannsign.data.model.debug.LogData
 import com.surajmanshal.mannsign.data.model.ordering.*
 import com.surajmanshal.mannsign.data.model.payment.InitiateTxnRequest
 import com.surajmanshal.mannsign.data.model.payment.PhonePePayLoad
@@ -258,4 +259,7 @@ interface NetworkCallsInterface {
 
     @GET("payment/paymentStatus")
     fun getPaymentStatus(@Query("orderId") orderId: String) : Call<SimpleResponse>
+
+    @POST("debug/addLog")
+    fun sendLog(@Body log : LogData) : Call<SimpleResponse>
 }
