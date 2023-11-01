@@ -11,11 +11,14 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.PaymentActivity
+import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.CartItemAdapter
+import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.databinding.ActivityCartBinding
 import com.surajmanshal.mannsign.network.NetworkService
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -34,6 +37,7 @@ class CartActivity : SecuredScreenActivity() {
     lateinit var vm: CartViewModel
 
     var email: String? = ""
+    var user : User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,24 +176,59 @@ class CartActivity : SecuredScreenActivity() {
         }
         //buttons
         binding.btnPlaceOrder.setOnClickListener {
-            val b = AlertDialog.Builder(this)
-            b.setTitle("Confirm your order please")
-            b.setMessage("Subtotal : ₹${vm._total.value}\nDiscount : ₹${vm._discount.value}\nDelivery : ₹${vm._delivery.value}\nYou have to pay : ₹${vm._amountToPay.value}")
-            b.setPositiveButton("Confirm") { v, m ->
-                orderProcessingDialog.show()
-                v.dismiss()
-                vm.placeOrder()
-            }
-            b.setNegativeButton("back") { v, m ->
-                Toast.makeText(this, "Order canceled", Toast.LENGTH_LONG).show()
-                v.dismiss()
-            }
-            b.show()
 
+            if (email == null) return@setOnClickListener
+
+            if (user == null){
+                NetworkService.networkInstance.fetchUserByEmail(email!!).enqueue(object : Callback<User?> {
+                    override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                        response.body()?.let {
+                            user = it
+                            if (it.hasSufficientProfileDetails())
+                                showOrderConfirmation()
+                            else
+                                showProfileIncomplete()
+                        }
+                    }
+
+                    override fun onFailure(call: Call<User?>, t: Throwable) {
+
+                    }
+                })
+                return@setOnClickListener
+            }
+            if (user!!.hasSufficientProfileDetails()){
+                showOrderConfirmation()
+            }
         }
         binding.btnApplyCoupon.setOnClickListener {
             vm.useCoupon(binding.edCouponCode.text.toString())
         }
+    }
+
+    private fun showProfileIncomplete() {
+        Toast.makeText(this, "Please Complete your Profile !", Toast.LENGTH_SHORT).show()
+        startActivity(Intent(this,ProfileEdit::class.java)
+            .putExtra(Constants.NAV_KEY,Constants.NAV_CART)
+            .putExtra("user",user)
+        )
+        finish()
+    }
+
+    fun showOrderConfirmation(){
+        val b = AlertDialog.Builder(this)
+        b.setTitle("Confirm your order please")
+        b.setMessage("Subtotal : ₹${vm._total.value}\nDiscount : ₹${vm._discount.value}\nDelivery : ₹${vm._delivery.value}\nYou have to pay : ₹${vm._amountToPay.value}")
+        b.setPositiveButton("Confirm") { v, m ->
+            orderProcessingDialog.show()
+            v.dismiss()
+            vm.placeOrder()
+        }
+        b.setNegativeButton("back") { v, m ->
+            Toast.makeText(this, "Order canceled", Toast.LENGTH_LONG).show()
+            v.dismiss()
+        }
+        b.show()
     }
 
     private fun startPaymentActivity(it: Order) {

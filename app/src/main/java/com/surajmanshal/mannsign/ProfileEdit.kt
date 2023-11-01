@@ -13,6 +13,7 @@ import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.user.UserDao
 import com.surajmanshal.mannsign.room.user.UserEntity
+import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.utils.loadRoundedImageWithUrl
@@ -30,6 +31,7 @@ class ProfileEdit : SecuredScreenActivity() {
     lateinit var imageUploading : ImageUploading
     lateinit var userDatabase : UserDao
     var mUser : User = User()
+    lateinit var navigatedFrom : String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class ProfileEdit : SecuredScreenActivity() {
         d = LoadingScreen(this)
         dd = d.loadingScreen()
         mUser = intent.extras?.get("user") as User
+        navigatedFrom = intent.getStringExtra(Constants.NAV_KEY)?:""
 
         userDatabase = LocalDatabase.getDatabase(this).userDao()
 
@@ -88,9 +91,21 @@ class ProfileEdit : SecuredScreenActivity() {
     }
 
     override fun onBackPressed() {
-        saveProfile()
+        val isSaved = saveProfile()
+        if (!isSaved){
+            return
+        }
+        if (navigatedFrom == Constants.NAV_CART){
+            navigateToCart()
+            return
+        }
         super.onBackPressed()
     }
+
+    private fun navigateToCart() {
+            startActivity(Intent(this,CartActivity::class.java))
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if(resultCode== Activity.RESULT_OK){
 
@@ -121,7 +136,7 @@ class ProfileEdit : SecuredScreenActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 
-    private fun saveProfile(){
+    private fun saveProfile() : Boolean{
         with(binding){
             val user = UserEntity(
                 emailId = editEmailName.text.toString(),
@@ -135,21 +150,30 @@ class ProfileEdit : SecuredScreenActivity() {
                 mUser.profileImage?.let { profileImage = it }
             }
 
+            val remoteUser = User(
+                emailId = editEmailName.text.toString(),
+                firstName = editFirstName.text.toString(),
+                lastName = editLastName.text.toString(),
+                address = editAddress.text.toString(),
+                token = "",
+                phoneNumber = user.phoneNumber,
+                pinCode = user.pinCode,
+                profileImage = mUser.profileImage,
+                gstNo = user.gstNo
+            )
+
+            if (!remoteUser.hasValidPhoneNumber() && !remoteUser.phoneNumber.isBlank()){
+                Toast.makeText(this@ProfileEdit, "Invalid Phone no.", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            if (!remoteUser.hasValidPinCode() && remoteUser.pinCode != null){
+                Toast.makeText(this@ProfileEdit, "Invalid Pincode", Toast.LENGTH_SHORT).show()
+                return false
+            }
             try {
 
                 CoroutineScope(Dispatchers.IO).launch {
-                    val res = NetworkService.networkInstance.updateUser(
-                        User(
-                            emailId = editEmailName.text.toString(),
-                            firstName = editFirstName.text.toString(),
-                            lastName = editLastName.text.toString(),
-                            address = editAddress.text.toString(),
-                            token = "",
-                            phoneNumber = user.phoneNumber,
-                            pinCode = user.pinCode,
-                            profileImage = mUser.profileImage,
-                            gstNo = user.gstNo
-                        )
+                    val res = NetworkService.networkInstance.updateUser( remoteUser
                     )
                     if (res.success) {
                         userDatabase.updateUser(user)
@@ -164,5 +188,6 @@ class ProfileEdit : SecuredScreenActivity() {
                 Toast.makeText(this@ProfileEdit, e.message, Toast.LENGTH_SHORT).show()
             }
         }
+        return true
     }
 }

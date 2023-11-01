@@ -4,7 +4,8 @@ package com.surajmanshal.mannsign.utils
 object Constants {
 
 
-
+    const val NAV_CART: String  = "cart"
+    const val NAV_KEY: String = "navigatedFrom"
     const val TYPE_POSTER = 1
     const val TYPE_BANNER = 2
     const val TYPE_ACP_BOARD = 3
