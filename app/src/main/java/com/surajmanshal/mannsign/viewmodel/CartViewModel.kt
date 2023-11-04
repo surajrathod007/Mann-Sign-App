@@ -233,7 +233,7 @@ class CartViewModel : ViewModel() {
     }
 
 
-    fun setVariantSize(size: Size?) {
+    fun setVariantSize(size: Size) {
         _selectedSize.postValue(size)
     }
     fun setVariantMaterial(material: Int?) {

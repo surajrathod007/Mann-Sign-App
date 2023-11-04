@@ -263,7 +263,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
                                 _selectedVariant.value?.apply {
                                     _currentProduct.value?.let {
                                         sizeId = it.sizes?.get(index)?.sid
-                                        setVariantSize(it.sizes?.get(index))
+                                        it.sizes?.get(index)?.let { it1 -> setVariantSize(it1) }
                                     }
                                 }
                             }
