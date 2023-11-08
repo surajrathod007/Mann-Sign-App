@@ -31,7 +31,7 @@ class ProfileEdit : SecuredScreenActivity() {
     lateinit var imageUploading : ImageUploading
     lateinit var userDatabase : UserDao
     var mUser : User = User()
-    lateinit var navigatedFrom : String
+    var navigatedFrom : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class ProfileEdit : SecuredScreenActivity() {
         d = LoadingScreen(this)
         dd = d.loadingScreen()
         mUser = intent.extras?.get("user") as User
-        navigatedFrom = intent.getStringExtra(Constants.NAV_KEY)?:""
+        navigatedFrom = intent.getStringExtra(Constants.NAV_KEY)
 
         userDatabase = LocalDatabase.getDatabase(this).userDao()
 
@@ -95,11 +95,17 @@ class ProfileEdit : SecuredScreenActivity() {
         if (!isSaved){
             return
         }
-        if (navigatedFrom == Constants.NAV_CART){
-            navigateToCart()
-            return
+        when(navigatedFrom){
+            Constants.NAV_CART -> navigateToCart()
+            Constants.NAV_AUTH -> navigateToMain()
         }
+        if(navigatedFrom != null) return
+
         super.onBackPressed()
+    }
+
+    private fun navigateToMain() {
+        startActivity(Intent(this,MainActivity::class.java))
     }
 
     private fun navigateToCart() {
@@ -162,11 +168,19 @@ class ProfileEdit : SecuredScreenActivity() {
                 gstNo = user.gstNo
             )
 
-            if (!remoteUser.hasValidPhoneNumber() && !remoteUser.phoneNumber.isBlank()){
+            if(remoteUser.firstName.isNullOrBlank() or remoteUser.lastName.isNullOrBlank()){
+                Toast.makeText(this@ProfileEdit, "Fill First name and Lastname", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            if (!remoteUser.hasValidPhoneNumber() /*&& !remoteUser.phoneNumber.isBlank()*/){
                 Toast.makeText(this@ProfileEdit, "Invalid Phone no.", Toast.LENGTH_SHORT).show()
                 return false
             }
-            if (!remoteUser.hasValidPinCode() && remoteUser.pinCode != null){
+            if (remoteUser.address.isNullOrBlank()){
+                Toast.makeText(this@ProfileEdit, "Address is required", Toast.LENGTH_SHORT).show()
+                return false
+            }
+            if (!remoteUser.hasValidPinCode() /*&& remoteUser.pinCode != null*/){
                 Toast.makeText(this@ProfileEdit, "Invalid Pincode", Toast.LENGTH_SHORT).show()
                 return false
             }

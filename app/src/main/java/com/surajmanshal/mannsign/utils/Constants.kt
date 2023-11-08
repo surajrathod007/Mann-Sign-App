@@ -4,6 +4,7 @@ package com.surajmanshal.mannsign.utils
 object Constants {
 
 
+    const val NAV_AUTH = "auth"
     const val NAV_CART: String  = "cart"
     const val NAV_KEY: String = "navigatedFrom"
     const val TYPE_POSTER = 1

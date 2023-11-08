@@ -18,6 +18,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.MainActivity
+import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
 import com.surajmanshal.mannsign.data.model.auth.LoginResponse
@@ -26,6 +27,7 @@ import com.surajmanshal.mannsign.databinding.FragLoginBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.user.UserEntity
+import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
@@ -104,8 +106,6 @@ class LoginFrag : Fragment() {
         editor.putString("token",user.token)
         editor.commit()
 
-        val intent = Intent(requireActivity(), MainActivity::class.java)
-
         val u = UserEntity(
             emailId = user.emailId,
 //            token = user.token
@@ -115,7 +115,13 @@ class LoginFrag : Fragment() {
             db.userDao().insertUser(u)
         }
 
-        startActivity(intent)
+        if (user.hasSufficientProfileDetails())
+            startActivity(Intent(requireActivity(), MainActivity::class.java))
+        else
+            startActivity(Intent(requireActivity(), ProfileEdit::class.java)
+                .putExtra(Constants.NAV_KEY, Constants.NAV_AUTH)
+                .putExtra("user",user))
+
         activity?.finish()
 
     }
