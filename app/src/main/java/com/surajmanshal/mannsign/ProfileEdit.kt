@@ -106,10 +106,12 @@ class ProfileEdit : SecuredScreenActivity() {
 
     private fun navigateToMain() {
         startActivity(Intent(this,MainActivity::class.java))
+        finish()
     }
 
     private fun navigateToCart() {
             startActivity(Intent(this,CartActivity::class.java))
+        finish()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
