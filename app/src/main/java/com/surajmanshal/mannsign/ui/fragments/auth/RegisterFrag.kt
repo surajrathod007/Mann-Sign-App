@@ -289,10 +289,23 @@ class RegisterFrag : Fragment() {
         return null
     }
 
+    /**
+     * Validates if it a not a fake number or invalid number
+     */
     private fun validPhone(): String? {
         val phoneText = binding.etMobileNumber.text.toString()
         if (phoneText.length != 10) {
             return "Must be 10 digit phone number"
+        }
+        if (phoneText == "0123456789" ){
+            return "Invalid phone number"
+        }
+        if (phoneText == "1234567890" ){
+            return "Invalid phone number"
+        }
+        val allSameDigits = phoneText.all { it == phoneText[0] }
+        if (allSameDigits){
+            return "Invalid phone number"
         }
         if (!phoneText.matches(Regex("^[6-9]([0-9]{9})"))) {
             return "Invalid phone number"

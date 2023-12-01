@@ -12,7 +12,7 @@ data class User(
     var token : String = "",
     var deviceId : String? = null,
     var profilePic : String? = null,
-    var gstNo : String? = null
+    var gstNo : String? = null,
 ) : java.io.Serializable {
     fun hasSufficientProfileDetails(): Boolean {
         return emailId.isNotEmpty() &&
@@ -24,13 +24,28 @@ data class User(
     }
 
     fun hasValidPhoneNumber(): Boolean {
+        if (phoneNumber == "1234567890"){
+            return false
+        }
+        val allSameDigits = phoneNumber.all { it == phoneNumber[0] }
+        if (allSameDigits){
+            return false
+        }
         val regex = Regex("\\d{10}")
         return phoneNumber.matches(regex)
     }
 
     fun hasValidPinCode(): Boolean {
+        val pin = pinCode.toString()
+        if (pin == "123456"){
+            return false
+        }
+        val allSameDigits = pin.all { it == pin[0] }
+        if (allSameDigits){
+            return false
+        }
         val regex = Regex("\\d{6}")
-        return pinCode.toString().matches(regex)
+        return pin.matches(regex)
     }
 
 }
