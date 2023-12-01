@@ -262,4 +262,7 @@ interface NetworkCallsInterface {
 
     @POST("debug/addLog")
     fun sendLog(@Body log : LogData) : Call<SimpleResponse>
+
+    @POST("usd/update")
+    suspend fun updateSession(@Query("email") email: String) : SimpleResponse
 }

@@ -90,6 +90,13 @@ class HomeFragment() : Fragment() {
         super.onResume()
         if(NetworkService.checkForInternet(requireContext())){
             loadData()
+            CoroutineScope(Dispatchers.IO).launch {
+                try {
+                    email?.let { NetworkService.networkInstance.updateSession(it) }
+                } catch (e: Exception) {
+//                            TODO("Not yet implemented")
+                }
+            }
         }else{
             makeToast(requireContext(),"No internet")
         }
