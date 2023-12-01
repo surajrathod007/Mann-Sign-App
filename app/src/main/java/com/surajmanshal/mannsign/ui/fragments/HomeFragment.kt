@@ -6,6 +6,7 @@ import alirezat775.lib.carouselview.CarouselView
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -24,12 +25,14 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.onesignal.OneSignal
 import com.surajmanshal.mannsign.AuthenticationActivity
+import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.BannerAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.CategoryAdapter
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductsMainAdapter
 import com.surajmanshal.mannsign.data.model.BannerImage
 import com.surajmanshal.mannsign.data.model.auth.LoginReq
+import com.surajmanshal.mannsign.data.model.auth.User
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentHomeBinding
 import com.surajmanshal.mannsign.network.NetworkService
@@ -72,6 +75,9 @@ class HomeFragment() : Fragment() {
     val adp = BannerAdapter()
     lateinit var carousel : Carousel
 
+    lateinit var sharedPreference : SharedPreferences
+
+    var hasSufficientProfile = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -114,9 +120,11 @@ class HomeFragment() : Fragment() {
         carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, adp)
         if (NetworkService.checkForInternet(requireContext())) {
             if (!email.isNullOrEmpty()) {
+                // commented since visitors are not allowed
                 isUserExists(email!!) {
                     if (it) {
                         setupDeviceId()
+                        checkIfUserHasSufficientProfile(email!!)
 //                        Functions.makeToast(requireContext(), "Device id set $email")
                         Log.d(this.javaClass.name,"Device id set $email")
                     } else {
@@ -194,6 +202,29 @@ class HomeFragment() : Fragment() {
             }
 
             override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                makeToast(requireContext(),t.message.toString())
+            }
+        })
+
+    }
+
+    private fun checkIfUserHasSufficientProfile(email: String) {
+
+        val ans = NetworkService.networkInstance.fetchUserByEmail(email)
+        ans.enqueue(object : Callback<User?> {
+            override fun onResponse(
+                call: Call<User?>,
+                response: Response<User?>
+            ) {
+                response.body()?.let {
+                    if (!it.hasSufficientProfileDetails()){
+                        startActivity(Intent(requireActivity(), ProfileEdit::class.java)
+                            .putExtra(Constants.NAV_KEY, Constants.NAV_AUTH)
+                            .putExtra("user",it))
+                    }
+                }
+            }
+            override fun onFailure(call: Call<User?>, t: Throwable) {
                 makeToast(requireContext(),t.message.toString())
             }
         })
