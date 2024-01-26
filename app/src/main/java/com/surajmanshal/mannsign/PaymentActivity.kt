@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.phonepe.intent.sdk.api.B2BPGRequestBuilder
 import com.phonepe.intent.sdk.api.PhonePe
+import com.phonepe.intent.sdk.api.PhonePeInitException
+import com.phonepe.intent.sdk.api.models.PhonePeEnvironment
 import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.data.model.payment.InitiateTxnRequest
 import com.surajmanshal.mannsign.data.model.payment.PhonePePayLoad
@@ -45,12 +47,15 @@ class PaymentActivity : AppCompatActivity() {
             return
         }
         if (BuildConfig.DEBUG){
+            Toast.makeText(this, "redirected as in debug mode", Toast.LENGTH_SHORT).show()
             chnageFragment(CheckPaymentStatusFragment.newInstance(order!!.orderId))
             return
         }
         println(order.toString())
-        PhonePe.init(this)
-        println(PhonePe.getPackageSignature())
+//        PhonePe.init(this)
+        PhonePe.init(this, PhonePeEnvironment.RELEASE, "M1ERITRXM74C", "ce51c56340b84825bdd60e02a5ba4f45")
+
+        //println(PhonePe.getPackageSignature())
         chnageFragment(PhonePeFragment())
     }
 
@@ -61,6 +66,7 @@ class PaymentActivity : AppCompatActivity() {
                 InitiateTxnRequest(
                     selectedApp,
                     it.orderId,
+//                    1000,
                     (it.total * 100).toInt(), // converted to Paise
                     null
                 )
@@ -77,7 +83,7 @@ class PaymentActivity : AppCompatActivity() {
                                 onInitiated(it.simpleResponse.success)
                                 if (it.simpleResponse.success) {
                                     // SDK Less
-                                    startPaymentIntent(it.simpleResponse.message,selectedApp)
+//                                    startPaymentIntent(it.simpleResponse.message,selectedApp)
                                     /*lifecycleScope.launch {
                                             NetworkService.networkInstance2.makePayment(
                                                 it.checksum!!,
@@ -113,7 +119,7 @@ class PaymentActivity : AppCompatActivity() {
                                             })
                                         }*/
                                     // SDK
-//                                    makeB2BReq(it.base64Payload!!,it.checksum!!,selectedApp)
+                                    makeB2BReq(it.base64Payload!!,it.checksum!!,selectedApp)
                                 }
                             }
                         }
@@ -134,14 +140,23 @@ class PaymentActivity : AppCompatActivity() {
             .setChecksum(checksum)
             .setUrl("/pg/v1/pay")
             .build()
-        val i = PhonePe.getImplicitIntent(
+        /*val i = PhonePe.getImplicitIntent(
             this@PaymentActivity,
             b2BPGRequest,
             pkg
         )
         startActivityForResult(
             i!!,B2B_PG_REQUEST_CODE
-        )
+        )*/
+        //For SDK call below function
+        try {
+            startActivityForResult(PhonePe.getImplicitIntent(
+                this, b2BPGRequest, pkg) ,B2B_PG_REQUEST_CODE
+            )
+        } catch(e : PhonePeInitException){
+
+        }
+
     }
 
     fun startPaymentIntent(redirectUrl: String,selectedApp: String){

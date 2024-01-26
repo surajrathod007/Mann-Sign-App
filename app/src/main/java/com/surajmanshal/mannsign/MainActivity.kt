@@ -48,7 +48,7 @@ class MainActivity : SecuredScreenActivity() {
         // Todo : Make its parameter server driven
         checkForAppUpdates(AppUpdateType.IMMEDIATE)
         PhonePe.init(this)
-        println("pkg sign "+PhonePe.getPackageSignature())
+        // println("pkg sign "+PhonePe.getPackageSignature())
         window.statusBarColor = Color.BLACK
         token = intent.getStringExtra(DataStore.JWT_TOKEN)
 
