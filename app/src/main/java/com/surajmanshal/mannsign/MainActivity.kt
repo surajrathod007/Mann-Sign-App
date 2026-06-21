@@ -16,6 +16,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.appupdate.AppUpdateOptions
 import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 
@@ -159,8 +160,8 @@ class MainActivity : SecuredScreenActivity() {
             if (isUpdateAvailable && isUpdateAllowed){
                 appUpdateManager.startUpdateFlowForResult(
                     it,
-                    updateType,
                     this,
+                    AppUpdateOptions.newBuilder(updateType).build(),
                     Constants.APP_UPDATE_REQUEST
                 )
             }

@@ -6,14 +6,15 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.surajmanshal.mannsign"
         minSdk 21
-        targetSdk 33
-        versionCode 13
-        versionName "2.4"
+        targetSdk 34  // todo : update to 34
+        // Update your com.google.android.play:feature-delivery:2.0.1 Maven dependency to an Android 14 compatible version! Your current com.google.android.play:feature-delivery:2.0.1 library is incompatible with targetSdkVersion 34 (Android 14), which introduces a backwards-incompatible change to broadcast receivers. As a reminder, from August 31, 2024, Google Play requires all new app releases to target Android 14. Update to the latest library version dependency to avoid app crashes.
+        versionCode 17
+        versionName "2.4.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -48,6 +49,7 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
+    namespace 'com.surajmanshal.mannsign'
 
 }
 
@@ -70,17 +72,20 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
 
     //navigation
-    def nav_version = "2.4.2"
+    def nav_version = "2.7.7"
     // Kotlin
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
-    // Feature module Support
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version")
+    /*// Feature module Support
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:$nav_version"){
+        exclude group: 'com.google.android.play', module: 'core'
+        exclude group: 'com.google.android.play', module: 'feature-delivery'
+    }*/
     // Testing Navigation
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
     //room
-    def roomVersion = "2.4.0"
+    def roomVersion = "2.6.1"
 
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
@@ -133,8 +138,16 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
     //Navigation
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    /*
+    +--- androidx.navigation:navigation-ui-ktx:2.4.2 (*)
++--- androidx.navigation:navigation-dynamic-features-fragment:2.4.2
+|    +--- androidx.navigation:navigation-dynamic-features-runtime:2.4.2
+|    |    +--- androidx.navigation:navigation-runtime:2.4.2 (*)
+|    |    \--- com.google.android.play:core:1.10.2
+|    +--- androidx.navigation:navigation-fragment:2.4.2 (*)
+|    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 1.7.10 (*)
+
+    * */
 
     //facebook shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
@@ -149,9 +162,9 @@ dependencies {
 //    implementation 'phonepe.intentsdk.android.release:IntentSDK:2.1.1'
     implementation 'phonepe.intentsdk.android.release:IntentSDK:2.4.2'
 
-
-    implementation 'com.google.android.play:core:1.9.0'
-//    implementation 'com.google.android.play:app-update:2.0.1'
-//    implementation 'com.google.android.play:app-update-ktx:2.0.1'
+    // IN APP UPDATES --------------------------------------------------------------------
+    // This dependency is downloaded from the Google’s Maven repository.
+    // So, make sure you also include that repository in your project's build.gradle file.
+    implementation "com.google.android.play:app-update:2.1.0"
 
 }
