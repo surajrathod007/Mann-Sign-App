@@ -1,6 +1,7 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.os.Bundle
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.surajmanshal.mannsign.SecuredScreenActivity
@@ -9,6 +10,7 @@ import com.surajmanshal.mannsign.databinding.ActivityWishListBinding
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.wishlist.WishListDao
 import com.surajmanshal.mannsign.utils.hide
+import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.viewmodel.WishListViewModel
 
 class WishListActivity : SecuredScreenActivity() {
@@ -26,6 +28,11 @@ class WishListActivity : SecuredScreenActivity() {
         // Observers ------------------------------------------------------------------
         wishListDao.getWishList().observe(this){ it ->
             vm.getMyWishList(it.map { it.productId })
+        }
+
+        vm.loading.observe(this){
+            binding.pbLoading.isVisible = it
+            binding.rvWishlist.isVisible = it.not()
         }
 
         binding.rvWishlist.apply {
