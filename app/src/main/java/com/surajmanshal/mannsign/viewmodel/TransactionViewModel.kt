@@ -1,5 +1,6 @@
 package com.surajmanshal.mannsign.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -78,6 +79,7 @@ class TransactionViewModel : ViewModel() {
 
             override fun onFailure(call: Call<List<Transaction>?>, t: Throwable) {
                 _msg.postValue(t.message.toString())
+                Log.e("TransactionViewModel", "onFailure: $t", )
                 _isLoading.postValue(false)
             }
         })

@@ -4,15 +4,23 @@ package com.surajmanshal.mannsign.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import com.google.gson.GsonBuilder
 import com.surajmanshal.mannsign.URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
 import java.util.concurrent.TimeUnit
+import kotlin.jvm.java
 
 object NetworkService {
     val networkInstance2: NetworkCallsInterface2
     val networkInstance : NetworkCallsInterface
+
+    val gson = GsonBuilder()
+        .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+        .create()
+
     init {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(2, TimeUnit.MINUTES)
@@ -20,7 +28,13 @@ object NetworkService {
             .readTimeout(2, TimeUnit.MINUTES)
             .build()
         val retrofit = Retrofit.Builder().baseUrl(URL.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder()
+                        .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+                        .create()
+                )
+            )
             .client(okHttpClient)
             .build()
         val retrofit2 = Retrofit.Builder().baseUrl("https://api.phonepe.com/apis/hermes/")

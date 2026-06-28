@@ -46,11 +46,8 @@ class TransactionsActivity : SecuredScreenActivity() {
         setContentView(binding.root)
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
-        if (!email.isNullOrEmpty())
-            loadTransactions(email!!)
 
         binding.shimmerTransactions.startShimmer()
-
 
         setupSpinner()
         setObserver()
@@ -148,9 +145,6 @@ class TransactionsActivity : SecuredScreenActivity() {
                 }
 
             }
-
-
-
     }
 
     private fun loadTransactions(email : String){
