@@ -3,6 +3,7 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.surajmanshal.mannsign.BuildConfig
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.network.NetworkService
@@ -43,12 +44,15 @@ class ChatViewModel : ViewModel() {
                 call: Call<List<ChatMessage>?>,
                 response: Response<List<ChatMessage>?>
             ) {
-                if(!response.body().isNullOrEmpty())
-                {
-                    _chats.postValue(response.body())
-                    msgSize.postValue(response.body()!!.size)
-                }else{
-                    _msg.postValue("Response is null")
+                response.body()?.let { chatMessages ->
+                    if (chatMessages.isNotEmpty()) {
+                        _chats.postValue(chatMessages)
+                        msgSize.postValue(chatMessages.size)
+                    } else {
+                        if (BuildConfig.DEBUG) {
+                            _msg.postValue("Chat is empty")
+                        }
+                    }
                 }
             }
             override fun onFailure(call: Call<List<ChatMessage>?>, t: Throwable) {
