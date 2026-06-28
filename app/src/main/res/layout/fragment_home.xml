@@ -139,6 +139,8 @@
                                 android:layout_weight="0.9"
                                 android:background="@drawable/search_bar_bg"
                                 android:hint="Search Product Here.."
+                                android:imeOptions="actionSearch"
+                                android:inputType="text"
                                 android:paddingLeft="12dp"
                                 android:textColor="@color/title_text_color"
                                 android:textColorHint="@color/text_normal_color"

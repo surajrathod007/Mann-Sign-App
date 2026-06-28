@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -157,15 +158,16 @@ class HomeFragment() : Fragment() {
         }
 
         binding.btnSearch.setOnClickListener {
-            try {
-                val i = Intent(requireActivity(), ProductCategoryDetailsActivity::class.java)
-                val text = GetInput.takeFrom(binding.edSearch)
-                i.putExtra("name", text.trim())
-                requireActivity().startActivity(i)
-            } catch (e: Exception) {
-                Functions.makeToast(requireContext(), e.message.toString())
-            }
+            gotoSearchActivity()
+        }
 
+        binding.edSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                gotoSearchActivity()
+                true
+            } else {
+                false
+            }
         }
 
         binding.refreshHome.setOnRefreshListener {
@@ -185,6 +187,17 @@ class HomeFragment() : Fragment() {
         //loadCarousal()
 
         return binding.root
+    }
+
+    private fun gotoSearchActivity() {
+        try {
+            val i = Intent(requireActivity(), ProductCategoryDetailsActivity::class.java)
+            val text = GetInput.takeFrom(binding.edSearch)
+            i.putExtra("name", text.trim())
+            requireActivity().startActivity(i)
+        } catch (e: Exception) {
+            makeToast(requireContext(), e.message.toString())
+        }
     }
 
     private fun deleteAllData() {
