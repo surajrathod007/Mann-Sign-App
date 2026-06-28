@@ -61,31 +61,26 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+private const val TAG = "HomeFragment"
+
 class HomeFragment() : Fragment() {
 
     lateinit var binding: FragmentHomeBinding
     lateinit var bottomMenu: BottomSheetDialog
     lateinit var vm: HomeViewModel
     var jwttoken: String? = null
-    //lateinit var bottomNavigation: AnimatedBottomBar
 
     var email: String? = ""
-    var token: String? = ""
-    var isMinProfileSetupDone = false
 
-    val adp = BannerAdapter()
+    val bannerAdapter = BannerAdapter()
     lateinit var carousel : Carousel
 
     lateinit var sharedPreference : SharedPreferences
-
-    var hasSufficientProfile = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -95,7 +90,7 @@ class HomeFragment() : Fragment() {
                 try {
                     email?.let { NetworkService.networkInstance.updateSession(it) }
                 } catch (e: Exception) {
-//                            TODO("Not yet implemented")
+                    Log.d(TAG, e.message.toString())
                 }
             }
         }else{
@@ -115,7 +110,6 @@ class HomeFragment() : Fragment() {
         val sharedPreference =
             requireActivity().getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", null)
-        token = sharedPreference.getString("token", "")      //not in use
 
         binding.shimmerView.startShimmer()
         if (jwttoken.isNullOrEmpty()) {
@@ -125,7 +119,7 @@ class HomeFragment() : Fragment() {
         }
 
 
-        carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, adp)
+        carousel = Carousel(activity as AppCompatActivity, binding.bannerCarousel, bannerAdapter)
         if (NetworkService.checkForInternet(requireContext())) {
             if (!email.isNullOrEmpty()) {
                 // commented since visitors are not allowed
@@ -174,17 +168,9 @@ class HomeFragment() : Fragment() {
             loadData()
         }
 
-        val localDatabase = LocalDatabase.getDatabase(requireContext()).userDao()
-
-        val user = email?.let { localDatabase.getUser(it) }
-        user?.observe(viewLifecycleOwner) {
-            isMinProfileSetupDone = it.firstName != null
-        }
-
         binding.btnCall.setOnClickListener {
             requireContext().makeACall(Constants.MANN_SIGN_PHONE_NUMBER)
         }
-        //loadCarousal()
 
         return binding.root
     }
@@ -285,19 +271,6 @@ class HomeFragment() : Fragment() {
         btnMyReviews.setOnClickListener {
             startActivity(Intent(requireActivity(), ReviewsActivity::class.java))
         }
-
-        //Not in use
-        /*
-        btnProfile.setOnClickListener {
-            if(!email.isNullOrEmpty()){
-                if(isMinProfileSetupDone) startActivity(Intent(requireActivity(), ProfileActivity::class.java))
-                else startActivity(Intent(requireActivity(), ProfileEdit::class.java))
-            }else{
-                startActivity(Intent(requireActivity(),AuthenticationActivity::class.java))
-            }
-        }
-
-         */
 
         btnTransactions.setOnClickListener {
             startActivity(Intent(requireActivity(), TransactionsActivity::class.java))
