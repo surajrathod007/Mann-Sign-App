@@ -5,6 +5,12 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localProperties.load(new FileInputStream(localPropertiesFile))
+}
+
 android {
     compileSdk 35
 
@@ -17,6 +23,11 @@ android {
         versionName "2.4.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "PAYTM_MERCHANT_ID", "\"${localProperties['paytm_merchant_id']}\""
+        buildConfigField "String", "PAYTM_MERCHANT_KEY", "\"${localProperties['paytm_merchant_key']}\""
+        buildConfigField "String", "ONESIGNAL_APP_ID", "\"${localProperties['onesignal_app_id']}\""
+        buildConfigField "String", "BASE_URL", "\"${localProperties['base_url']}\""
     }
 
     buildTypes {

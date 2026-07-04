@@ -1,6 +1,8 @@
 package com.surajmanshal.mannsign.utils
 
 
+import com.surajmanshal.mannsign.BuildConfig
+
 object Constants {
 
 
@@ -44,8 +46,8 @@ object Constants {
     const val NO_EMAIL = "no email"
 
     //Payment
-    const val MERCHENT_ID = "GEHAnc22595306265338"
-    const val MERCHENT_KEY = "Df52XjAjwekpgUHM"
+    val MERCHENT_ID : String = BuildConfig.PAYTM_MERCHANT_ID
+    val MERCHENT_KEY : String = BuildConfig.PAYTM_MERCHANT_KEY
 
 
     // Policy URLS

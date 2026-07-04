@@ -13,12 +13,8 @@ class MyApp : Application() {
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
 
         OneSignal.initWithContext(this)
-        OneSignal.setAppId(ONESIGNAL_USER_APP_ID)
+        OneSignal.setAppId(BuildConfig.ONESIGNAL_APP_ID)
 
         //Functions.makeToast(this,OneSignal.getDeviceState()?.userId.toString())
-    }
-
-    companion object{
-        const val ONESIGNAL_USER_APP_ID = "87353ca3-0d82-4a23-9ef6-76e162617243"
     }
 }
