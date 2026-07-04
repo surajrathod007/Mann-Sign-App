@@ -6,12 +6,12 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.surajmanshal.mannsign"
         minSdk 21
-        targetSdk 34  // todo : update to 34
+        targetSdk 35  // todo : update to 34
         // Update your com.google.android.play:feature-delivery:2.0.1 Maven dependency to an Android 14 compatible version! Your current com.google.android.play:feature-delivery:2.0.1 library is incompatible with targetSdkVersion 34 (Android 14), which introduces a backwards-incompatible change to broadcast receivers. As a reminder, from August 31, 2024, Google Play requires all new app releases to target Android 14. Update to the latest library version dependency to avoid app crashes.
         versionCode 17
         versionName "2.4.3"
@@ -43,6 +43,7 @@ android {
     buildFeatures {
         dataBinding true
         viewBinding true
+        buildConfig true
     }
 
     lintOptions{
@@ -55,8 +56,8 @@ android {
 
 dependencies {
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'com.google.firebase:firebase-messaging-ktx:23.1.0'
@@ -85,7 +86,7 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
 
     //room
-    def roomVersion = "2.6.1"
+    def roomVersion = "2.7.0"
 
     implementation "androidx.room:room-runtime:$roomVersion"
     kapt "androidx.room:room-compiler:$roomVersion"
