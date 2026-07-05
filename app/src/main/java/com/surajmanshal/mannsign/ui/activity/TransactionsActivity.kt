@@ -2,7 +2,6 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -21,6 +20,8 @@ import com.surajmanshal.mannsign.adapter.recyclerview.TransactionAdapter
 import com.surajmanshal.mannsign.data.model.DateFilter
 import com.surajmanshal.mannsign.databinding.ActivityTransactionsBinding
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.TransactionViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,11 +40,11 @@ class TransactionsActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityTransactionsBinding.inflate(layoutInflater)
 
-        window.statusBarColor = Color.BLACK
-
         vm = ViewModelProvider(this).get(TransactionViewModel::class.java)
 
         setContentView(binding.root)
+        binding.transactionAppBar.applyStatusBarInset()
+        binding.bounceTransactionScroll.applyNavBarInset()
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
 

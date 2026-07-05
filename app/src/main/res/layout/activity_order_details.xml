@@ -66,6 +66,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.factor.bouncy.BouncyNestedScrollView
+            android:id="@+id/bounceOrderDetailScroll"
             app:layout_constraintTop_toBottomOf="@id/orderDetailsAppBar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

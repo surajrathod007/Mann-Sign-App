@@ -58,6 +58,7 @@
                 android:orientation="vertical">
 
                 <com.google.android.material.appbar.AppBarLayout
+                    android:id="@+id/appBarUserProfile"
                     android:elevation="0dp"
                     app:elevation="0dp"
                     android:background="@color/white"

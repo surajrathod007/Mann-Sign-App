@@ -5,7 +5,6 @@ import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -50,7 +49,6 @@ class MainActivity : SecuredScreenActivity() {
         checkForAppUpdates(AppUpdateType.IMMEDIATE)
         PhonePe.init(this)
         // println("pkg sign "+PhonePe.getPackageSignature())
-        window.statusBarColor = Color.BLACK
         token = intent.getStringExtra(DataStore.JWT_TOKEN)
 
 

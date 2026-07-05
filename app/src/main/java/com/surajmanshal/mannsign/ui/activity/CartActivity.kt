@@ -2,7 +2,6 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -19,6 +18,8 @@ import com.surajmanshal.mannsign.data.model.ordering.Order
 import com.surajmanshal.mannsign.databinding.ActivityCartBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.Constants
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import retrofit2.Call
 import retrofit2.Callback
@@ -45,7 +46,6 @@ class CartActivity : SecuredScreenActivity() {
         binding = ActivityCartBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(CartViewModel::class.java)
 
-        window.statusBarColor = Color.BLACK
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
 
@@ -55,6 +55,8 @@ class CartActivity : SecuredScreenActivity() {
         }
 
         setContentView(binding.root)
+        binding.cartsAppBar.applyStatusBarInset()
+        binding.sCartNested.applyNavBarInset()
 
 
         binding.btnCartBack.setOnClickListener {

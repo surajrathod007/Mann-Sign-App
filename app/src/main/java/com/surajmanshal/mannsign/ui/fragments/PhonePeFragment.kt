@@ -14,6 +14,8 @@ import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.adapter.IconedSpinnerAdapter
 import com.surajmanshal.mannsign.data.model.payment.UPIApp
 import com.surajmanshal.mannsign.databinding.FragmentPhonePeBinding
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.utils.show
 
 
@@ -66,6 +68,12 @@ class PhonePeFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.payOptionsToolbar.root.applyStatusBarInset()
+        binding.root.applyNavBarInset()
     }
 
     private fun getAppName(pkg: String): String {

@@ -132,7 +132,7 @@
             android:name=".AuthenticationActivity"
             android:exported="true"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
+            />
         <activity
             android:name=".ProfileActivity"
             android:exported="false"

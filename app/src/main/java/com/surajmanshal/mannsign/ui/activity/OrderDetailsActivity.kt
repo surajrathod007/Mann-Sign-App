@@ -6,7 +6,6 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -30,6 +29,8 @@ import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.utils.show
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 import kotlinx.coroutines.Runnable
 
@@ -67,6 +68,8 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         binding = ActivityOrderDetailsBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(OrdersViewModel::class.java)
         setContentView(binding.root)
+        binding.orderDetailsAppBar.applyStatusBarInset()
+        binding.bounceOrderDetailScroll.applyNavBarInset()
 
         orderId = intent.getStringExtra("id")?: kotlin.run {
             finish()
@@ -74,7 +77,6 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         }
 
 
-        window.statusBarColor = Color.BLACK
 //        getOrder()
         //TODO : Every 5 second new request is made
         /*

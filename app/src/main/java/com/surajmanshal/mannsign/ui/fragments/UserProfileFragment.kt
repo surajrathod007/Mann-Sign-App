@@ -28,6 +28,8 @@ import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.ui.activity.WishListActivity
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.utils.viewFullScreen
@@ -50,6 +52,12 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.appBarUserProfile.applyStatusBarInset()
+        binding.root.applyNavBarInset()
     }
 
     override fun onCreateView(

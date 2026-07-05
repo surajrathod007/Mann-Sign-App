@@ -14,6 +14,7 @@
         tools:context=".ui.activity.ProductCategoryDetailsActivity">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/productCatAppBar"
             android:background="@color/white"
             android:layout_width="match_parent"
             android:elevation="0dp"
@@ -52,6 +53,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.factor.bouncy.BouncyNestedScrollView
+            android:id="@+id/productCatScroll"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

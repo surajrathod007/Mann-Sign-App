@@ -2,7 +2,6 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
@@ -11,6 +10,8 @@ import com.surajmanshal.mannsign.AuthenticationActivity
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrdersAdapter
 import com.surajmanshal.mannsign.databinding.ActivityOrdersBinding
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.OrdersViewModel
 
 class OrdersActivity : SecuredScreenActivity() {
@@ -23,6 +24,8 @@ class OrdersActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityOrdersBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.orderAppBar.applyStatusBarInset()
+        binding.bounceScroll.applyNavBarInset()
         vm = ViewModelProvider(this).get(OrdersViewModel::class.java)
         val sharedPreference =  getSharedPreferences("user_e", Context.MODE_PRIVATE)
 
@@ -30,8 +33,6 @@ class OrdersActivity : SecuredScreenActivity() {
         email = sharedPreference.getString("email","")
         if(!email.isNullOrEmpty())
             loadOrders(email!!)
-
-        window.statusBarColor = Color.BLACK
 
         setObservers()
 

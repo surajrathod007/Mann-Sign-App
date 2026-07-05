@@ -22,6 +22,7 @@ import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.FontAdapter
 import com.surajmanshal.mannsign.databinding.ActivityCustomAcpBoardBinding
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.viewmodel.CustomAcpViewModel
 import java.io.File
 
@@ -39,10 +40,10 @@ class CustomAcpBoardActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCustomAcpBoardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.applySystemBarInsets()
         downLoadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         vm = ViewModelProvider(this).get(CustomAcpViewModel::class.java)
 
-        window.statusBarColor = Color.BLACK
         //todo : fetch links from database
         val fontUrls = arrayListOf<String>(
             "https://fontsfree.net//wp-content/fonts/basic/sans-serif/dDihapus404.ttf",

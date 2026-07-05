@@ -11,6 +11,8 @@ import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.wishlist.WishListDao
 import com.surajmanshal.mannsign.utils.hide
 import com.surajmanshal.mannsign.utils.show
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.WishListViewModel
 
 class WishListActivity : SecuredScreenActivity() {
@@ -49,6 +51,8 @@ class WishListActivity : SecuredScreenActivity() {
         // Views Initialization -----------------------------------------------------------
         binding.apply {
             setContentView(root)
+            toolbar.root.applyStatusBarInset()
+            rvWishlist.applyNavBarInset()
             toolbar.apply {
                 tvToolbarTitle.text = "My Wishlist"
                 ivBackButton.setOnClickListener {

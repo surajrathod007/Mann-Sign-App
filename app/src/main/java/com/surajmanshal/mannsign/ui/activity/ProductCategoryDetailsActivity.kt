@@ -1,6 +1,5 @@
 package com.surajmanshal.mannsign.ui.activity
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -11,6 +10,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.ProductAdapter
 import com.surajmanshal.mannsign.databinding.ActivityProductCategoryDetailsBinding
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.ProductCategoryDetailsViewModel
 
 class ProductCategoryDetailsActivity : SecuredScreenActivity() {
@@ -29,8 +30,9 @@ class ProductCategoryDetailsActivity : SecuredScreenActivity() {
 
 
         setContentView(binding.root)
+        binding.productCatAppBar.applyStatusBarInset()
+        binding.productCatScroll.applyNavBarInset()
 
-        window.statusBarColor = Color.BLACK
         binding.shimmerSearchLoading.startShimmer()
         loadData(id,name)
 
@@ -52,8 +54,8 @@ class ProductCategoryDetailsActivity : SecuredScreenActivity() {
     }
 
     fun setupObserver(){
+        binding.rvProductCatDetails.layoutManager = GridLayoutManager(this,2)
         vm.filteredProducts.observe(this){
-            binding.rvProductCatDetails.layoutManager = GridLayoutManager(this,2)
             binding.rvProductCatDetails.adapter = ProductAdapter(
                 this@ProductCategoryDetailsActivity,
                 it,

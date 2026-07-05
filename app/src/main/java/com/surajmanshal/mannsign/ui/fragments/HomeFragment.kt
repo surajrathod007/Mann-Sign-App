@@ -47,6 +47,8 @@ import com.surajmanshal.mannsign.ui.activity.TransactionsActivity
 import com.surajmanshal.mannsign.ui.activity.WishListActivity
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore.JWT_TOKEN
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
@@ -80,6 +82,12 @@ class HomeFragment() : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         vm = ViewModelProvider(requireActivity()).get(HomeViewModel::class.java)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.appBar.applyStatusBarInset()
+        binding.boucneScroll.applyNavBarInset()
     }
 
     override fun onResume() {

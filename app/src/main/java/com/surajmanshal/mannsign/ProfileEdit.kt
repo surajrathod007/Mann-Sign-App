@@ -15,6 +15,7 @@ import com.surajmanshal.mannsign.room.user.UserDao
 import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.utils.Constants
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.utils.loadRoundedImageWithUrl
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,7 @@ class ProfileEdit : SecuredScreenActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_edit)
+        binding.root.applySystemBarInsets()
         imageUploading = ImageUploading(this)
         d = LoadingScreen(this)
         dd = d.loadingScreen()

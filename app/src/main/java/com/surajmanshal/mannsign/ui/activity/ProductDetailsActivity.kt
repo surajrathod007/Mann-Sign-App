@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.Bitmap
-import android.graphics.Color
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -47,6 +46,8 @@ import com.surajmanshal.mannsign.utils.show
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import com.surajmanshal.mannsign.viewmodel.CartViewModel
 import com.surajmanshal.mannsign.viewmodel.ProductsViewModel
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -71,10 +72,11 @@ class ProductDetailsActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProductDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.productDetailsHeader.applyStatusBarInset()
+        binding.productBuyingLayout.root.applyNavBarInset()
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
         cartVm = ViewModelProvider(this)[CartViewModel::class.java]
         reviewViewModel = ViewModelProvider(this)[ReviewsViewModel::class.java]
-        window.statusBarColor = Color.BLACK
         val owner = this
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreferences.getString("email", Constants.NO_EMAIL)

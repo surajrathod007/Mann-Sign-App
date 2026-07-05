@@ -31,6 +31,7 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -62,6 +63,12 @@ class LoginFrag : Fragment() {
         }
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.root.applySystemBarInsets()
+    }
+
     fun isDataFillled(view: TextView) : Boolean{
         if (TextUtils.isEmpty(view.text.toString().trim() { it <= ' ' })) {
             when(view){

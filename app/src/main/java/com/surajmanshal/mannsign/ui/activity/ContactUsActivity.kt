@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.surajmanshal.mannsign.databinding.ActivityContactUsBinding
 import com.surajmanshal.mannsign.utils.Constants
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.makeACall
 
 
@@ -16,6 +17,7 @@ class ContactUsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityContactUsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.root.applySystemBarInsets()
         binding.apply {
             tvPhoneNo.text = Constants.MANN_SIGN_PHONE_NUMBER
             tvWhatAppNo.text = Constants.MANN_SIGN_PHONE_NUMBER

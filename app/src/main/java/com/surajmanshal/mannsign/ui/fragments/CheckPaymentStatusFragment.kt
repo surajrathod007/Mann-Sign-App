@@ -14,6 +14,7 @@ import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentCheckPaymentStatusBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.hide
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.show
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -66,6 +67,11 @@ class CheckPaymentStatusFragment : Fragment() {
                 }
             })
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.root.applySystemBarInsets()
     }
 
     private fun testingPaymentStatus() {

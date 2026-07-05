@@ -16,6 +16,8 @@ import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.auth.DataStore
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +34,8 @@ class AccountDeleteActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAccountDeleteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.deleteAppBar.applyStatusBarInset()
+        binding.scrollDelete.applyNavBarInset()
         val sharedPreferences = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreferences?.getString("email", "")
         setupClickListeners()

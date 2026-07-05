@@ -21,6 +21,7 @@ import com.surajmanshal.mannsign.databinding.FragmentResetPasswordBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
 import com.surajmanshal.mannsign.utils.auth.GenericTextWatcher
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajrathod.authme.util.GetInput
 import kotlinx.coroutines.launch
@@ -114,6 +115,12 @@ class ResetPasswordFragment : Fragment() {
         }
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.root.applySystemBarInsets()
+    }
+
     fun isDataFillled(view: EditText) : Boolean{
         /*if (TextUtils.isEmpty(view.text.toString().trim() { it <= ' ' })) {
             Snackbar.make(view, "Fields are empty", 1000).show()

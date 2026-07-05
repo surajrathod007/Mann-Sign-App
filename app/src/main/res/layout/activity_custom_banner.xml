@@ -21,6 +21,7 @@
 
 
             <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/customBannerAppBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="0dp"
@@ -66,6 +67,7 @@
 
             </com.google.android.material.appbar.AppBarLayout>
             <com.factor.bouncy.BouncyNestedScrollView
+                android:id="@+id/customBannerScroll"
                 android:animateLayoutChanges="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

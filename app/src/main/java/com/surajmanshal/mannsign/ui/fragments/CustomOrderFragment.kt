@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
@@ -47,6 +46,8 @@ import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.Functions.makeToast
 import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.CustomBannerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -93,8 +94,6 @@ class CustomOrderFragment : Fragment() {
         d = LoadingScreen(requireContext())
         dd = d.loadingScreen("Creating product")
 
-        requireActivity().window.statusBarColor = Color.BLACK
-
         binding.llMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         binding.btnApplyImage.setOnClickListener {
             //onApply()
@@ -118,6 +117,12 @@ class CustomOrderFragment : Fragment() {
         selectTypeListners()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.customOrderAppBar.applyStatusBarInset()
+        binding.customOrderScroll.applyNavBarInset()
     }
 
     fun onApply() {

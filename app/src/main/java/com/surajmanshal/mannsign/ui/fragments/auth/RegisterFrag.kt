@@ -41,6 +41,7 @@ import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -187,6 +188,11 @@ class RegisterFrag : Fragment() {
         }
 
         return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.root.applySystemBarInsets()
     }
 
     private fun verifyEmail() {

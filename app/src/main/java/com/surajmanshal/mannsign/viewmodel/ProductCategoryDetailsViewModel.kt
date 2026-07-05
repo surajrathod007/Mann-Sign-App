@@ -3,8 +3,13 @@ package com.surajmanshal.mannsign.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.network.NetworkService
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,10 +67,17 @@ class ProductCategoryDetailsViewModel : ViewModel() {
         })
     }
 
+    private var searchJob: Job? = null
+
     fun searchProduct(name : String){
-        val l = _products.value!!.filter {
-            it.posterDetails!!.title.contains(name,true)
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch(Dispatchers.Default) {
+            delay(500)
+            val allProducts = _products.value ?: return@launch
+            val l = allProducts.filter {
+                it.posterDetails!!.title.contains(name,true)
+            }
+            _filteredProducts.postValue(l)
         }
-        _filteredProducts.postValue(l)
     }
 }

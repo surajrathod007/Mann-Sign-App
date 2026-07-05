@@ -4,12 +4,12 @@ import android.animation.LayoutTransition
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -20,6 +20,8 @@ import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.databinding.ActivityChatBinding
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.URIPathHelper
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.ChatViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,8 +48,6 @@ class ChatActivity : SecuredScreenActivity() {
     //TODO : Do api call in every 1-2 seconds , using handler
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        window.statusBarColor = Color.BLACK
         binding = ActivityChatBinding.inflate(layoutInflater)
         vm = ViewModelProvider(this).get(ChatViewModel::class.java)
 
@@ -57,6 +57,8 @@ class ChatActivity : SecuredScreenActivity() {
         email = sharedPreference.getString("email", "")
         id = intent.getStringExtra("id")
         setContentView(binding.root)
+        binding.chatAppBar.applyStatusBarInset()
+        binding.llChat.applyNavBarInset()
 
 
         if (!id.isNullOrEmpty() && !email.isNullOrEmpty()) {

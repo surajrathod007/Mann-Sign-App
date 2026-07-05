@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -37,6 +36,8 @@ import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
 import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.CustomBannerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,8 +74,6 @@ class CustomBannerActivity : SecuredScreenActivity() {
         d = LoadingScreen(this)
         dd = d.loadingScreen("Creating product")
 
-        window.statusBarColor = Color.BLACK
-
         binding.llMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
         binding.btnApplyImage.setOnClickListener {
             //onApply()
@@ -100,6 +99,8 @@ class CustomBannerActivity : SecuredScreenActivity() {
         setObservers()
         selectTypeListners()
         setContentView(binding.root)
+        binding.customBannerAppBar.applyStatusBarInset()
+        binding.customBannerScroll.applyNavBarInset()
     }
 
     fun onApply() {

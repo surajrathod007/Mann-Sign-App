@@ -16,6 +16,7 @@ import com.surajmanshal.mannsign.data.response.SimpleResponse
 import com.surajmanshal.mannsign.databinding.FragmentForgotPasswordBinding
 import com.surajmanshal.mannsign.network.NetworkService
 import com.surajmanshal.mannsign.utils.auth.ExceptionHandler
+import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import kotlinx.coroutines.launch
 
@@ -54,6 +55,12 @@ class ForgotPasswordFragment : Fragment() {
 
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.root.applySystemBarInsets()
+    }
+
     fun onSimpleResponse(task : String,simpleResponse: SimpleResponse){
         if(simpleResponse.success){
             d.toggleDialog(dd)  // hide

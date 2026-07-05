@@ -2,7 +2,6 @@ package com.surajmanshal.mannsign.ui.activity
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -20,6 +19,8 @@ import com.surajmanshal.mannsign.adapter.recyclerview.ReviewAdapter
 import com.surajmanshal.mannsign.databinding.ActivityReviewsBinding
 import com.surajmanshal.mannsign.room.LocalDatabase
 import com.surajmanshal.mannsign.room.user.UserEntity
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.ReviewsViewModel
 
 class ReviewsActivity : SecuredScreenActivity() {
@@ -35,7 +36,6 @@ class ReviewsActivity : SecuredScreenActivity() {
         vm = ViewModelProvider(this).get(ReviewsViewModel::class.java)
 
 
-        window.statusBarColor = Color.BLACK
         val sharedPreference = getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreference.getString("email", "")
         if (!email.isNullOrEmpty())
@@ -70,6 +70,8 @@ class ReviewsActivity : SecuredScreenActivity() {
 
 
         setContentView(binding.root)
+        binding.reviewsAppBar.applyStatusBarInset()
+        binding.bounceReviewScroll.applyNavBarInset()
     }
 
     private fun setObservers() {

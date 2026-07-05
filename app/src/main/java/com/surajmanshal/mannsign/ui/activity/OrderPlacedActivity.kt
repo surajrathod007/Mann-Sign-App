@@ -6,6 +6,8 @@ import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.R
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.databinding.ActivityOrderPlacedBinding
+import com.surajmanshal.mannsign.utils.applyNavBarInset
+import com.surajmanshal.mannsign.utils.applyStatusBarInset
 
 class OrderPlacedActivity : SecuredScreenActivity() {
 
@@ -18,6 +20,8 @@ class OrderPlacedActivity : SecuredScreenActivity() {
         setupViews()
         setupClickListeners()
         setContentView(binding.root)
+        binding.orderPlacedAppBar.applyStatusBarInset()
+        binding.root.applyNavBarInset()
     }
 
     private fun setupViews() {
