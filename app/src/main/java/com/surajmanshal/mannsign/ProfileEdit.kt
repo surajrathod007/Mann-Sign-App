@@ -1,8 +1,8 @@
 package com.surajmanshal.mannsign
 
-import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
@@ -15,6 +15,7 @@ import com.surajmanshal.mannsign.room.user.UserDao
 import com.surajmanshal.mannsign.room.user.UserEntity
 import com.surajmanshal.mannsign.ui.activity.CartActivity
 import com.surajmanshal.mannsign.utils.Constants
+import com.surajmanshal.mannsign.utils.PhotoPicker
 import com.surajmanshal.mannsign.utils.applySystemBarInsets
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.utils.loadRoundedImageWithUrl
@@ -33,6 +34,8 @@ class ProfileEdit : SecuredScreenActivity() {
     lateinit var userDatabase : UserDao
     var mUser : User = User()
     var navigatedFrom : String? = null
+
+    private val photoPicker = PhotoPicker(this) { uri -> onProfileImagePicked(uri) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +86,7 @@ class ProfileEdit : SecuredScreenActivity() {
 
             ivProfilePic.apply {
                 mUser.profileImage?.let { loadRoundedImageWithUrl(it) }
-                setOnClickListener { imageUploading.chooseProfileImageFromGallary() }
+                setOnClickListener { photoPicker.launch() }
             }
 
             btnUpdateProfile.setOnClickListener {
@@ -116,34 +119,13 @@ class ProfileEdit : SecuredScreenActivity() {
         finish()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(resultCode== Activity.RESULT_OK){
-
-                if(data!=null){
-                    try{
-                        val selectedImageUri = data.data!!
-                        imageUploading.imageUri = selectedImageUri
-                        Glide.with(this).load(selectedImageUri).circleCrop().into(binding.ivProfilePic)
-                        CoroutineScope(Dispatchers.IO).launch {
-                            imageUploading.imageUri?.let {
-                                if(requestCode == Constants.CHOOSE_PROFILE_IMAGE)
-                                    imageUploading.apply {
-                                        withContext(Dispatchers.Main){
-                                            dd.show()
-                                        }
-                                        sendProfileImage(createImageMultipart())
-                                    }
-                            }
-                        }
-                    }catch(e : java.lang.Exception){
-                        e.printStackTrace()
-                    }
-                }
-
-        }else{
-            Toast.makeText(this, "Req canceled", Toast.LENGTH_SHORT).show()
+    private fun onProfileImagePicked(uri: Uri) {
+        imageUploading.imageUri = uri
+        Glide.with(this).load(uri).circleCrop().into(binding.ivProfilePic)
+        CoroutineScope(Dispatchers.IO).launch {
+            withContext(Dispatchers.Main) { dd.show() }
+            imageUploading.sendProfileImage(imageUploading.createImageMultipart())
         }
-        super.onActivityResult(requestCode, resultCode, data)
     }
 
     private fun saveProfile() : Boolean{

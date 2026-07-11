@@ -149,3 +149,13 @@ fun Context.openFile(file: File, path: String) {
         startActivity(i)
     }
 }
+
+/** For a `content://` [Uri] already resolved via MediaStore — no FileProvider indirection needed. */
+fun Context.openFile(uri: Uri) {
+    val intent = Intent(Intent.ACTION_VIEW).apply {
+        setDataAndType(uri, "application/pdf")
+        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+    }
+    startActivity(intent)
+}

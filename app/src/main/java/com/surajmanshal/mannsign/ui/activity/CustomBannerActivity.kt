@@ -1,10 +1,8 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.animation.LayoutTransition
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -34,6 +32,7 @@ import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.ActivityCustomBannerBinding
 import com.surajmanshal.mannsign.utils.Constants
 import com.surajmanshal.mannsign.utils.Functions
+import com.surajmanshal.mannsign.utils.PhotoPicker
 import com.surajmanshal.mannsign.utils.URIPathHelper
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.utils.applyNavBarInset
@@ -50,7 +49,6 @@ import kotlin.math.roundToInt
 class CustomBannerActivity : SecuredScreenActivity() {
 
     val arrProductType = listOf("Poster", "Banner")
-    val REQUEST_CODE = 0
     var aspectRatio : String = ""
 
     lateinit var vm: CustomBannerViewModel
@@ -59,6 +57,8 @@ class CustomBannerActivity : SecuredScreenActivity() {
     lateinit var dd : Dialog
 
     lateinit var binding: ActivityCustomBannerBinding
+
+    private val photoPicker = PhotoPicker(this) { uri -> onProductImagePicked(uri) }
 
     var email : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,7 +83,7 @@ class CustomBannerActivity : SecuredScreenActivity() {
                 calculateMeasures()
         }
         binding.customPosterImage.setOnClickListener {
-            chooseImage()
+            photoPicker.launch()
         }
         binding.btnCustomBannerBack.setOnClickListener {
             finish()
@@ -347,12 +347,6 @@ class CustomBannerActivity : SecuredScreenActivity() {
         ).roundToInt()
     }
 
-    fun chooseImage() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, Constants.CHOOSE_PRODUCT_IMAGE)
-    }
-
     fun uploadProductImage(){
         CoroutineScope(Dispatchers.IO).launch {
             imageUploading.imageUri?.let {
@@ -367,16 +361,9 @@ class CustomBannerActivity : SecuredScreenActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == Constants.CHOOSE_PRODUCT_IMAGE) {
-            //you got the image
-            var uri = data?.data
-            if (uri != null) {
-                setImageHeightWidth(this@CustomBannerActivity, uri)
-                imageUploading.imageUri = uri
-            }
-        }
+    private fun onProductImagePicked(uri: Uri) {
+        setImageHeightWidth(this@CustomBannerActivity, uri)
+        imageUploading.imageUri = uri
     }
 
     fun setImageHeightWidth(c: Context, uri: Uri?) {

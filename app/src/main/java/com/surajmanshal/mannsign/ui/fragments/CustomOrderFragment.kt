@@ -1,13 +1,11 @@
 package com.surajmanshal.mannsign.ui.fragments
 
 import android.animation.LayoutTransition
-import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.graphics.BitmapFactory
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
@@ -15,7 +13,6 @@ import android.text.TextWatcher
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.TypedValue
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +20,7 @@ import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.google.gson.internal.LinkedTreeMap
@@ -38,16 +36,9 @@ import com.surajmanshal.mannsign.data.model.product.Banner
 import com.surajmanshal.mannsign.data.model.product.Poster
 import com.surajmanshal.mannsign.data.model.product.Product
 import com.surajmanshal.mannsign.databinding.FragmentCustomOrderBinding
-import com.surajmanshal.mannsign.ui.activity.CustomAcpBoardActivity
-import com.surajmanshal.mannsign.ui.activity.CustomBannerActivity
 import com.surajmanshal.mannsign.ui.activity.OrderPlacedActivity
-import com.surajmanshal.mannsign.utils.Constants
-import com.surajmanshal.mannsign.utils.Functions
-import com.surajmanshal.mannsign.utils.Functions.makeToast
-import com.surajmanshal.mannsign.utils.URIPathHelper
+import com.surajmanshal.mannsign.utils.*
 import com.surajmanshal.mannsign.utils.auth.LoadingScreen
-import com.surajmanshal.mannsign.utils.applyNavBarInset
-import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.viewmodel.CustomBannerViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +51,6 @@ import kotlin.math.roundToInt
 class CustomOrderFragment : Fragment() {
 
     val arrProductType = listOf("Poster", "Banner")
-    val REQUEST_CODE = 0
     var aspectRatio : String = ""
 
     lateinit var vm: CustomBannerViewModel
@@ -68,15 +58,12 @@ class CustomOrderFragment : Fragment() {
     lateinit var d : LoadingScreen
     lateinit var dd : Dialog
 
+    private val photoPicker = PhotoPicker(this) { uri -> onProductImagePicked(uri) }
+
 
     lateinit var binding : FragmentCustomOrderBinding
 
     var email : String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,7 +90,7 @@ class CustomOrderFragment : Fragment() {
                 calculateMeasures()
         }
         binding.customPosterImage.setOnClickListener {
-            chooseImage()
+            photoPicker.launch()
         }
         binding.btnPlaceCustomOrder.setOnClickListener {
             uploadProductImage()
@@ -395,12 +382,6 @@ class CustomOrderFragment : Fragment() {
         ).roundToInt()
     }
 
-    fun chooseImage() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, Constants.CHOOSE_PRODUCT_IMAGE)
-    }
-
     fun uploadProductImage(){
         CoroutineScope(Dispatchers.IO).launch {
             imageUploading.imageUri?.let {
@@ -415,16 +396,9 @@ class CustomOrderFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == Constants.CHOOSE_PRODUCT_IMAGE) {
-            //you got the image
-            var uri = data?.data
-            if (uri != null) {
-                setImageHeightWidth(requireActivity(), uri)
-                imageUploading.imageUri = uri
-            }
-        }
+    private fun onProductImagePicked(uri: Uri) {
+        setImageHeightWidth(requireActivity(), uri)
+        imageUploading.imageUri = uri
     }
 
     fun setImageHeightWidth(c: Context, uri: Uri?) {

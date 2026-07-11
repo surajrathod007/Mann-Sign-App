@@ -5,15 +5,10 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.paytm.pgsdk.PaytmOrder
@@ -44,12 +39,6 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
     lateinit var mHandler: Handler
     lateinit var mRunnable: Runnable
-
-    var isRead = false
-    var isWrite = false
-    var isStorageGranted = false
-
-    lateinit var permissionLauncher: ActivityResultLauncher<Array<String>>
 
     override fun onStart() {
         super.onStart()
@@ -107,24 +96,6 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             i.putExtra("id", orderId)
             startActivity(i)
         }
-        permissionLauncher =
-            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-                if (Build.VERSION.SDK_INT >= 33) {
-                    val audio = it[android.Manifest.permission.READ_MEDIA_AUDIO] ?: false
-                    val video = it[android.Manifest.permission.READ_MEDIA_VIDEO] ?: false
-                    val image = it[android.Manifest.permission.READ_MEDIA_IMAGES] ?: false
-                    if (audio && video && image) {
-                        isStorageGranted = true
-                    }
-                } else {
-                    isRead = it[android.Manifest.permission.READ_EXTERNAL_STORAGE] ?: isRead
-                    isWrite = it[android.Manifest.permission.WRITE_EXTERNAL_STORAGE] ?: isWrite
-                    if (isRead && isWrite) {
-                        isStorageGranted = true
-                    }
-                }
-
-            }
         /*binding.btnDownloadInvoice.setOnClickListener {
             requestPermission()
             if (isStorageGranted) {
@@ -787,71 +758,4 @@ class OrderDetailsActivity : SecuredScreenActivity() {
 
     }*/
     // Updated Invoice Structure
-
-
-
-
-    fun requestPermission() {
-
-        //check permission already granted or not
-        isRead = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-        isWrite = ContextCompat.checkSelfPermission(
-            this,
-            android.Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-
-
-        var permissionRequest: MutableList<String> = ArrayList()
-
-        if (Build.VERSION.SDK_INT >= 33) {
-
-            val audio = ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.READ_MEDIA_AUDIO
-            ) == PackageManager.PERMISSION_GRANTED
-
-            val video = ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.READ_MEDIA_VIDEO
-            ) == PackageManager.PERMISSION_GRANTED
-
-            val image = ContextCompat.checkSelfPermission(
-                this,
-                android.Manifest.permission.READ_MEDIA_IMAGES
-            ) == PackageManager.PERMISSION_GRANTED
-
-            if (!audio) {
-                permissionRequest.add(android.Manifest.permission.READ_MEDIA_AUDIO)
-            }
-
-            if (!video) {
-                permissionRequest.add(android.Manifest.permission.READ_MEDIA_VIDEO)
-            }
-
-            if (!image) {
-                permissionRequest.add(android.Manifest.permission.READ_MEDIA_IMAGES)
-            }
-
-
-        } else {
-            if (!isRead) {
-                permissionRequest.add(android.Manifest.permission.READ_EXTERNAL_STORAGE)
-            }
-
-            if (!isWrite) {
-                permissionRequest.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-            }
-        }
-
-
-
-        if (permissionRequest.isNotEmpty()) {
-            //request permission
-            permissionLauncher.launch(permissionRequest.toTypedArray())
-        }
-
-    }
 }

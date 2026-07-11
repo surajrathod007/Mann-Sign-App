@@ -29,12 +29,6 @@ object Constants {
     const val CHANGE_MATERIAL_PRICE = 1
     const val CHANGE_DELIVERY_PRICE = 2
 
-    // Permission Codes
-    const val CHOOSE_PROFILE_IMAGE = 101
-    const val CHOOSE_PRODUCT_IMAGE = 104
-    const val READ_EXTERNAL_STORAGE = 102
-
-
     const val CATEGORY_CUSTOM_PRODUCT = 100
     const val CATEGORY_CUSTOM_POSTER = 101
     const val CATEGORY_CUSTOM_BANNER = 102

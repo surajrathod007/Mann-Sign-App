@@ -1,15 +1,12 @@
 package com.surajmanshal.mannsign.ui.activity
 
 import android.animation.LayoutTransition
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
-import androidx.activity.enableEdgeToEdge
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -18,10 +15,7 @@ import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.ChatAdapter
 import com.surajmanshal.mannsign.data.model.ordering.ChatMessage
 import com.surajmanshal.mannsign.databinding.ActivityChatBinding
-import com.surajmanshal.mannsign.utils.Functions
-import com.surajmanshal.mannsign.utils.URIPathHelper
-import com.surajmanshal.mannsign.utils.applyNavBarInset
-import com.surajmanshal.mannsign.utils.applyStatusBarInset
+import com.surajmanshal.mannsign.utils.*
 import com.surajmanshal.mannsign.viewmodel.ChatViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,11 +33,12 @@ class ChatActivity : SecuredScreenActivity() {
     var id: String? = null
     var email: String? = null
 
-    val REQUEST_CODE = 0
     var imageUri: Uri? = null
 
     lateinit var mHandler: Handler
     lateinit var mRunnable: Runnable
+
+    private val photoPicker = PhotoPicker(this) { uri -> onChatImagePicked(uri) }
 
     //TODO : Do api call in every 1-2 seconds , using handler
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -190,7 +185,7 @@ class ChatActivity : SecuredScreenActivity() {
             finish()
         }
         binding.btnAddChatImage.setOnClickListener {
-            chooseImage()
+            photoPicker.launch()
         }
         binding.btnRemoveChatImage.setOnClickListener {
             binding.imgChatSelected.setImageURI(null)
@@ -267,28 +262,11 @@ class ChatActivity : SecuredScreenActivity() {
         return 0
     }
 
-    fun chooseImage() {
-        val intent = Intent(Intent.ACTION_PICK)
-        intent.type = "image/*"
-        startActivityForResult(intent, REQUEST_CODE)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
-            //you got the image
-            var uri = data?.data
-            imageUri = data?.data
-            if (uri != null) {
-                binding.imgChatSelected.setImageURI(uri)
-                binding.imgChatSelected.visibility = View.VISIBLE
-                binding.btnRemoveChatImage.visibility = View.VISIBLE
-                binding.btnAddChatImage.visibility = View.GONE
-            } else {
-                binding.imgChatSelected.visibility = View.GONE
-                binding.btnRemoveChatImage.visibility = View.GONE
-                binding.btnAddChatImage.visibility = View.VISIBLE
-            }
-        }
+    private fun onChatImagePicked(uri: Uri) {
+        imageUri = uri
+        binding.imgChatSelected.setImageURI(uri)
+        binding.imgChatSelected.visibility = View.VISIBLE
+        binding.btnRemoveChatImage.visibility = View.VISIBLE
+        binding.btnAddChatImage.visibility = View.GONE
     }
 }

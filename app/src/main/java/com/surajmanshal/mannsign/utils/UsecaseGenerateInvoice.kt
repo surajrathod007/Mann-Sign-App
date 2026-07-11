@@ -1,10 +1,12 @@
 package com.surajmanshal.mannsign.utils
 
+import android.content.ContentValues
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.Environment
+import android.provider.MediaStore
 import android.widget.Toast
 import com.itextpdf.io.image.ImageDataFactory
 import com.itextpdf.kernel.pdf.PdfDocument
@@ -25,6 +27,7 @@ import java.io.ByteArrayOutputStream
 
 import java.io.File
 import java.io.FileOutputStream
+import java.io.OutputStream
 import java.time.LocalDate
 
 class UsecaseGenerateInvoice(private val context : Context) {
@@ -33,16 +36,10 @@ class UsecaseGenerateInvoice(private val context : Context) {
             try {
                 var lst = order.orderItems
 
-//            val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString()
-                val path = if (Build.VERSION.SDK_INT == Build.VERSION_CODES.Q){
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)?.toString()
-                }else{
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).toString()
-                }
-                val file = File(path, "mann_invoice${System.currentTimeMillis()}.pdf")
-                val output = FileOutputStream(file)
+                val fileName = "mann_sign_order_invoice_${System.currentTimeMillis()}.pdf"
+                val (outputStream, openInvoice) = createInvoiceDestination(fileName)
 
-                val writer = PdfWriter(file)
+                val writer = PdfWriter(outputStream)
                 val pdfDocument = PdfDocument(writer)
                 val document = Document(pdfDocument)
                 //document.setMargins(1f,1f,1f,1f)
@@ -476,13 +473,37 @@ class UsecaseGenerateInvoice(private val context : Context) {
                 document.add(table4)
                 document.close()
                 Toast.makeText(context, "Pdf Created", Toast.LENGTH_SHORT).show()
-                if (path != null) {
-                    context.openFile(file, path)
-                }
+                openInvoice()
 
             } catch (e: Exception) {
                 Toast.makeText(context, e.message, Toast.LENGTH_SHORT).show()
             }
 
         }
+
+    /**
+     * On API 29+ this writes through [MediaStore.Downloads] via [android.content.ContentResolver]
+     * so the PDF lands in the public Downloads/MannSign folder without any storage permission.
+     * Below API 29, scoped storage doesn't apply yet, so it falls back to a direct [File] write
+     * into the legacy public Documents directory (caller must hold WRITE_EXTERNAL_STORAGE there).
+     */
+    private fun createInvoiceDestination(fileName: String): Pair<OutputStream, () -> Unit> {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val values = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+                put(MediaStore.MediaColumns.MIME_TYPE, "application/pdf")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/MannSign")
+            }
+            val uri = context.contentResolver.insert(
+                MediaStore.Downloads.EXTERNAL_CONTENT_URI, values
+            ) ?: error("Unable to create invoice entry in MediaStore")
+            val outputStream = context.contentResolver.openOutputStream(uri)
+                ?: error("Unable to open invoice output stream")
+            return outputStream to { context.openFile(uri) }
+        }
+
+        val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+        val file = File(dir, fileName)
+        return FileOutputStream(file) to { context.openFile(file, dir.toString()) }
+    }
 }
