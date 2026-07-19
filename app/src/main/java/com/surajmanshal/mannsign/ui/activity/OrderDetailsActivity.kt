@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.paytm.pgsdk.PaytmOrder
 import com.paytm.pgsdk.PaytmPaymentTransactionCallback
 import com.paytm.pgsdk.TransactionManager
+import com.surajmanshal.mannsign.BuildConfig
 import com.surajmanshal.mannsign.PaymentActivity
 import com.surajmanshal.mannsign.SecuredScreenActivity
 import com.surajmanshal.mannsign.adapter.recyclerview.OrderItemsAdapter
@@ -110,8 +111,8 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             d.setTitle("Want to make payment ?")
             d.setMessage("You can make payment through your registered UPI apps !")
             d.setPositiveButton("Yes") { d, w ->
-
-//                todo : reveal while publishing
+                // Reachable only when BuildConfig.PAYMENTS_ENABLED is true (the button is
+                // hidden otherwise). Re-enable the flag once the server payment route is fixed.
                 startPaymentActivity()
             }
             d.setNegativeButton("No") { d, w ->
@@ -262,7 +263,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
             else
                 binding.txtYouHaveToPay.text = "You paid : "
 
-            if (order.orderStatus == Constants.ORDER_CONFIRMED )
+            if (order.orderStatus == Constants.ORDER_CONFIRMED && BuildConfig.PAYMENTS_ENABLED)
                 binding.btnMakePayment.visibility = View.VISIBLE
             else
                 binding.btnMakePayment.visibility = View.GONE

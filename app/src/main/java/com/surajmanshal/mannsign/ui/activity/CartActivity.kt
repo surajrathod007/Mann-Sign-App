@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.surajmanshal.mannsign.AuthenticationActivity
+import com.surajmanshal.mannsign.BuildConfig
 import com.surajmanshal.mannsign.PaymentActivity
 import com.surajmanshal.mannsign.ProfileEdit
 import com.surajmanshal.mannsign.SecuredScreenActivity
@@ -151,30 +152,7 @@ class CartActivity : SecuredScreenActivity() {
 
         }
         vm.orderPlaced.observe(this) {
-            if (it.success) {
-                // todo : reload should be no longer needed
-                loadCarts(email!!)
-                vm.clearValues()
-                vm.setScrollVisibility(false)
-//                val b = AlertDialog.Builder(this)
-//                b.setTitle("Your order is placed !")
-//                b.setMessage("Thanks you for ordering from mann sign ;)")
-//                b.show()
-                NetworkService.networkInstance.getOrderById(it.message)
-                    .enqueue(object : Callback<Order?> {
-                        override fun onResponse(call: Call<Order?>, response: Response<Order?>) {
-                            response.body()?.let { order ->
-                                orderProcessingDialog.dismiss()
-                                startPaymentActivity(order)
-                            }
-                        }
-
-                        override fun onFailure(call: Call<Order?>, t: Throwable) {
-                            Toast.makeText(this@CartActivity, t.message, Toast.LENGTH_SHORT).show()
-                        }
-                    })
-//                startActivity(Intent(this@CartActivity,OrderPlacedActivity::class.java))
-            }
+            if (it.success) onOrderPlaced(it.message)
         }
         //buttons
         binding.btnPlaceOrder.setOnClickListener {
@@ -231,6 +209,38 @@ class CartActivity : SecuredScreenActivity() {
             v.dismiss()
         }
         b.show()
+    }
+
+    private fun onOrderPlaced(orderId: String) {
+        // The order is already created on the server at this point. Reset the cart UI, then
+        // either proceed to payment or, when the payment module is disabled, go straight to the
+        // order-placed success screen.
+        loadCarts(email!!)
+        vm.clearValues()
+        vm.setScrollVisibility(false)
+
+        if (BuildConfig.PAYMENTS_ENABLED) {
+            proceedToPayment(orderId)
+        } else {
+            orderProcessingDialog.dismiss()
+            startActivity(Intent(this, OrderPlacedActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun proceedToPayment(orderId: String) {
+        NetworkService.networkInstance.getOrderById(orderId)
+            .enqueue(object : Callback<Order?> {
+                override fun onResponse(call: Call<Order?>, response: Response<Order?>) {
+                    orderProcessingDialog.dismiss()
+                    response.body()?.let { order -> startPaymentActivity(order) }
+                }
+
+                override fun onFailure(call: Call<Order?>, t: Throwable) {
+                    orderProcessingDialog.dismiss()
+                    Toast.makeText(this@CartActivity, t.message, Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     private fun startPaymentActivity(it: Order) {

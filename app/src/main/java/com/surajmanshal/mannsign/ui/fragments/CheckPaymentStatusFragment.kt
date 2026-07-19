@@ -42,30 +42,32 @@ class CheckPaymentStatusFragment : Fragment() {
 
         binding = FragmentCheckPaymentStatusBinding.inflate(layoutInflater)
 
-//         testingPaymentStatus()
-//        return binding.root
-        NetworkService.networkInstance.getPaymentStatus(orderId)
-            .enqueue(object : Callback<SimpleResponse?> {
-                override fun onResponse(
-                    call: Call<SimpleResponse?>,
-                    response: Response<SimpleResponse?>
-                ) {
-                    response.body()?.let {
-                        if (it.success) {
-                            showPaymentSuccessStatus()
-                        } else {
-                            showPaymentFailedStatus(it.message)
+        if (BuildConfig.DEBUG) {
+            testingPaymentStatus()
+        } else {
+            NetworkService.networkInstance.getPaymentStatus(orderId)
+                .enqueue(object : Callback<SimpleResponse?> {
+                    override fun onResponse(
+                        call: Call<SimpleResponse?>,
+                        response: Response<SimpleResponse?>
+                    ) {
+                        response.body()?.let {
+                            if (it.success) {
+                                showPaymentSuccessStatus()
+                            } else {
+                                showPaymentFailedStatus(it.message)
+                            }
+                            false
+                        } ?: run {
+                            Toast.makeText(requireContext(), "Null res", Toast.LENGTH_SHORT).show()
                         }
-                        false
-                    } ?: run {
-                        Toast.makeText(requireContext(), "Null res", Toast.LENGTH_SHORT).show()
                     }
-                }
 
-                override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
-                    throw t
-                }
-            })
+                    override fun onFailure(call: Call<SimpleResponse?>, t: Throwable) {
+                        throw t
+                    }
+                })
+        }
         return binding.root
     }
 

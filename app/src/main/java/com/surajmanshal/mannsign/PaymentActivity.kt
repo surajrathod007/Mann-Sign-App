@@ -150,9 +150,10 @@ class PaymentActivity : AppCompatActivity() {
         )*/
         //For SDK call below function
         try {
-            startActivityForResult(PhonePe.getImplicitIntent(
-                this, b2BPGRequest, pkg) ,B2B_PG_REQUEST_CODE
-            )
+            PhonePe.getImplicitIntent(
+                this, b2BPGRequest, pkg)?.let {
+                startActivityForResult(it ,B2B_PG_REQUEST_CODE)
+            }
         } catch(e : PhonePeInitException){
 
         }

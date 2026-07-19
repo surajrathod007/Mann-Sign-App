@@ -451,6 +451,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
 
     private fun setupButtonAction(email: String, productId: Int) {
 //        todo : keep disabled until PG not get set
+        // TODO: disable actions until complete product details are loaded
         if(cartVm._selectedVariant.value?.let { it1 -> isVariantInCart(it1) } == true) setupGoToCart()
         else setupAddToCart(email, productId)
 
@@ -536,7 +537,12 @@ class ProductDetailsActivity : SecuredScreenActivity() {
     private fun setupAddToCart(email: String, productId: Int) {
         with(binding.productBuyingLayout) {
             btnAddVariantToCart.apply {
-                backgroundTintList = resources.getColorStateList(R.color.order_selected_text_color)
+                isEnabled = cartVm._selectedVariant.value?.variantPrice != null
+                backgroundTintList = if (isEnabled) {
+                    resources.getColorStateList(R.color.order_selected_text_color)
+                } else {
+                    resources.getColorStateList(R.color.gray_600)
+                }
                 text = context.getString(R.string.add_to_cart)
                 setOnClickListener {
                     if (email == Constants.NO_EMAIL)

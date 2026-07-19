@@ -73,16 +73,14 @@ class OrdersViewModel : ViewModel() {
 
     fun getCustomerOrders(email : String){
         isLoading.postValue(true)
-        Log.d("My Orders",email)
         val r = db.getOrderByEmail(email)
         r.enqueue(object : Callback<List<Order>> {
             override fun onResponse(call: Call<List<Order>>, response: Response<List<Order>>) {
-                Log.d("My Orders",response.toString())
                 if(response.body()?.isEmpty() == true){
                     _msg.postValue("No Orders , Please Order Something!")
                 }
-                response.body()?.let {
-                    _customerOrders.postValue(it)
+                response.body()?.let { orders ->
+                    _customerOrders.postValue(orders.reversed())
                 }
                 isLoading.postValue(false)
             }

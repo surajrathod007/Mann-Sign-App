@@ -28,6 +28,9 @@ android {
         buildConfigField "String", "PAYTM_MERCHANT_KEY", "\"${localProperties['paytm_merchant_key']}\""
         buildConfigField "String", "ONESIGNAL_APP_ID", "\"${localProperties['onesignal_app_id']}\""
         buildConfigField "String", "BASE_URL", "\"${localProperties['base_url']}\""
+        // Payment module toggle. Disabled until the production payment-initiation route is fixed.
+        // Flip to "true" to re-enable the PhonePe/PaymentActivity flow. Orders are placed regardless.
+        buildConfigField "boolean", "PAYMENTS_ENABLED", "false"
     }
 
     buildTypes {
