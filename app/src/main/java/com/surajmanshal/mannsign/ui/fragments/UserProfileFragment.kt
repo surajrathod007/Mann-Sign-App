@@ -1,6 +1,7 @@
 package com.surajmanshal.mannsign.ui.fragments
 
 import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -32,6 +33,7 @@ import com.surajmanshal.mannsign.utils.applyNavBarInset
 import com.surajmanshal.mannsign.utils.applyStatusBarInset
 import com.surajmanshal.mannsign.utils.auth.DataStore
 import com.surajmanshal.mannsign.utils.auth.DataStore.preferenceDataStoreAuth
+import com.surajmanshal.mannsign.utils.auth.LoadingScreen
 import com.surajmanshal.mannsign.utils.viewFullScreen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -46,6 +48,7 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
 
     lateinit var binding: FragmentUserProfileBinding
     lateinit var userDatabase: UserDao
+    lateinit var loadingDialog: Dialog
     var mUser: User = User()
     var email: String? = null
     var token: String? = null
@@ -67,6 +70,7 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_user_profile, container, false)
         binding = FragmentUserProfileBinding.bind(view)
+        loadingDialog = LoadingScreen(requireContext()).loadingScreen()
 
         val sharedPreferences = activity?.getSharedPreferences("user_e", Context.MODE_PRIVATE)
         email = sharedPreferences?.getString("email", "")
@@ -82,15 +86,18 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
 //            val user = userDatabase.getUser(email!!)
 //            binding.llUserContent.visibility = View.VISIBLE
 //            binding.userLogin.visibility = View.GONE
+            loadingDialog.show()
             val r = NetworkService.networkInstance.fetchUserByEmail(email!!)
             r.enqueue(object : Callback<User?> {
                 override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                    loadingDialog.dismiss()
                     if (response.body() != null)
                         setupUserDetails(response.body()!!)
                     else makeToast(requireContext(), "User is nulll")
                 }
 
                 override fun onFailure(call: Call<User?>, t: Throwable) {
+                    loadingDialog.dismiss()
                     makeToast(requireContext(), t.localizedMessage.toString())
                 }
             })
@@ -119,6 +126,9 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
         if(activity is MainActivity){
             (activity as MainActivity).removeListener(this)
         }
+        if (::loadingDialog.isInitialized && loadingDialog.isShowing) {
+            loadingDialog.dismiss()
+        }
         super.onDestroyView()
     }
     private fun setupOnBackPressed() {
@@ -128,15 +138,18 @@ class UserProfileFragment() : Fragment() , MainActivity.MainActivityBackPressLis
     override fun onResume() {
         super.onResume()
         if (!email.isNullOrEmpty()) {
+            loadingDialog.show()
             val r = NetworkService.networkInstance.fetchUserByEmail(email!!)
             r.enqueue(object : Callback<User?> {
                 override fun onResponse(call: Call<User?>, response: Response<User?>) {
+                    loadingDialog.dismiss()
                     if (response.body() != null)
                         setupUserDetails(response.body()!!)
                     else makeToast(requireContext(), "User is nulll")
                 }
 
                 override fun onFailure(call: Call<User?>, t: Throwable) {
+                    loadingDialog.dismiss()
                     makeToast(requireContext(), t.localizedMessage.toString())
                 }
             })
