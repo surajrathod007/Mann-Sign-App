@@ -89,7 +89,7 @@ class OrderDetailsActivity : SecuredScreenActivity() {
         binding.rvOrderItems.layoutManager = LinearLayoutManager(this)
 
         binding.btnOrderDetailBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
             finish()
         }
         binding.btnOrderChat.setOnClickListener {

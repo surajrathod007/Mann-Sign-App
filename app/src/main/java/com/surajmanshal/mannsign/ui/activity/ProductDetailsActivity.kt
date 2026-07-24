@@ -16,6 +16,7 @@ import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
@@ -72,6 +73,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityProductDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackCallback)
         binding.productDetailsHeader.applyStatusBarInset()
         binding.productBuyingLayout.root.applyNavBarInset()
         vm = ViewModelProvider(this)[ProductsViewModel::class.java]
@@ -246,7 +248,7 @@ class ProductDetailsActivity : SecuredScreenActivity() {
 
                     // Click Listeners ----------------------------------------------------------------------------------
                     btnChatBack.setOnClickListener {
-                        onBackPressed()
+                        onBackPressedDispatcher.onBackPressed()
                     }
                     /*productBuyingLayout.apply {
                         btnAddVariantToCart.setOnClickListener {
@@ -444,9 +446,10 @@ class ProductDetailsActivity : SecuredScreenActivity() {
         }
     }
 
-    override fun onBackPressed() {
-        finish()
-        super.onBackPressed()
+    private val onBackCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            finish()
+        }
     }
 
     private fun setupButtonAction(email: String, productId: Int) {

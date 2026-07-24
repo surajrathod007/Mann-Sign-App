@@ -61,7 +61,7 @@ class CartActivity : SecuredScreenActivity() {
 
 
         binding.btnCartBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
             finish()
         }
 

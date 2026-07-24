@@ -25,6 +25,7 @@
     <application
         android:name=".MyApp"
         android:allowBackup="true"
+        android:enableOnBackInvokedCallback="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
@@ -34,7 +35,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MannSignApp"
         android:usesCleartextTraffic="true"
-        tools:targetApi="31">
+        tools:targetApi="33">
+
+        <!-- Android 16 (API 36) ignores per-activity screenOrientation locks on large
+             screens (sw >= 600dp). This opt-out keeps the app's portrait-only layouts
+             working on tablets/foldables. Temporary: only honored while targeting SDK 36 —
+             revisit (go fully adaptive) before bumping targetSdk to 37. -->
+        <property
+            android:name="android.window.PROPERTY_COMPAT_ALLOW_RESTRICTED_RESIZABILITY"
+            android:value="true" />
 
 
         <activity

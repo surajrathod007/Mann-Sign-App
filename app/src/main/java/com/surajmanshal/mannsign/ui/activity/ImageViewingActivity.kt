@@ -30,7 +30,7 @@ class ImageViewingActivity : SecuredScreenActivity() {
             imageTintList = AppCompatResources
                 .getColorStateList(this@ImageViewingActivity,R.color.white)
             setOnClickListener {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
             }
         }
     }

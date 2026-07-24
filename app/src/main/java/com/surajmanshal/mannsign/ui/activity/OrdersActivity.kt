@@ -44,7 +44,7 @@ class OrdersActivity : SecuredScreenActivity() {
         }
         binding.emptyOrderView.txtEmptyMessage.text = "No orders !"
         binding.btnOrderBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
             finish()
         }
         binding.loginRegisterOrder.btnLoginRegister.setOnClickListener {

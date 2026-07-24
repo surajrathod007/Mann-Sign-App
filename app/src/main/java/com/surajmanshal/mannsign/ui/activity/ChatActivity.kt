@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -52,6 +53,7 @@ class ChatActivity : SecuredScreenActivity() {
         email = sharedPreference.getString("email", "")
         id = intent.getStringExtra("id")
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackCallback)
         binding.chatAppBar.applyStatusBarInset()
         binding.llChat.applyNavBarInset()
 
@@ -113,12 +115,11 @@ class ChatActivity : SecuredScreenActivity() {
         super.onResume()
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-        if (mRunnable != null) {
+    private val onBackCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
             mHandler.removeCallbacks(mRunnable)
+            finish()
         }
-        finish()
     }
 
     fun btnClickListners() {

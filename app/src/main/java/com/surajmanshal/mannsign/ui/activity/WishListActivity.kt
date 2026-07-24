@@ -56,7 +56,7 @@ class WishListActivity : SecuredScreenActivity() {
             toolbar.apply {
                 tvToolbarTitle.text = "My Wishlist"
                 ivBackButton.setOnClickListener {
-                    onBackPressed()
+                    onBackPressedDispatcher.onBackPressed()
                 }
                 ivOptions.hide()
             }

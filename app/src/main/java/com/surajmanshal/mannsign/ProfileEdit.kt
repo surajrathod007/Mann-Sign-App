@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.surajmanshal.mannsign.data.model.auth.User
@@ -41,6 +42,7 @@ class ProfileEdit : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_profile_edit)
         binding.root.applySystemBarInsets()
+        onBackPressedDispatcher.addCallback(this, onBackCallback)
         imageUploading = ImageUploading(this)
         d = LoadingScreen(this)
         dd = d.loadingScreen()
@@ -90,23 +92,25 @@ class ProfileEdit : SecuredScreenActivity() {
             }
 
             btnUpdateProfile.setOnClickListener {
-                onBackPressed()
+                onBackPressedDispatcher.onBackPressed()
             }
         }
     }
 
-    override fun onBackPressed() {
-        val isSaved = saveProfile()
-        if (!isSaved){
-            return
-        }
-        when(navigatedFrom){
-            Constants.NAV_CART -> navigateToCart()
-            Constants.NAV_AUTH -> navigateToMain()
-        }
-        if(navigatedFrom != null) return
+    private val onBackCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            val isSaved = saveProfile()
+            if (!isSaved) {
+                return
+            }
+            when (navigatedFrom) {
+                Constants.NAV_CART -> navigateToCart()
+                Constants.NAV_AUTH -> navigateToMain()
+            }
+            if (navigatedFrom != null) return
 
-        super.onBackPressed()
+            finish()
+        }
     }
 
     private fun navigateToMain() {

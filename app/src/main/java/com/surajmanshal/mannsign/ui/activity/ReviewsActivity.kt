@@ -51,7 +51,7 @@ class ReviewsActivity : SecuredScreenActivity() {
         binding.emptyReviews.txtEmptyMessage.text = "You have no reviews !"
         binding.shimmerReviewLoading.startShimmer()
         binding.btnReviewBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
             finish()
         }
         binding.loginRegisterReviews.btnLoginRegister.setOnClickListener {

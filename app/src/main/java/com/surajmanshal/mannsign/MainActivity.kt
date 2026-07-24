@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import com.google.android.material.snackbar.Snackbar
@@ -44,6 +45,7 @@ class MainActivity : SecuredScreenActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        onBackPressedDispatcher.addCallback(this, onBackCallback)
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         // Todo : Make its parameter server driven
         checkForAppUpdates(AppUpdateType.IMMEDIATE)
@@ -96,17 +98,22 @@ class MainActivity : SecuredScreenActivity() {
 
     }
 
-    override fun onBackPressed() {
-        listners.forEach {
-            it.onActivityBackPressed()
+    private val onBackCallback = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            listners.forEach {
+                it.onActivityBackPressed()
+            }
+            if (backPressedTime + 3000 > System.currentTimeMillis()) {
+                finish()
+            } else {
+                Toast.makeText(
+                    this@MainActivity,
+                    "Press back again to leave the app.",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            backPressedTime = System.currentTimeMillis()
         }
-        if (backPressedTime + 3000 > System.currentTimeMillis()) {
-            super.onBackPressed()
-            finish()
-        } else {
-            Toast.makeText(this, "Press back again to leave the app.", Toast.LENGTH_LONG).show()
-        }
-        backPressedTime = System.currentTimeMillis()
     }
 
     fun registerListener(listener: MainActivityBackPressListener) {

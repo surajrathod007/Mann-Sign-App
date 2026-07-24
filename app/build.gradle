@@ -12,12 +12,12 @@ if (localPropertiesFile.exists()) {
 }
 
 android {
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.surajmanshal.mannsign"
         minSdk 21
-        targetSdk 35  // todo : update to 34
+        targetSdk 36
         // Update your com.google.android.play:feature-delivery:2.0.1 Maven dependency to an Android 14 compatible version! Your current com.google.android.play:feature-delivery:2.0.1 library is incompatible with targetSdkVersion 34 (Android 14), which introduces a backwards-incompatible change to broadcast receivers. As a reminder, from August 31, 2024, Google Play requires all new app releases to target Android 14. Update to the latest library version dependency to avoid app crashes.
         versionCode 17
         versionName "2.4.3"
@@ -33,8 +33,18 @@ android {
         buildConfigField "boolean", "PAYMENTS_ENABLED", "false"
     }
 
+    signingConfigs {
+        release {
+            storeFile file(localProperties['release_store_file'] ?: 'release.jks')
+            storePassword localProperties['release_store_password']
+            keyAlias localProperties['release_key_alias']
+            keyPassword localProperties['release_key_password']
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
