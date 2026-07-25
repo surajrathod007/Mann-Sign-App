@@ -19,8 +19,8 @@ android {
         minSdk 21
         targetSdk 36
         // Update your com.google.android.play:feature-delivery:2.0.1 Maven dependency to an Android 14 compatible version! Your current com.google.android.play:feature-delivery:2.0.1 library is incompatible with targetSdkVersion 34 (Android 14), which introduces a backwards-incompatible change to broadcast receivers. As a reminder, from August 31, 2024, Google Play requires all new app releases to target Android 14. Update to the latest library version dependency to avoid app crashes.
-        versionCode 17
-        versionName "2.4.3"
+        versionCode 19
+        versionName "2.6.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
